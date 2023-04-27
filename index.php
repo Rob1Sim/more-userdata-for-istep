@@ -7,7 +7,8 @@ Author: Robin Simonneau, Arbër Jonuzi
 Version: 1.0
 Author URI: https://robin-sim.fr/
 */
-error_reporting(E_ALL); ini_set('display_errors', '1');
+require_once(plugin_dir_path(__FILE__).'utilities.php');
+
 /**
  * Créer la base de donnée lors de l'activation du plugin
  * @return void
@@ -37,5 +38,25 @@ function more_ud_istep_install(): void
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
 }
-register_activation_hook( __FILE__, 'more_ud_istep_install' );
+register_activation_hook( __FILE__, 'more_ud_istep_install' ); //Appelé lors de l'activation du plugin
+
+
+
+add_shortcode('add_istep_user_form','add_new_user_form');
+
+/**
+ * Affiche le formulaire de création d'utilisateur
+ * @return string
+ */
+function add_new_user_form():string {
+    $html = "<p>Vous n'êtes pas connecté</p>";
+    if (can_user_create_users(['informatique','administrator','secretariat']))
+    {
+        //TODO: Do something
+    } else {
+        $html = "<p>Vous n'avez pas l'autorisation d'utiliser ceci</p>";
+    }
+    return $html;
+
+}
 
