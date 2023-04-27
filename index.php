@@ -8,18 +8,32 @@ Version: 1.0
 Author URI: https://robin-sim.fr/
 */
 
-function install() {
+/**
+ * Créer la base de donnée lors de l'activation du plugin
+ * @return void
+ */
+function install(): void
+{
     global $wpdb;
-    $table_name = $wpdb->prefix . 'mon_plugin_table';
+    $table_name = $wpdb->prefix . 'more_ud_istep';
     $charset_collate = $wpdb->get_charset_collate();
 
-    $sql = "CREATE TABLE $table_name (
-        id mediumint(9) NOT NULL AUTO_INCREMENT,
-        nom varchar(255) NOT NULL,
-        PRIMARY KEY  (id)
-    ) $charset_collate;";
+    $sql = "CREATE TABLE istep_user_data (
+    id INT NOT NULL AUTO_INCREMENT,
+    wp_user_id INT NOT NULL,
+    fonction VARCHAR(255),
+    nTelephone VARCHAR(10),
+    bureau VARCHAR(4),
+    equipe VARCHAR(255),
+    tourDuBureau VARCHAR(10),
+    campus VARCHAR(255),
+    employeur VARCHAR(255),
+    caseCourrier VARCHAR(10),
+    PRIMARY KEY (id),
+    FOREIGN KEY (wp_user_id) REFERENCES wp_user(id)
+) $charset_collate;";
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
 }
-register_activation_hook( __FILE__, 'mon_plugin_install' );
+register_activation_hook( __FILE__, 'install' );
