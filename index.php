@@ -50,9 +50,9 @@ add_shortcode('add_istep_user_form','add_new_user_form');
  */
 function add_new_user_form():string {
     $html = "<p>Vous n'êtes pas connecté</p>";
-    if (can_user_create_users(['informatique','administrator','secretariat']))
+    if (can_user_create_users(get_option('istep_user_roles')))
     {
-        //TODO: Do something
+        $html ="<p>ça fonctionnne</p>";
     } else {
         $html = "<p>Vous n'avez pas l'autorisation d'utiliser ceci</p>";
     }
@@ -94,16 +94,17 @@ function more_userdata_istep_menu_content(): void {
             <?php wp_nonce_field( 'istep_user_roles_nonce', 'istep_user_roles_nonce' ); ?>
             <table class="form-table">
                 <tr>
-                    <th scope="row"><label for="istep_user_roles"><?php _e( 'Rôles:', 'istep_users' ); ?></label></th>
+                    <th scope="row"><label for="istep_user_roles"><?php _e( 'Rôles qui peuvent créer des utilisateurs:', 'istep_users' ); ?></label></th>
                     <td>
                         <?php
                         // Récupère tous les rôles WordPress
-                        $roles = wp_roles()->get_names();
+                        $roles = get_editable_roles();
+
                         // Récupère les rôles sélectionnés dans la base de données
                         $selected_roles = get_option('istep_user_roles', array());
                         // Affiche une checkbox pour chaque rôle
                         foreach ($roles as $key => $value) {
-                            echo '<label><input type="checkbox" name="istep_user_roles[]" value="'.$key.'" '.checked(in_array($key, $selected_roles), true, false).'>'.$value.'</label><br/>';
+                            echo '<label><input type="checkbox" name="istep_user_roles[]" value="'.$key.'" '.checked(in_array($key, $selected_roles), true, false).'>'.$value['name'].'</label><br/>';
                         }
                         ?>
                     </td>
