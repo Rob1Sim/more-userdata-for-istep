@@ -60,3 +60,18 @@ function add_new_user_form():string {
 
 }
 
+// ---- Menu Administrateur ----
+/**
+ * Génère la page dans le panel administrateur
+ * @return void
+ */
+function more_userdata_istep_menu(): void{
+    add_menu_page(
+        "Paramètre création d'utilisteur",
+        "ISTeP'Users options",
+        "administrator",
+        "istep_users_options",
+        "more_userdata_istep_menu_content"
+    );
+}
+add_action( 'admin_menu', 'more_userdata_istep_menu' );
