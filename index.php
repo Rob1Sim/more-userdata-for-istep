@@ -52,7 +52,71 @@ function add_new_user_form():string {
     $html = "<p>Vous n'êtes pas connecté</p>";
     if (can_user_create_users(get_option('istep_user_roles')))
     {
-        $html ="<p>ça fonctionnne</p>";
+        $html =<<<HTML
+        <form method="POST">
+            <label for="last_name">Nom : 
+                <input type="text" name="last_name"/> 
+            </label>
+            
+            
+            <label for="name">Prénom :
+                <input type="text" name="name"/> 
+             </label>
+            
+            
+            <label for="login">Identifiant : 
+                <input type="text" name="login"/> 
+            </label>
+            
+            
+            <label for="email">Adresse email :
+                <input type="email" name="email"/>
+             </label>
+             
+             <label for="phone">Numéro de téléphone :
+                <input type="tel" name="phone"/>
+             </label>
+            
+            <label for="password">Mot de passe : 
+                <input type="password" name="password"/>
+            </label>
+            
+            <label for="office">Bureau : 
+                <input type="text" name="office"/> 
+            </label>
+            
+            <label for="login">Tour du bureau : 
+                <ul>
+                    <li><input type="radio" name="tourBureau" value="Tour 46 - 00 2ème étage" checked/> </li>
+                    <li><input type="radio" name="tourBureau" value="Tour 46 - 00 3ème étage"/> </li>
+                    <li><input type="radio" name="tourBureau" value="Tour 46 - 00 4ème étage"/> </li>
+                    <li><input type="radio" name="tourBureau" value="Tour 46 - 45 2ème étage"/> </li>
+                    <li><input type="radio" name="tourBureau" value="Tour 56 - 66 5ème étage"/> </li>
+                    <li><input type="radio" name="tourBureau" value="Tour 56 - 55 5ème étage"/> </li>
+                </ul>
+            </label>
+            
+            <label>Equipe : </label>
+              <select name="team">
+                <option value="Pétrologie et Géodynamique">Pétrologie et Géodynamique</option>
+                <option value="Tectonique">Tectonique</option>
+                <option value="Terre-Mer Structures et Archives">Terre-Mer Structures et Archives</option>
+                <option value="Informatique">Informatique</option>
+                <option value="Direction">Direction</option>
+                <option value="Terre-Mer Structures et Archives">Terre-Mer Structures et Archives</option>
+                <option value="Terre-Mer Structures et Archives">Terre-Mer Structures et Archives</option>
+                <option value="Pas d'équipe">Pas d'équipe</option>
+              </select>
+
+HTML;
+        $roles = get_editable_roles();
+        // Récupère les rôles sélectionnés dans la base de données
+        $selected_roles = get_option('istep_user_roles', array());
+        // Affiche une checkbox pour chaque rôle
+        foreach ($roles as $key => $value) {
+            $html.= '<label><input type="checkbox" name="roles" value="'.$key.'" '.checked(in_array($key, $selected_roles), true, false).'>'.$value['name'].'</label><br/>';
+        }
+
     } else {
         $html = "<p>Vous n'avez pas l'autorisation d'utiliser ceci</p>";
     }
