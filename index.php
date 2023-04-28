@@ -10,7 +10,6 @@ Author URI: https://robin-sim.fr/
 */
 require_once(plugin_dir_path(__FILE__).'utilities.php');
 require_once( plugin_dir_path( __FILE__ ) . 'admin-functions.php' );
-
 global $wpdb;
 /**
  * Nom de la table équipe dans la base de donnée
@@ -109,35 +108,69 @@ function add_new_user_form():string {
             
             <label for="login">Tour du bureau : 
                 <ul>
-                    <li><input type="radio" name="tourBureau" value="Tour 46 - 00 2ème étage" checked/> </li>
-                    <li><input type="radio" name="tourBureau" value="Tour 46 - 00 3ème étage"/> </li>
-                    <li><input type="radio" name="tourBureau" value="Tour 46 - 00 4ème étage"/> </li>
-                    <li><input type="radio" name="tourBureau" value="Tour 46 - 45 2ème étage"/> </li>
-                    <li><input type="radio" name="tourBureau" value="Tour 56 - 66 5ème étage"/> </li>
-                    <li><input type="radio" name="tourBureau" value="Tour 56 - 55 5ème étage"/> </li>
+                    <li><label></label><input type="radio" name="tourBureau" value="tour-46-00-2e" checked/>Tour 46 - 00 2ème étage</label> </li>
+                    <li><label></label><input type="radio" name="tourBureau" value="tour-46-00-3e" checked/>Tour 46 - 00 3ème étage</label> </li>
+                    <li><label></label><input type="radio" name="tourBureau" value="tour-46-00-4e" checked/>Tour 46 - 00 4ème étage</label> </li>
+                    <li><label></label><input type="radio" name="tourBureau" value="tour-46-45-2e" checked/>Tour 46 - 45 2ème étage</label> </li>
+                    <li><label></label><input type="radio" name="tourBureau" value="tour-56-66-5e" checked/>Tour 56 - 66 5ème étage</label> </li>
+                    <li><label></label><input type="radio" name="tourBureau" value="tour-56-55-5e" checked/>Tour 56 - 55 5ème étage</label> </li>
                 </ul>
             </label>
             
-            <label>Equipe : </label>
-              <select name="team">
-                <option value="Pétrologie et Géodynamique">Pétrologie et Géodynamique</option>
-                <option value="Tectonique">Tectonique</option>
-                <option value="Terre-Mer Structures et Archives">Terre-Mer Structures et Archives</option>
-                <option value="Informatique">Informatique</option>
-                <option value="Direction">Direction</option>
-                <option value="Terre-Mer Structures et Archives">Terre-Mer Structures et Archives</option>
-                <option value="Terre-Mer Structures et Archives">Terre-Mer Structures et Archives</option>
-                <option value="Pas d'équipe">Pas d'équipe</option>
-              </select>
-
+            <label>Equipe :
+            <select name="team">
+                
 HTML;
+        //Récupères les équipes existantes
+        global $wpdb;
+        $table_name = TABLE_TEAM_NAME;
+        $teams = $wpdb->get_results("SELECT * FROM $table_name");
+
+        foreach ($teams as $team){
+            $teamName = $team->nom_equipe;
+            echo $teamName;
+            $teamId = $team->id_equipe;
+            $html .= "<option value=\"".$teamId."\">".$teamName."</option>";
+        }
+        $html.=<<<HTML
+        </select>
+        </label>
+        <label for="teamRank">
+            Rang au sein de l'équipe :
+            <input type="text" name="teamRank">
+        </label>
+        <label for="campus">
+            Campus :
+            <input type="text" name="campus">
+        </label>
+        <label for="employer">
+            Employeur :
+            <input type="text" name="employer">
+        </label>
+        <label for="mailCase">
+            Case courrier :
+            <input type="text" name="mailCase">
+        </label>
+        <div class="role-box">
+HTML;
+        if ( ! function_exists( 'get_editable_roles' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/user.php';
+        }
         $roles = get_editable_roles();
+
         // Récupère les rôles sélectionnés dans la base de données
         $selected_roles = get_option('istep_user_roles', array());
+
         // Affiche une checkbox pour chaque rôle
         foreach ($roles as $key => $value) {
             $html.= '<label><input type="checkbox" name="roles" value="'.$key.'" '.checked(in_array($key, $selected_roles), true, false).'>'.$value['name'].'</label><br/>';
         }
+        $html.= <<<HTML
+        </div>
+        <button type="submit" name="submit">Créer</button>
+</form>
+HTML;
+
 
     } else {
         $html = "<p>Vous n'avez pas l'autorisation d'utiliser ceci</p>";
