@@ -46,7 +46,7 @@ function more_ud_istep_install(): void
         bureau VARCHAR(4),
         equipe INT,
         rangEquipe VARCHAR(255),
-        tourDuBureau VARCHAR(10),
+        tourDuBureau VARCHAR(30),
         campus VARCHAR(255),
         employeur VARCHAR(255),
         caseCourrier VARCHAR(10),
