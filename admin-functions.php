@@ -20,6 +20,22 @@ function more_userdata_istep_menu(): void{
         'istep_manage_teams', // slug de la page
         'more_userdata_istep_menu_team_page' // fonction de rappel
     );
+    add_submenu_page(
+        'admin.php?page=edit_teams&id=',
+        'Modifier équipe',
+        'Modifier équipe',
+        'administrator',
+        'edit_teams',
+        'more_userdata_istep_edit_equipe_page'
+    );
+    add_submenu_page(
+        'admin.php?page=delete_teams&id=',
+        'Supprimer équipe',
+        'Supprimer équipe',
+        'administrator',
+        'delete_teams',
+        'more_userdata_istep_delete_equipe_page'
+    );
 }
 add_action( 'admin_menu', 'more_userdata_istep_menu' );
 
