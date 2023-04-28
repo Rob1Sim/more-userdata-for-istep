@@ -74,6 +74,9 @@ function add_new_user_form():string {
     $html = "<p>Vous n'êtes pas connecté</p>";
     if (can_user_create_users(get_option('istep_user_roles')))
     {
+        if(isset($_GET['error'])){
+            $html.= "<div class=\"error\">".sanitize_text_field($_GET['error'])."</div>";
+        }
         $html =<<<HTML
         <h4>Formulaire de création d'utilisateur</h4>
         <form method="POST" class="create-istep-user-form">
@@ -173,11 +176,11 @@ HTML;
 
         // Affiche une checkbox pour chaque rôle
         foreach ($roles as $key => $value) {
-            $html.= '<label><p></p><input type="checkbox" name="roles[]" value="'.$key.'" '.checked(in_array($key, $selected_roles), true, false).'><p>'.$value['name'].'</p></label><br/>';
+            $html.= '<label><p></p><input type="checkbox" name="roles[]" value="'.$key.'"><p>'.$value['name'].'</p></label><br/>';
         }
         $html.= <<<HTML
         </div>
-        <button type="submit" name="submit">Créer</button>
+        <button type="submit" name="submit_create_istep_user">Créer</button>
 </form>
 HTML;
 
@@ -189,8 +192,9 @@ HTML;
 
 }
 
+add_action('init','add_new_user');
 function add_new_user() {
-    if (isset($_POST['submit'])) {
+    if (isset($_POST['submit_create_istep_user'])) {
         // Récupération des données du formulaire
         $last_name = sanitize_text_field($_POST['last_name']);
         $name = sanitize_text_field($_POST['name']);
@@ -206,7 +210,7 @@ function add_new_user() {
         $campus = sanitize_text_field($_POST['campus']);
         $employer = sanitize_text_field($_POST['employer']);
         $mailCase = sanitize_text_field($_POST['mailCase']);
-        $pp = $_FILES['pp'];
+        //$pp = $_FILES['pp'];
         $roles = $_POST['roles'];
         //Nettoyage des roles
         $verified_roles = [];
@@ -218,6 +222,11 @@ function add_new_user() {
         if (isset($last_name) && isset($name) && isset($login) && isset($email)
             && isset($password) && isset($office) && isset($job) && isset($tourBureau) && isset($team)
             && isset($teamRank) && isset($campus) && isset($employer)) {
+
+            if (strlen($phone)!=10){
+
+                wp_redirect(get_permalink());
+            }
 
             // Créer un tableau avec les informations de l'utilisateur
             $user_data = array(
@@ -267,17 +276,18 @@ function add_new_user() {
                 );
                 //Ajout de l'utilisateur dans la bd membre_ISTeP
                 if ($wpdb->insert(TABLE_MEMBERS_NAME, $data, $format ) === false) {
-                    $error_message = $wpdb->last_error;
-                    echo "Une erreur est survenue lors de l'ajout de l'utisateur : ".$error_message;
+                    wp_redirect(home_url());
                 }else{
                     $user_data = array(
                         'ID' => $user_id,
-                        'role' => $verified_roles
+                        'roles' => $verified_roles
                     );
                     //Ajout des roles à l'utilisateur créer
-                    wp_update_user( $user_data );
-
-
+                    if (is_wp_error(wp_update_user( $user_data ))){
+                        wp_redirect(home_url());
+                    }
+                    wp_redirect(home_url());
+                    exit;
                 }
 
             }
