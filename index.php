@@ -108,7 +108,7 @@ function add_new_user_form():string {
                 <input type="text" name="office" required/> 
             </label>
             
-            <label for="office">Fonction : 
+            <label for="job">Fonction : 
                 <input type="text" name="job" required/> 
             </label>
             
@@ -173,7 +173,7 @@ HTML;
 
         // Affiche une checkbox pour chaque rôle
         foreach ($roles as $key => $value) {
-            $html.= '<label><p></p><input type="checkbox" name="roles" value="'.$key.'" '.checked(in_array($key, $selected_roles), true, false).'><p>'.$value['name'].'</p></label><br/>';
+            $html.= '<label><p></p><input type="checkbox" name="roles[]" value="'.$key.'" '.checked(in_array($key, $selected_roles), true, false).'><p>'.$value['name'].'</p></label><br/>';
         }
         $html.= <<<HTML
         </div>
@@ -189,7 +189,102 @@ HTML;
 
 }
 
+function add_new_user() {
+    if (isset($_POST['submit'])) {
+        // Récupération des données du formulaire
+        $last_name = sanitize_text_field($_POST['last_name']);
+        $name = sanitize_text_field($_POST['name']);
+        $login = sanitize_text_field($_POST['login']);
+        $email = sanitize_text_field($_POST['email']);
+        $phone = sanitize_text_field($_POST['phone']);
+        $password = $_POST['password'];
+        $office = sanitize_text_field($_POST['office']);
+        $job = sanitize_text_field($_POST['job']);
+        $tourBureau = sanitize_text_field($_POST['tourBureau']);
+        $team = sanitize_text_field($_POST['team']);
+        $teamRank = sanitize_text_field($_POST['teamRank']);
+        $campus = sanitize_text_field($_POST['campus']);
+        $employer = sanitize_text_field($_POST['employer']);
+        $mailCase = sanitize_text_field($_POST['mailCase']);
+        $pp = $_FILES['pp'];
+        $roles = $_POST['roles'];
+        //Nettoyage des roles
+        $verified_roles = [];
+        foreach ($roles as $role){
+            $verified_roles[] = sanitize_text_field($role);
+        }
 
+        // Validation des données (à faire)
+        if (isset($last_name) && isset($name) && isset($login) && isset($email)
+            && isset($password) && isset($office) && isset($job) && isset($tourBureau) && isset($team)
+            && isset($teamRank) && isset($campus) && isset($employer)) {
+
+            // Créer un tableau avec les informations de l'utilisateur
+            $user_data = array(
+                'user_login' => $login,
+                'user_email' => $email,
+                'user_pass'  => $password,
+                'user_nicename' => strtolower($last_name)."_".strtolower($name),
+                'display_name' => $last_name." ".$name,
+            );
+
+            //Ajout de l'utilisateur
+            $user_id = wp_insert_user( $user_data );
+
+            // Vérifier si l'utilisateur a été ajouté avec succès
+            if ( is_wp_error( $user_id ) ) {
+                $error_message = $user_id->get_error_message();
+                echo "Erreur lors de l'ajout de l'utilisateur : $error_message";
+            } else {
+                echo "L'utilisateur a été ajouté avec succès avec l'ID : $user_id";
+
+                //Si l'utilisateur wp a bien été créer on continue
+                global $wpdb;
+                $user = get_user_by( 'login', $login ); // récupère l'utilisateur par login
+                $user_id = $user->ID;
+                $data = array(
+                    'wp_user_id' => $user_id,
+                    'fonction' => $job,
+                    'nTelephone' => $phone,
+                    'bureau' => $office,
+                    'equipe' => intval($team),
+                    'rangEquipe' => $teamRank,
+                    'tourDuBureau' => $tourBureau,
+                    'campus' => $campus,
+                    'employeur' => $employer,
+                    'caseCourrier' => $mailCase,
+                );
+                $format = array(
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%d',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                );
+                //Ajout de l'utilisateur dans la bd membre_ISTeP
+                if ($wpdb->insert(TABLE_MEMBERS_NAME, $data, $format ) === false) {
+                    $error_message = $wpdb->last_error;
+                    echo "Une erreur est survenue lors de l'ajout de l'utisateur : ".$error_message;
+                }else{
+                    $user_data = array(
+                        'ID' => $user_id,
+                        'role' => $verified_roles
+                    );
+                    //Ajout des roles à l'utilisateur créer
+                    wp_update_user( $user_data );
+
+
+                }
+
+            }
+
+        }
+    }
+}
 
 
 
