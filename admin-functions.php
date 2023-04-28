@@ -129,20 +129,20 @@ function more_userdata_istep_menu_team_page() {
             <?php
             global $wpdb;
             $table_name = TABLE_TEAM_NAME;
-            $equipes = $wpdb->get_results("SELECT * FROM $table_name");
-            foreach ($equipes as $equipe) {
+            $teams = $wpdb->get_results("SELECT * FROM $table_name");
+            foreach ($teams as $team) {
                 echo '<tr>';
-                echo '<td>' . $equipe->id_equipe . '</td>';
-                echo '<td>' . $equipe->nom_equipe . '</td>';
+                echo '<td>' . $team->id_equipe . '</td>';
+                echo '<td>' . $team->nom_equipe . '</td>';
                 echo '<td>
-                        <form method="post" action="' . admin_url( 'admin.php?page=edit_teams&id=' . $equipe->id_equipe ) . '">
-                            <input type="hidden" name="id" value="' . $equipe->id_equipe . '">
+                        <form method="post" action="' . admin_url( 'admin.php?page=edit_teams&id=' . $team->id_equipe ) . '">
+                            <input type="hidden" name="id" value="' . $team->id_equipe . '">
                             <button type="submit" class="button">Modifier</button>
                         </form>
                       </td>';
                 echo '<td>
-                        <form method="post" action="' . admin_url( 'admin.php?page=delete_teams&id=' . $equipe->id_equipe ) . '">
-                            <input type="hidden" name="equipe_id_delete" value="' . $equipe->id_equipe . '">
+                        <form method="post" action="' . admin_url( 'admin.php?page=delete_teams&id=' . $team->id_equipe ) . '">
+                            <input type="hidden" name="equipe_id_delete" value="' . $team->id_equipe . '">
                             <button type="submit" class="button">Supprimer</button>
                         </form>
                       </td>';
