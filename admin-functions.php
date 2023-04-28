@@ -67,7 +67,8 @@ function more_userdata_istep_menu_content(): void {
                         $selected_roles = get_option('istep_user_roles', array());
                         // Affiche une checkbox pour chaque rôle
                         foreach ($roles as $key => $value) {
-                            echo '<label><input type="checkbox" name="istep_user_roles[]" value="'.$key.'" '.checked(in_array($key, $selected_roles), true, false).'>'.$value['name'].'</label><br/>';
+                            echo '<label><input type="checkbox" name="istep_user_roles[]" value="'.$key.'" '
+                                .checked(in_array($key, $selected_roles), true, false).'>'.$value['name'].'</label><br/>';
                         }
                         ?>
                     </td>
@@ -87,8 +88,8 @@ function more_userdata_istep_menu_team_page() {
     // Vérifie si le formulaire a été soumis
     if (isset($_POST['submit'])) {
         // Ajoute une nouvelle équipe à la base de données
-        $nom_equipe = $_POST['nom_equipe'];
-        if (isset($nom_equipe)){
+        $nom_equipe = sanitize_text_field($_POST['nom_equipe']);
+        if (isset($nom_equipe) && $nom_equipe !== ""){
             global $wpdb;
             $wpdb->insert(
                 TABLE_TEAM_NAME,
@@ -109,7 +110,7 @@ function more_userdata_istep_menu_team_page() {
                 <tr>
                     <th scope="row"><label for="nom_equipe"><?php _e( 'Nom de l\'équipe:', 'istep_users' ); ?></label></th>
                     <td>
-                        <input type="text" name="nom_equipe" id="nom_equipe" value="">
+                        <input type="text" name="nom_equipe" id="nom_equipe" value="" required>
                     </td>
                 </tr>
             </table>
