@@ -51,8 +51,10 @@ function more_ud_istep_install(): void
         employeur VARCHAR(255),
         caseCourrier VARCHAR(10),
         PRIMARY KEY (id_membre),
-        FOREIGN KEY (wp_user_id) REFERENCES {$wpdb->prefix}users(ID),
+        FOREIGN KEY (wp_user_id) REFERENCES {$wpdb->prefix}users(ID)
+            ON DELETE CASCADE,
         FOREIGN KEY (equipe) REFERENCES {$wpdb->prefix}equipe_ISTeP(id_equipe)
+            ON DELETE SET NULL
 ) $charset_collate;";
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
