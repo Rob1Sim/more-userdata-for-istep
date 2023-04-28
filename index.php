@@ -225,7 +225,8 @@ function add_new_user() {
 
             if (strlen($phone)!=10){
 
-                wp_redirect(get_permalink());
+                wp_redirect(home_url('/add-istep-user'));
+
             }
 
             // Créer un tableau avec les informations de l'utilisateur
@@ -245,7 +246,6 @@ function add_new_user() {
                 $error_message = $user_id->get_error_message();
                 echo "Erreur lors de l'ajout de l'utilisateur : $error_message";
             } else {
-                echo "L'utilisateur a été ajouté avec succès avec l'ID : $user_id";
 
                 //Si l'utilisateur wp a bien été créer on continue
                 global $wpdb;
@@ -276,7 +276,7 @@ function add_new_user() {
                 );
                 //Ajout de l'utilisateur dans la bd membre_ISTeP
                 if ($wpdb->insert(TABLE_MEMBERS_NAME, $data, $format ) === false) {
-                    wp_redirect(home_url());
+                    wp_redirect(home_url('/add-istep-user'));
                 }else{
                     $user_data = array(
                         'ID' => $user_id,
@@ -284,10 +284,9 @@ function add_new_user() {
                     );
                     //Ajout des roles à l'utilisateur créer
                     if (is_wp_error(wp_update_user( $user_data ))){
-                        wp_redirect(home_url());
+                        wp_redirect(home_url('/add-istep-user'));
                     }
-                    wp_redirect(home_url());
-                    exit;
+                    wp_redirect(home_url('/add-istep-user'));
                 }
 
             }
