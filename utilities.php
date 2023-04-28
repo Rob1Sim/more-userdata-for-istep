@@ -1,4 +1,5 @@
 <?php
+// ------------Fonction diverses utilisé dans le plugin-----------
 /**
  * Récupère les roles de l'utilisateur connecté
  * @return array
