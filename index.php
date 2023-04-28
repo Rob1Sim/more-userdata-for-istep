@@ -2,12 +2,13 @@
 /*
 Plugin Name: More userData for ISTeP
 Plugin URI: https://wpusermanager.com/
-Description: Ajoute de nouveaux champs à renseigner lors de la création d'un utilisateur pour les membres de l'ISTeP,
-ainsi qu'un formulaire de création d'utilistateur.
+Description: Ajoute un formulaire de création d'utilisateur pensé pour l'ISTeP, ainsi qu'une gestions des équipes.
 Author: Robin Simonneau, Arbër Jonuzi
 Version: 1.0
 Author URI: https://robin-sim.fr/
 */
+wp_enqueue_style('more-userdata-for-istep',plugins_url('more-userdata-for-istep.css',__FILE__));
+
 require_once(plugin_dir_path(__FILE__).'utilities.php');
 require_once( plugin_dir_path( __FILE__ ) . 'admin-functions.php' );
 global $wpdb;
@@ -34,7 +35,7 @@ function more_ud_istep_install(): void
     $sql = "
     CREATE TABLE $table_name_user_team(
         id_equipe INT NOT NULL AUTO_INCREMENT,
-        nom_equipe VARCHAR(255),
+        nom_equipe VARCHAR(255) NOT NULL,
         PRIMARY KEY(id_equipe)
     )$charset_collate;
     CREATE TABLE $table_name_user_data (
@@ -74,24 +75,25 @@ function add_new_user_form():string {
     if (can_user_create_users(get_option('istep_user_roles')))
     {
         $html =<<<HTML
-        <form method="POST">
+        <h4>Formulaire de création d'utilisateur</h4>
+        <form method="POST" class="create-istep-user-form">
             <label for="last_name">Nom : 
-                <input type="text" name="last_name"/> 
+                <input type="text" name="last_name" required/> 
             </label>
             
             
             <label for="name">Prénom :
-                <input type="text" name="name"/> 
+                <input type="text" name="name" required/> 
              </label>
             
             
             <label for="login">Identifiant : 
-                <input type="text" name="login"/> 
+                <input type="text" name="login" required/> 
             </label>
             
             
             <label for="email">Adresse email :
-                <input type="email" name="email"/>
+                <input type="email" name="email" required/>
              </label>
              
              <label for="phone">Numéro de téléphone :
@@ -99,11 +101,15 @@ function add_new_user_form():string {
              </label>
             
             <label for="password">Mot de passe : 
-                <input type="password" name="password"/>
+                <input type="password" name="password" required/>
             </label>
             
             <label for="office">Bureau : 
-                <input type="text" name="office"/> 
+                <input type="text" name="office" required/> 
+            </label>
+            
+            <label for="office">Fonction : 
+                <input type="text" name="job" required/> 
             </label>
             
             <label for="login">Tour du bureau : 
@@ -137,19 +143,23 @@ HTML;
         </label>
         <label for="teamRank">
             Rang au sein de l'équipe :
-            <input type="text" name="teamRank">
+            <input type="text" name="teamRank" required>
         </label>
         <label for="campus">
             Campus :
-            <input type="text" name="campus">
+            <input type="text" name="campus" required>
         </label>
         <label for="employer">
             Employeur :
-            <input type="text" name="employer">
+            <input type="text" name="employer" required>
         </label>
         <label for="mailCase">
             Case courrier :
             <input type="text" name="mailCase">
+        </label>
+        <label>
+        Photo de profile :
+        <input type="file" accept="image/jpeg, image/png" name="pp">
         </label>
         <div class="role-box">
 HTML;
@@ -163,7 +173,7 @@ HTML;
 
         // Affiche une checkbox pour chaque rôle
         foreach ($roles as $key => $value) {
-            $html.= '<label><input type="checkbox" name="roles" value="'.$key.'" '.checked(in_array($key, $selected_roles), true, false).'>'.$value['name'].'</label><br/>';
+            $html.= '<label><p></p><input type="checkbox" name="roles" value="'.$key.'" '.checked(in_array($key, $selected_roles), true, false).'><p>'.$value['name'].'</p></label><br/>';
         }
         $html.= <<<HTML
         </div>
