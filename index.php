@@ -79,7 +79,7 @@ function add_new_user_form():string {
         }
         $html =<<<HTML
         <h4>Formulaire de création d'utilisateur</h4>
-        <form method="POST" class="create-istep-user-form" action="?">
+        <form method="POST" class="create-istep-user-form" action="?" id="create-user-istep-form">
             <label for="last_name">Nom : 
                 <input type="text" name="last_name" required/> 
             </label>
@@ -99,8 +99,8 @@ function add_new_user_form():string {
                 <input type="email" name="email" required/>
              </label>
              
-             <label for="phone">Numéro de téléphone :
-                <input type="tel" name="phone"/>
+             <label for="phone" id="phoneParent">Numéro de téléphone :
+                <input type="tel" name="phone" id="phoneNumber"/>
              </label>
             
             <label for="password">Mot de passe : 
@@ -179,7 +179,7 @@ HTML;
         }
         $html.= <<<HTML
         </div>
-        <button type="submit" name="submit_create_istep_user">Créer</button>
+        <button type="submit" name="submit_create_istep_user" id="create-user-submit-btn"">Créer</button>
 </form>
 HTML;
 
