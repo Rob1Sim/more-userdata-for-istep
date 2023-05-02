@@ -8,6 +8,7 @@ Version: 1.0
 Author URI: https://robin-sim.fr/
 */
 wp_enqueue_style('more-userdata-for-istep',plugins_url('more-userdata-for-istep.css',__FILE__));
+wp_enqueue_script('more-userdata-for-istep-js',plugins_url('more-userdata-for-istep.js',__FILE__),array(), false, true);
 
 require_once(plugin_dir_path(__FILE__).'utilities.php');
 require_once( plugin_dir_path( __FILE__ ) . 'admin-functions.php' );
@@ -198,20 +199,20 @@ function add_new_user() {
         $error = sanitize_text_field($_GET['user-create-error']);
         switch ($error) {
             case "1":
-                echo "Le numéro de téléphone est incorrecte";
+                echo "<div class=\"user-create-error\">Le numéro de téléphone est incorrecte</div>";
                 break;
             case "2":
-                echo "Erreur lors de la création de l'utilisateur : ".sanitize_text_field($_GET["error-message"]);
+                echo "<div class=\"user-create-error\">Erreur lors de la création de l'utilisateur : ".sanitize_text_field($_GET["error-message"])."</div>";
                 break;
             case "3":
-                echo "Erreur lors de l'ajout des rôles";
+                echo "<div class=\"user-create-error\">Erreur lors de l'ajout des rôles</div>";
                 break;
         }
 
     }
     //affiche un succès si l'utilisateur est bien ajouté
     if (isset($_GET['user-create-success'])){
-        echo "L'utilisateur à été ajouté avec succès";
+        echo "<div class=\"user-create-success\">L'utilisateur à été ajouté avec succès</div>";
     }
     if (isset($_POST['submit_create_istep_user'])) {
         // Récupération des données du formulaire
