@@ -20,7 +20,6 @@ define("TABLE_TEAM_NAME", $wpdb->prefix . 'equipe_ISTeP');
  * Nom de la table membre dans la base de donnée
  */
 define("TABLE_MEMBERS_NAME",$wpdb->prefix . 'membre_ISTeP');
-
 /**
  * Créer la base de donnée lors de l'activation du plugin
  * @return void
@@ -79,7 +78,7 @@ function add_new_user_form():string {
         }
         $html =<<<HTML
         <h4>Formulaire de création d'utilisateur</h4>
-        <form method="POST" class="create-istep-user-form">
+        <form method="POST" class="create-istep-user-form" action="?">
             <label for="last_name">Nom : 
                 <input type="text" name="last_name" required/> 
             </label>
@@ -137,7 +136,6 @@ HTML;
 
         foreach ($teams as $team){
             $teamName = $team->nom_equipe;
-            echo $teamName;
             $teamId = $team->id_equipe;
             $html .= "<option value=\"".$teamId."\">".$teamName."</option>";
         }
@@ -192,14 +190,35 @@ HTML;
 
 }
 
-add_action('init','add_new_user');
+add_action('wp','add_new_user');
 function add_new_user() {
+    $current_url = home_url( "sample-page/?" );
+    //Affiche une erreur si des informations entréer sont incorrecte
+    if (isset($_GET['user-create-error'])){
+        $error = sanitize_text_field($_GET['user-create-error']);
+        switch ($error) {
+            case "1":
+                echo "Le numéro de téléphone est incorrecte";
+                break;
+            case "2":
+                echo "Erreur lors de la création de l'utilisateur : ".sanitize_text_field($_GET["error-message"]);
+                break;
+            case "3":
+                echo "Erreur lors de l'ajout des rôles";
+                break;
+        }
+
+    }
+    //affiche un succès si l'utilisateur est bien ajouté
+    if (isset($_GET['user-create-success'])){
+        echo "L'utilisateur à été ajouté avec succès";
+    }
     if (isset($_POST['submit_create_istep_user'])) {
         // Récupération des données du formulaire
         $last_name = sanitize_text_field($_POST['last_name']);
         $name = sanitize_text_field($_POST['name']);
-        $login = sanitize_text_field($_POST['login']);
-        $email = sanitize_text_field($_POST['email']);
+        $login = sanitize_text_field($_POST['login']); //Bloquer les nom existant
+        $email = sanitize_text_field($_POST['email']);// Bloquer les email existant
         $phone = sanitize_text_field($_POST['phone']);
         $password = $_POST['password'];
         $office = sanitize_text_field($_POST['office']);
@@ -211,12 +230,17 @@ function add_new_user() {
         $employer = sanitize_text_field($_POST['employer']);
         $mailCase = sanitize_text_field($_POST['mailCase']);
         //$pp = $_FILES['pp'];
-        $roles = $_POST['roles'];
-        //Nettoyage des roles
-        $verified_roles = [];
-        foreach ($roles as $role){
-            $verified_roles[] = sanitize_text_field($role);
+        if (isset($_POST['roles'])){
+            //Nettoyage des roles
+            $roles = $_POST['roles'];
+            $verified_roles = [];
+            foreach ($roles as $role){
+                $verified_roles[] = sanitize_text_field($role);
+            }
+        } else {
+            $verified_roles = [get_option('default_role')];
         }
+
 
         // Validation des données (à faire)
         if (isset($last_name) && isset($name) && isset($login) && isset($email)
@@ -225,8 +249,7 @@ function add_new_user() {
 
             if (strlen($phone)!=10){
 
-                wp_redirect(home_url('/add-istep-user'));
-
+                wp_safe_redirect($current_url."user-create-error=1");
             }
 
             // Créer un tableau avec les informations de l'utilisateur
@@ -244,7 +267,8 @@ function add_new_user() {
             // Vérifier si l'utilisateur a été ajouté avec succès
             if ( is_wp_error( $user_id ) ) {
                 $error_message = $user_id->get_error_message();
-                echo "Erreur lors de l'ajout de l'utilisateur : $error_message";
+                wp_safe_redirect($current_url."user-create-error=2&error-message=$error_message");
+
             } else {
 
                 //Si l'utilisateur wp a bien été créer on continue
@@ -276,7 +300,8 @@ function add_new_user() {
                 );
                 //Ajout de l'utilisateur dans la bd membre_ISTeP
                 if ($wpdb->insert(TABLE_MEMBERS_NAME, $data, $format ) === false) {
-                    wp_redirect(home_url('/add-istep-user'));
+                    wp_redirect($current_url);
+                    exit;
                 }else{
                     $user_data = array(
                         'ID' => $user_id,
@@ -284,13 +309,12 @@ function add_new_user() {
                     );
                     //Ajout des roles à l'utilisateur créer
                     if (is_wp_error(wp_update_user( $user_data ))){
-                        wp_redirect(home_url('/add-istep-user'));
+                        wp_safe_redirect($current_url."user-create-error=3");
                     }
-                    wp_redirect(home_url('/add-istep-user'));
+
                 }
-
+                wp_redirect($current_url."user-create-success=0",302);
             }
-
         }
     }
 }
