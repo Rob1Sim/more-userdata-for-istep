@@ -1,7 +1,7 @@
 const submit_button = document.getElementById("create-user-submit-btn");
 const form = document.getElementById("create-user-istep-form");
 let showPassword = false;
-//Vérificateur de formulaire
+//vérification du formulaire
 submit_button.addEventListener('click',(event)=>{
     const elements = document.querySelectorAll('.user-create-error');
     elements.forEach((e)=>{
@@ -68,7 +68,8 @@ submit_button.addEventListener('click',(event)=>{
         addErrorMessage("Case courrier incorrect",document.querySelector('#mailCase').parentNode);
         return;
     }
-    if (tower.length !== 1){
+
+    if (!isOnlyOneRadioButtonSelected(tower)){
         addErrorMessage("Tour de bureau incorrect",document.querySelector('#tower').parentNode);
         return;
     }
@@ -152,4 +153,23 @@ function addErrorMessage(errorText,parentSelector){
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+}
+
+/**
+ * Vérifie que un unique bouton est préssé
+ * @returns {boolean}
+ */
+function isOnlyOneRadioButtonSelected(radioButtons) {
+    let checked = false;
+    for (let i = 0; i < radioButtons.length; i++) {
+        if (radioButtons[i].checked) {
+            if (checked) {
+                // Si un autre bouton radio est déjà coché, retourner false
+                return false;
+            }
+            checked = true;
+        }
+    }
+    // Retourner true si un et seulement un bouton radio est coché
+    return checked;
 }
