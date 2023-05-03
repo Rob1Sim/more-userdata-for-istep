@@ -3,6 +3,8 @@
 Plugin Name: More userData for ISTeP
 Plugin URI: https://wpusermanager.com/
 Description: Ajoute un formulaire de création d'utilisateur pensé pour l'ISTeP et une page personalisé pour les utilsateurs, ainsi qu'une gestions des équipes.
+!Nécéssite un plugin qui gère les permissions pour les roles!
+!l'utilisation de tiny directory est recomandé!
 Author: Robin Simonneau, Arbër Jonuzi
 Version: 1.0
 Author URI: https://robin-sim.fr/
@@ -59,6 +61,18 @@ function more_ud_istep_install(): void
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
+
+    $page_data = array(
+        'post_title' => "Membres de l'ISTeP",
+        'post_content' => '[users_directory]',
+        'post_status' => 'publish',
+        'post_type' => 'page',
+        'post_name' => 'membres-istep'
+
+    );
+
+// Insère la page dans la base de données de WordPress
+    wp_insert_post($page_data);
 }
 register_activation_hook( __FILE__, 'more_ud_istep_install' ); //Appelé lors de l'activation du plugin
 
@@ -328,8 +342,10 @@ function add_new_user() {
                     }
 
                     //Ajout de l'image de profile
-                    if (isset($pp)){
-
+                    createPersonalPage($user_id,$name." ".$last_name,strtolower($last_name)."_".strtolower($name));
+                    if (isset($_FILES['async-upload']["name"]) && $_FILES['async-upload']["name"]!== ""){
+                        echo $_FILES['async-upload']["name"];
+                        die();
                         // Vérifie si le fichier est au format JPG, PNG ou GIF
                         $allowed_formats = array('jpg', 'jpeg', 'png', 'gif');
                         $extension = strtolower(pathinfo($_FILES['async-upload']['name'], PATHINFO_EXTENSION));
@@ -353,6 +369,9 @@ function add_new_user() {
                         }
 
 
+                    }else{
+                        wp_redirect($current_url."user-create-success=0",302);
+
                     }
                 }
 
@@ -361,3 +380,27 @@ function add_new_user() {
     }
 }
 
+/**
+ * Créer une page personnel lors de l'ajout d'un utilisateur via le formulaire
+ * @param $userId
+ * @param $userDisplayName
+ * @param $userNiceName
+ * @return void
+ */
+function createPersonalPage($userId,$userDisplayName,$userNiceName){
+    $parent = get_page_by_path('membres-istep');
+
+    $page_data = array(
+        'post_title' => $userDisplayName,
+        'post_content' => '',
+        'post_status' => 'publish',
+        'post_type' => 'page',
+        'post_author' => $userId,
+        'post_name' => $userNiceName,
+        'post_parent' => $parent->ID,
+
+    );
+
+// Insère la page dans la base de données de WordPress
+    wp_insert_post($page_data);
+}
