@@ -79,24 +79,24 @@ function add_new_user_form():string {
         }
         $html =<<<HTML
         <h4>Formulaire de création d'utilisateur</h4>
-        <form method="POST" class="create-istep-user-form" action="?" id="create-user-istep-form">
+        <form method="POST" class="create-istep-user-form" action="" id="create-user-istep-form">
             <label for="last_name">Nom : 
-                <input type="text" name="last_name" required/> 
+                <input type="text" name="last_name" id="last_name" required/> 
             </label>
             
             
             <label for="name">Prénom :
-                <input type="text" name="name" required/> 
+                <input type="text" name="name" id="name" required/> 
              </label>
             
             
             <label for="login">Identifiant : 
-                <input type="text" name="login" required/> 
+                <input type="text" name="login" id="login" required/> 
             </label>
             
             
             <label for="email">Adresse email :
-                <input type="email" name="email" required/>
+                <input type="email" name="email" id="email" required/>
              </label>
              
              <label for="phone" id="phoneParent">Numéro de téléphone :
@@ -104,18 +104,20 @@ function add_new_user_form():string {
              </label>
             
             <label for="password">Mot de passe : 
-                <input type="password" name="password" required/>
+                <input type="password" name="password" id="password" required/>
+                <button type="button" id="random-pws">Générer un mot de passe aléatoire</button>
+                <button type="button" id="show-password">Afficher le mot de passe</button>
             </label>
             
             <label for="office">Bureau : 
-                <input type="text" name="office" required/> 
+                <input type="text" name="office" id="office" required/> 
             </label>
             
             <label for="job">Fonction : 
-                <input type="text" name="job" required/> 
+                <input type="text" name="job" id="job" required/> 
             </label>
             
-            <label for="login">Tour du bureau : 
+            <label for="tower" id="tower">Tour du bureau : 
                 <ul>
                     <li><label></label><input type="radio" name="tourBureau" value="tour-46-00-2e" checked/>Tour 46 - 00 2ème étage</label> </li>
                     <li><label></label><input type="radio" name="tourBureau" value="tour-46-00-3e" checked/>Tour 46 - 00 3ème étage</label> </li>
@@ -126,8 +128,8 @@ function add_new_user_form():string {
                 </ul>
             </label>
             
-            <label>Equipe :
-            <select name="team">
+            <label id="c">Equipe :
+            <select name="team" id="team">
                 
 HTML;
         //Récupères les équipes existantes
@@ -143,21 +145,21 @@ HTML;
         $html.=<<<HTML
         </select>
         </label>
-        <label for="teamRank">
+        <label for="teamRank" >
             Rang au sein de l'équipe :
-            <input type="text" name="teamRank" required>
+            <input type="text" name="teamRank" id="teamRank" required>
         </label>
-        <label for="campus">
+        <label for="campus" >
             Campus :
-            <input type="text" name="campus" required>
+            <input type="text" name="campus" id="campus" required>
         </label>
         <label for="employer">
             Employeur :
-            <input type="text" name="employer" required>
+            <input type="text" name="employer" id="employer" required>
         </label>
         <label for="mailCase">
             Case courrier :
-            <input type="text" name="mailCase">
+            <input type="text" name="mailCase" id="mailCase">
         </label>
         <label>
         Photo de profile :
@@ -179,6 +181,7 @@ HTML;
         }
         $html.= <<<HTML
         </div>
+        <input type="hidden" name="submit_create_istep_user" value="value">
         <button type="submit" name="submit_create_istep_user" id="create-user-submit-btn"">Créer</button>
 </form>
 HTML;
@@ -250,7 +253,7 @@ function add_new_user() {
 
             if (strlen($phone)!=10){
 
-                wp_safe_redirect($current_url."user-create-error=1");
+                wp_redirect($current_url."user-create-error=1");
             }
 
             // Créer un tableau avec les informations de l'utilisateur
@@ -268,7 +271,7 @@ function add_new_user() {
             // Vérifier si l'utilisateur a été ajouté avec succès
             if ( is_wp_error( $user_id ) ) {
                 $error_message = $user_id->get_error_message();
-                wp_safe_redirect($current_url."user-create-error=2&error-message=$error_message");
+                wp_redirect($current_url."user-create-error=2&error-message=$error_message");
 
             } else {
 
@@ -310,7 +313,7 @@ function add_new_user() {
                     );
                     //Ajout des roles à l'utilisateur créer
                     if (is_wp_error(wp_update_user( $user_data ))){
-                        wp_safe_redirect($current_url."user-create-error=3");
+                        wp_redirect($current_url."user-create-error=3");
                     }
 
                 }
