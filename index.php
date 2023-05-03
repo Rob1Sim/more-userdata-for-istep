@@ -344,8 +344,6 @@ function add_new_user() {
                     //Ajout de l'image de profile
                     createPersonalPage($user_id,$name." ".$last_name,strtolower($last_name)."_".strtolower($name));
                     if (isset($_FILES['async-upload']["name"]) && $_FILES['async-upload']["name"]!== ""){
-                        echo $_FILES['async-upload']["name"];
-                        die();
                         // Vérifie si le fichier est au format JPG, PNG ou GIF
                         $allowed_formats = array('jpg', 'jpeg', 'png', 'gif');
                         $extension = strtolower(pathinfo($_FILES['async-upload']['name'], PATHINFO_EXTENSION));
