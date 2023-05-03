@@ -77,3 +77,28 @@
 #random-pws, #show-password{
     width: 20%;
 }
+
+.user-info-container{
+    display: flex;
+    gap: 5%;
+    height: 50%;
+    flex-wrap: wrap;
+}
+.user-info-container>img{
+    width: initial;
+}
+.user-info-text-container{
+    display: flex;
+    gap: 15%;
+    width: 50%;
+}
+.user-info-text-container>div:nth-child(2){
+    width: 45%;
+}
+
+.user-info-text-container>div>h5{
+    margin-bottom: 1%;
+}
+.user-info-text-container>div>p{
+    margin-top: 1%;
+}
