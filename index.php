@@ -79,7 +79,7 @@ function add_new_user_form():string {
         }
         $html =<<<HTML
         <h4>Formulaire de création d'utilisateur</h4>
-        <form method="POST" class="create-istep-user-form" action="" id="create-user-istep-form">
+        <form method="POST" class="create-istep-user-form" action="" id="create-user-istep-form" enctype="multipart/form-data">
             <label for="last_name">Nom : 
                 <input type="text" name="last_name" id="last_name" required/> 
             </label>
@@ -163,7 +163,7 @@ HTML;
         </label>
         <label>
         Photo de profile :
-        <input type="file" accept="image/jpeg, image/png" name="pp">
+        <input type="file" accept="image/jpeg, image/png" name="async-upload" >
         </label>
         <div class="role-box">
 HTML;
@@ -185,7 +185,6 @@ HTML;
         <button type="submit" name="submit_create_istep_user" id="create-user-submit-btn"">Créer</button>
 </form>
 HTML;
-
 
     } else {
         $html = "<p>Vous n'avez pas l'autorisation d'utiliser ceci</p>";
@@ -210,6 +209,9 @@ function add_new_user() {
             case "3":
                 echo "<div class=\"user-create-error\">Erreur lors de l'ajout des rôles</div>";
                 break;
+            case "4":
+                echo "<div class=\"user-create-error\">Erreur lors de l'ajout de l'avatar : ".sanitize_text_field($_GET["error-message"])."</div>";
+                break;
         }
 
     }
@@ -233,7 +235,8 @@ function add_new_user() {
         $campus = sanitize_text_field($_POST['campus']);
         $employer = sanitize_text_field($_POST['employer']);
         $mailCase = sanitize_text_field($_POST['mailCase']);
-        //$pp = $_FILES['pp'];
+        $pp = $_POST['async-upload'];
+
         if (isset($_POST['roles'])){
             //Nettoyage des roles
             $roles = $_POST['roles'];
@@ -246,7 +249,7 @@ function add_new_user() {
         }
 
 
-        // Validation des données (à faire)
+        // Validation des données
         if (isset($last_name) && isset($name) && isset($login) && isset($email)
             && isset($password) && isset($office) && isset($job) && isset($tourBureau) && isset($team)
             && isset($teamRank) && isset($campus) && isset($employer)) {
@@ -315,13 +318,26 @@ function add_new_user() {
                     if (is_wp_error(wp_update_user( $user_data ))){
                         wp_redirect($current_url."user-create-error=3");
                     }
-
+                    //Ajout de l'image de profile
+                    if (isset($pp)){
+                        require_once(ABSPATH . 'wp-admin/includes/media.php');
+                        require_once(ABSPATH . 'wp-admin/includes/file.php');
+                        require_once(ABSPATH . 'wp-admin/includes/image.php');
+                        $attachment_id = media_handle_upload('async-upload', 0);
+                        if(is_wp_error($attachment_id)) {
+                            wp_redirect($current_url."user-create-error=4&error-message=". $attachment_id->get_error_message());
+                        } else {
+                            // Mettez à jour le champ de méta de l'utilisateur avec l'ID de l'attachement
+                            add_user_meta($user_id,"profile_picture",$attachment_id);
+                        }
+                    }
                 }
                 wp_redirect($current_url."user-create-success=0",302);
             }
         }
     }
 }
+
 
 
 
