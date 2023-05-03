@@ -127,7 +127,6 @@ submit_button.addEventListener('click',(event)=>{
 
 function validatePhoneNumber(phoneNumber) {
     const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
-    console.log("Tarlouse "+phoneNumber)
     return phoneRegex.test(phoneNumber);
 }
 
