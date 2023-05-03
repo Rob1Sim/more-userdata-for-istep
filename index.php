@@ -342,7 +342,7 @@ function add_new_user() {
                     }
 
                     //Ajout de l'image de profile
-                    createPersonalPage($user_id,$name." ".$last_name,strtolower($last_name)."_".strtolower($name));
+                    create_personal_page($user_id,$name." ".$last_name,strtolower($last_name)."_".strtolower($name));
                     if (isset($_FILES['async-upload']["name"]) && $_FILES['async-upload']["name"]!== ""){
                         // Vérifie si le fichier est au format JPG, PNG ou GIF
                         $allowed_formats = array('jpg', 'jpeg', 'png', 'gif');
@@ -378,6 +378,54 @@ function add_new_user() {
     }
 }
 
+
+add_shortcode('istep_user_data','display_users_data');
+/**
+ * Affiche diverses informations de l'utilisateur sur la page de base
+ * @return string
+ */
+function display_users_data(): string
+{
+    $page_id = get_queried_object_id();
+    $page_author_id = get_post_field( 'post_author', $page_id );
+    $page_author_info = get_userdata( $page_author_id ); // Récupère les informations de l'utilisateur
+
+    global $wpdb;
+    $tableName = TABLE_MEMBERS_NAME;
+    $userData = $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $page_author_id")[0];
+    $userAvatar = get_user_avatar($page_author_id);
+    var_dump($userData);
+    $userTower = convert_tower_into_readable($userData->tourDuBureau);
+    $html = <<<HTML
+    <div class="user-info-container">
+        <div>
+            $userAvatar
+        </div>
+        <div class="user-info-text-container">
+            <div>
+                <h5>Fonction</h5>
+                <p>$userData->fonction</p>
+                
+                <h5>Equipe</h5>
+                <p>$userData->equipe</p>
+            </div>
+            <div>
+                <h5>Coordonées :</h5>
+                <p><strong>Téléphone :</strong></p>
+                <p>$userData->nTelephone</p>
+                <p><strong>Campus : </strong></p>
+                <p>$userData->campus</p>
+                <p><strong>Tour :</strong></p>
+                <p>$userTower</p>
+                <p><strong>Bureau :</strong></p>
+                <p> $userData->bureau</p>
+            </div>
+        </div>
+</div>
+HTML;
+    return $html;
+}
+
 /**
  * Créer une page personnel lors de l'ajout d'un utilisateur via le formulaire
  * @param $userId
@@ -385,12 +433,13 @@ function add_new_user() {
  * @param $userNiceName
  * @return void
  */
-function createPersonalPage($userId,$userDisplayName,$userNiceName){
+function create_personal_page($userId, $userDisplayName, $userNiceName): void
+{
     $parent = get_page_by_path('membres-istep');
 
     $page_data = array(
         'post_title' => $userDisplayName,
-        'post_content' => '',
+        'post_content' => '[istep_user_data]',
         'post_status' => 'publish',
         'post_type' => 'page',
         'post_author' => $userId,
@@ -401,4 +450,36 @@ function createPersonalPage($userId,$userDisplayName,$userNiceName){
 
 // Insère la page dans la base de données de WordPress
     wp_insert_post($page_data);
+}
+function get_user_avatar($user_id) {
+    $avatar_id = get_user_meta($user_id, 'wp_user_avatar', true);
+    if ($avatar_id) {
+        if (is_array(wp_get_attachment_image_src($avatar_id, 'thumbnail'))){
+            $avatar_url = wp_get_attachment_image_src($avatar_id, 'thumbnail')[0];
+        }else{
+            return "Erreur de chargment de l'image";
+        }
+    } else {
+        $avatar_url = get_avatar_url($user_id);
+    }
+    return '<img src="' . $avatar_url . '" alt="Avatar">';
+}
+
+/**
+ * Transforme le nom de la tour enregistré dans la bd
+ * @param $rawName
+ * @return string
+ */
+function convert_tower_into_readable($rawName):string{
+
+$parts = explode('-', $rawName);
+
+$tour = ucfirst($parts[0]);
+$floor = str_replace('-', ' ', $parts[1]);
+$level = $parts[2];
+
+
+// Afficher le résultat
+return "$tour $floor"."-"." $level"."ème étage";
+
 }
