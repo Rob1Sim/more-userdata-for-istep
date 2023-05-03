@@ -2,7 +2,7 @@
 /*
 Plugin Name: More userData for ISTeP
 Plugin URI: https://wpusermanager.com/
-Description: Ajoute un formulaire de création d'utilisateur pensé pour l'ISTeP, ainsi qu'une gestions des équipes.
+Description: Ajoute un formulaire de création d'utilisateur pensé pour l'ISTeP et une page personalisé pour les utilsateurs, ainsi qu'une gestions des équipes.
 Author: Robin Simonneau, Arbër Jonuzi
 Version: 1.0
 Author URI: https://robin-sim.fr/
@@ -185,7 +185,6 @@ HTML;
         <button type="submit" name="submit_create_istep_user" id="create-user-submit-btn"">Créer</button>
 </form>
 HTML;
-    $html.=display_users_avatar(112);
     } else {
         $html = "<p>Vous n'avez pas l'autorisation d'utiliser ceci</p>";
     }
@@ -360,21 +359,5 @@ function add_new_user() {
             }
         }
     }
-}
-
-
-/**
- * Retourne l'image de profile stocké dans les métadonnées
- * @param $user_id
- * @return string
- */
-function display_users_avatar($user_id) {
-    $avatar_id = get_user_meta($user_id, 'wp_user_avatar', true);
-    if ($avatar_id) {
-        $avatar_url = wp_get_attachment_image_src($avatar_id, 'thumbnail')[0];
-    } else {
-        $avatar_url = get_avatar_url($user_id);
-    }
-    return '<img src="' . $avatar_url . '" alt="Avatar">';
 }
 
