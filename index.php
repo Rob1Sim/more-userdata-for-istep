@@ -185,7 +185,7 @@ HTML;
         <button type="submit" name="submit_create_istep_user" id="create-user-submit-btn"">Créer</button>
 </form>
 HTML;
-
+    $html.=display_users_avatar(112);
     } else {
         $html = "<p>Vous n'avez pas l'autorisation d'utiliser ceci</p>";
     }
@@ -194,6 +194,10 @@ HTML;
 }
 
 add_action('wp','add_new_user');
+/**
+ * Fonction qui vérifie les données entré dans le formulaire et les enregistre dans la base de donnée
+ * @return void
+ */
 function add_new_user() {
     $current_url = home_url( "sample-page/?" );
     //Affiche une erreur si des informations entréer sont incorrecte
@@ -211,6 +215,12 @@ function add_new_user() {
                 break;
             case "4":
                 echo "<div class=\"user-create-error\">Erreur lors de l'ajout de l'avatar : ".sanitize_text_field($_GET["error-message"])."</div>";
+                break;
+            case "5":
+                echo "<div class=\"user-create-error\">Le format de l'image n'est pas correcte</div>";
+                break;
+            case "6":
+                echo "<div class=\"user-create-error\">L'extension de l'image n'est pas correcte</div>";
                 break;
         }
 
@@ -235,7 +245,7 @@ function add_new_user() {
         $campus = sanitize_text_field($_POST['campus']);
         $employer = sanitize_text_field($_POST['employer']);
         $mailCase = sanitize_text_field($_POST['mailCase']);
-        $pp = $_POST['async-upload'];
+        $pp = $_FILES['async-upload'];
 
         if (isset($_POST['roles'])){
             //Nettoyage des roles
@@ -247,7 +257,6 @@ function add_new_user() {
         } else {
             $verified_roles = [get_option('default_role')];
         }
-
 
         // Validation des données
         if (isset($last_name) && isset($name) && isset($login) && isset($email)
@@ -314,30 +323,58 @@ function add_new_user() {
                         'ID' => $user_id,
                         'roles' => $verified_roles
                     );
-                    //Ajout des roles à l'utilisateur créer
+                    //Ajout des roles à l'utilisateur créé
                     if (is_wp_error(wp_update_user( $user_data ))){
                         wp_redirect($current_url."user-create-error=3");
                     }
+
                     //Ajout de l'image de profile
                     if (isset($pp)){
-                        require_once(ABSPATH . 'wp-admin/includes/media.php');
-                        require_once(ABSPATH . 'wp-admin/includes/file.php');
-                        require_once(ABSPATH . 'wp-admin/includes/image.php');
-                        $attachment_id = media_handle_upload('async-upload', 0);
-                        if(is_wp_error($attachment_id)) {
-                            wp_redirect($current_url."user-create-error=4&error-message=". $attachment_id->get_error_message());
+
+                        // Vérifie si le fichier est au format JPG, PNG ou GIF
+                        $allowed_formats = array('jpg', 'jpeg', 'png', 'gif');
+                        $extension = strtolower(pathinfo($_FILES['async-upload']['name'], PATHINFO_EXTENSION));
+
+                        if(!in_array($extension, $allowed_formats)) {
+                            wp_redirect($current_url."user-create-error=6");
+
                         } else {
-                            // Mettez à jour le champ de méta de l'utilisateur avec l'ID de l'attachement
-                            add_user_meta($user_id,"profile_picture",$attachment_id);
+                            require_once(ABSPATH . 'wp-admin/includes/media.php');
+                            require_once(ABSPATH . 'wp-admin/includes/file.php');
+                            require_once(ABSPATH . 'wp-admin/includes/image.php');
+                            $attachment_id = media_handle_upload('async-upload', 0);
+                            if(is_wp_error($attachment_id)) {
+                                wp_redirect($current_url."user-create-error=4&error-message=". $attachment_id->get_error_message());
+                            } else {
+                                // Mettez à jour le champ de méta de l'utilisateur avec l'ID de l'attachement
+                                add_user_meta($user_id,"wp_user_avatar",$attachment_id);
+                            }
+
+                            wp_redirect($current_url."user-create-success=0",302);
                         }
+
+
                     }
                 }
-                wp_redirect($current_url."user-create-success=0",302);
+
             }
         }
     }
 }
 
 
-
+/**
+ * Retourne l'image de profile stocké dans les métadonnées
+ * @param $user_id
+ * @return string
+ */
+function display_users_avatar($user_id) {
+    $avatar_id = get_user_meta($user_id, 'wp_user_avatar', true);
+    if ($avatar_id) {
+        $avatar_url = wp_get_attachment_image_src($avatar_id, 'thumbnail')[0];
+    } else {
+        $avatar_url = get_avatar_url($user_id);
+    }
+    return '<img src="' . $avatar_url . '" alt="Avatar">';
+}
 
