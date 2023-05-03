@@ -4,7 +4,9 @@ let showPassword = false;
 //Vérificateur de formulaire
 submit_button.addEventListener('click',(event)=>{
     const elements = document.querySelectorAll('.user-create-error');
-
+    elements.forEach((e)=>{
+        e.remove();
+    })
 
     event.preventDefault();
     const name = document.getElementById("name");
