@@ -24,19 +24,19 @@ submit_button.addEventListener('click',(event)=>{
     const tower = document.getElementsByName("tourBureau");
     const team = document.getElementById("team");
 
-    if(name.value === "" || name.value === null){
+    if(name.value === "" || name.value === null|| name.value.length > 255){
         addErrorMessage("Prénom incorrect",document.querySelector('#name').parentNode);
         return;
     }
-    if(lastName.value === "" || lastName.value === null){
+    if(lastName.value === "" || lastName.value === null|| lastName.value.length > 255){
         addErrorMessage("Nom incorrect",document.querySelector('#last_name').parentNode);
         return;
     }
-    if(login.value === "" || login.value === null){
+    if(login.value === "" || login.value === null|| login.value.length > 255){
         addErrorMessage("Login incorrect",document.querySelector('#login').parentNode);
         return;
     }
-    if(email.value === "" || email.value === null || !isValidEmail(email.value)){
+    if(email.value === "" || email.value === null || !isValidEmail(email.value)|| email.value.length > 255){
         addErrorMessage("Email incorrect",document.querySelector('#email').parentNode);
         return;
     }
@@ -44,27 +44,27 @@ submit_button.addEventListener('click',(event)=>{
         addErrorMessage("Mot de passe non valide",document.querySelector('#password').parentNode);
         return;
     }
-    if(office.value === "" || office.value === null){
+    if(office.value === "" || office.value === null || office.value.length>4){
         addErrorMessage("Bureau incorrect",document.querySelector('#office').parentNode);
         return;
     }
-    if(job.value === "" || job.value === null){
+    if(job.value === "" || job.value === null || job.value.length > 255){
         addErrorMessage("Fonction incorrect",document.querySelector('#job').parentNode);
         return;
     }
-    if(rank.value === "" || rank.value === null){
+    if(rank.value === "" || rank.value === null ||rank.value.length > 255){
         addErrorMessage("Rang incorrect",document.querySelector('#teamRank').parentNode);
         return;
     }
-    if(campus.value === "" || campus.value === null){
+    if(campus.value === "" || campus.value === null|| campus.value.length > 255){
         addErrorMessage("Campus incorrect",document.querySelector('#campus').parentNode);
         return;
     }
-    if(employer.value === "" || employer.value === null){
+    if(employer.value === "" || employer.value === null|| employer.value.length > 255){
         addErrorMessage("Employeur incorrect",document.querySelector('#employer').parentNode);
         return;
     }
-    if(mailCase.value === "" || mailCase.value === null){
+    if(mailCase.value === "" || mailCase.value === null|| job.value.length > 10){
         addErrorMessage("Case courrier incorrect",document.querySelector('#mailCase').parentNode);
         return;
     }
@@ -74,8 +74,9 @@ submit_button.addEventListener('click',(event)=>{
         return;
     }
 
-    if(team.value ==="" || team.value === null){
-        addErrorMessage("Equipe incorrect",document.querySelector('#team-label').parentNode);
+    if(team.value ==="" || team.value === null || isNaN(parseInt(team.value))){
+        console.log(isNaN(parseInt(team.value)))
+        addErrorMessage("Equipe incorrect",document.querySelector('#c'));
         return;
     }
 
