@@ -9,20 +9,12 @@ Author: Robin Simonneau, Arbër Jonuzi
 Version: 1.0
 Author URI: https://robin-sim.fr/
 */
-wp_enqueue_style('scripts/more-userdata-for-istep',plugins_url('more-userdata-for-istep.css',__FILE__));
-wp_enqueue_script('styles/more-userdata-for-istep-js',plugins_url('more-userdata-for-istep.js',__FILE__),array(), false, true);
+wp_enqueue_style('more-userdata-for-istep',plugins_url('styles/more-userdata-for-istep.css',__FILE__));
+wp_enqueue_script('more-userdata-for-istep-js',plugins_url('scripts/more-userdata-for-istep.js',__FILE__),array(), false, true);
 
 require_once(plugin_dir_path(__FILE__).'utilities.php');
 require_once( plugin_dir_path( __FILE__ ) . 'admin-functions.php' );
-global $wpdb;
-/**
- * Nom de la table équipe dans la base de donnée
- */
-define("TABLE_TEAM_NAME", $wpdb->prefix . 'equipe_ISTeP');
-/**
- * Nom de la table membre dans la base de donnée
- */
-define("TABLE_MEMBERS_NAME",$wpdb->prefix . 'membre_ISTeP');
+
 /**
  * Créer la base de donnée lors de l'activation du plugin
  * @return void
@@ -448,76 +440,8 @@ function create_personal_page(int $userId, string $userDisplayName,string $userN
     wp_insert_post($page_data);
 }
 
-/**
- * Récupère l'avatar de l'utilisateur passé en paramètre
- * @param int $user_id
- * @return string
- */
-function get_user_avatar(int $user_id) {
-    $avatar_id = get_user_meta($user_id, 'wp_user_avatar', true);
-    if ($avatar_id) {
-        if (is_array(wp_get_attachment_image_src($avatar_id, 'thumbnail'))){
-            $avatar_url = wp_get_attachment_image_src($avatar_id, 'thumbnail')[0];
-        }else{
-            return "Erreur de chargment de l'image";
-        }
-    } else {
-        $avatar_url = get_avatar_url($user_id);
-    }
-    return '<img src="' . $avatar_url . '" alt="Avatar">';
-}
-
-/**
- * Transforme le nom de la tour enregistré dans la bd
- * @param string $rawName
- * @return string
- */
-function convert_tower_into_readable(string $rawName):string{
-
-$parts = explode('-', $rawName);
-
-$tour = ucfirst($parts[0]);
-$floor = str_replace('-', ' ', $parts[1]);
-$level = $parts[2];
 
 
-// Afficher le résultat
-return "$tour $floor"."-"." $level"."ème étage";
-
-}
-
-/**
- * Renvoie le nom de l'équipe correspondant à l'id passé en paramètre
- * @param int $id
- * @return mixed|stdClass
- */
-function get_team_name_by_id(int $id){
-    global $wpdb;
-    $tableName = TABLE_TEAM_NAME;
-    return $wpdb->get_results("SELECT nom_equipe FROM $tableName WHERE id_equipe = $id")[0];
-}
-
-/**
- * Renvoie toutes les information de l'utilisateur qui possède l'id passé en paramètre
- * @param int $id
- * @return mixed|stdClass
- */
-function get_istep_user_by_id(int $id):mixed{
-    global $wpdb;
-    $tableName = TABLE_MEMBERS_NAME;
-    return $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $id")[0];
-}
-
-/**
- * Récupère tous les élément d'une table donnée
- * @param string $table
- * @return array
- */
-function get_list_of_table(string $table):array{
-    global $wpdb;
-    $tableName = $table;
-    return $wpdb->get_results("SELECT * FROM $tableName");
-}
 
 // -- Tiny Directory --
 add_shortcode('users_directory','createDirectoryFromDBUsers');
@@ -528,9 +452,9 @@ add_shortcode('users_directory','createDirectoryFromDBUsers');
  */
 function createDirectoryFromDBUsers(): string{
     //Ajout de la feuille de style et du javascript
-    wp_enqueue_style('tiny-directory-css',plugins_url('scripts/tiny-directory.css',__FILE__));
-    wp_enqueue_script('tiny-directory-js',plugins_url('styles/tiny-directory.js',__FILE__),array(), false, true);
-    $users = get_users();
+    wp_enqueue_style('tiny-directory-css',plugins_url('styles/tiny-directory.css',__FILE__));
+    wp_enqueue_script('tiny-directory-js',plugins_url('scripts/tiny-directory.js',__FILE__),array(), false, true);
+    $users = get_list_of_table(TABLE_MEMBERS_NAME);
     // Vérifier s'il y a des utilisateurs
     if ( !empty( $users ) ) {
         //Génère le tableau
@@ -551,28 +475,29 @@ function createDirectoryFromDBUsers(): string{
     <tbody>
     HTML;
         foreach ( $users as $user ) {
-            $userID = $user->ID;
+            $userID = $user->wp_user_id;
             $userAvatar = get_user_avatar($userID);
-            $isetep_user = get_istep_user_by_id($userID);
-            $linkToProfilePage = home_url()."/membres-istep/$user->user_nicename";
+            $istep_users = get_istep_user_by_id($userID);
+            $wp_user = get_user_by("id",$userID);
+            $linkToProfilePage = home_url()."/membres-istep/$wp_user->user_nicename";
             $html.= <<<HTML
         <tr class="user-$userID tiny-directory-tr" tabindex="0">
             <td class="no-display-fields" id="pp-$userID" data-id="$userID">$userAvatar</td>
-            <td class="no-display-fields" ><strong>Téléphone : </strong>$isetep_user->nTelephone</td>
+            <td class="no-display-fields" ><strong>Téléphone : </strong>$istep_users->nTelephone</td>
             <td class="no-display-fields" ><strong>Coordonées : </strong>
                 <ul>
-                    <li>$isetep_user->campus</li>
-                    <li>$isetep_user->tourDuBureau</li>
-                    <li>$isetep_user->bureau</li>
+                    <li>$istep_users->campus</li>
+                    <li>$istep_users->tourDuBureau</li>
+                    <li>$istep_users->bureau</li>
                 </ul>
             </td>
             <td class="no-display-fields" id="login-$userID">$linkToProfilePage</td>
             <td class="no-display-fields" id="login-$userID">$linkToProfilePage</td>
             <td class="no-display-fields" id="login-$userID">$linkToProfilePage</td>
-            <td class="tiny-directory-td name-$userID">$user->display_name</td>
-            <td class="tiny-directory-td email-$userID"><a href="mailto:$user->user_email">$user->user_email</td>
-            <td class="tiny-directory-td phone-$userID">$isetep_user->nTelephone</td>
-            <td class="tiny-directory-td position-$userID">$isetep_user->fonction</td>
+            <td class="tiny-directory-td name-$userID">$wp_user->display_name</td>
+            <td class="tiny-directory-td email-$userID"><a href="mailto:$wp_user->user_email">$wp_user->user_email</td>
+            <td class="tiny-directory-td phone-$userID">$istep_users->nTelephone</td>
+            <td class="tiny-directory-td position-$userID">$istep_users->fonction</td>
         </tr>
 HTML;
         }
