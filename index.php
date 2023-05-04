@@ -390,10 +390,10 @@ function display_users_data(): string
     $page_author_id = get_post_field( 'post_author', $page_id );
     $page_author_info = get_userdata( $page_author_id ); // Récupère les informations de l'utilisateur
 
-    $userData = get_user_name_from_id($page_author_id);
+    $userData = get_user_name_by_id($page_author_id);
     $userAvatar = get_user_avatar($page_author_id);
     $userTower = convert_tower_into_readable($userData->tourDuBureau);
-    $userTeam = get_team_name_from_id($userData->equipe);
+    $userTeam = get_team_name_by_id($userData->equipe);
 
     $html = <<<HTML
     <div class="user-info-container">
@@ -491,7 +491,7 @@ return "$tour $floor"."-"." $level"."ème étage";
  * @param int $id
  * @return mixed|stdClass
  */
-function get_team_name_from_id(int $id){
+function get_team_name_by_id(int $id){
     global $wpdb;
     $tableName = TABLE_TEAM_NAME;
     return $wpdb->get_results("SELECT nom_equipe FROM $tableName WHERE id_equipe = $id")[0];
@@ -502,7 +502,7 @@ function get_team_name_from_id(int $id){
  * @param int $id
  * @return mixed|stdClass
  */
-function get_user_name_from_id(int $id):mixed{
+function get_user_name_by_id(int $id):mixed{
     global $wpdb;
     $tableName = TABLE_MEMBERS_NAME;
     return $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $id")[0];
@@ -515,6 +515,6 @@ function get_user_name_from_id(int $id):mixed{
  */
 function get_list_of_table(string $table):array{
     global $wpdb;
-    $tableName = TABLE_MEMBERS_NAME;
+    $tableName = $table;
     return $wpdb->get_results("SELECT * FROM $tableName");
 }
