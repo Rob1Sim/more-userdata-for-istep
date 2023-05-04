@@ -1,5 +1,7 @@
 <?php
 // ---- Menu Administrateur ----
+wp_enqueue_script('more-userdata-for-istep-admin-js',plugins_url('more-userdata-for-istep-admin.js',__FILE__),array(), false, true);
+
 /**
  * Génère la page dans le panel administrateur
  * @return void
@@ -7,7 +9,7 @@
 function more_userdata_istep_menu(): void{
     add_menu_page(
         "Paramètre création d'utilisteur",
-        "Roles de création d'utilisateur",
+        "Membres de l'ISTeP paramètres",
         "administrator",
         "istep_users_options",
         "more_userdata_istep_menu_content"
@@ -246,7 +248,26 @@ function more_userdata_istep_users_list():void{
     ?>
     <div class="wrap">
         <h1>Liste des membres de l'ISTeP</h1>
-        <table class="wp-list-table widefat fixed striped">
+        <label for="dropdown-colonne">Trier par :</label>
+        <select id="dropdown-colonne">
+            <option value="0">ID</option>
+            <option value="1">Nom de l'utilisateur</option>
+            <option value="2">Login</option>
+            <option value="3">Equipe</option>
+            <option value="4">Fonction</option>
+            <option value="5">Email</option>
+            <option value="6">Numéro de téléphone</option>
+            <option value="7">Rang dans l'équipe</option>
+            <option value="8">Tour du bureau</option>
+            <option value="9">Bureau</option>
+            <option value="10">Campus</option>
+            <option value="11">Employeur</option>
+            <option value="12">Case courrier</option>
+        </select>
+
+        <label for="search">Rechercher :</label>
+        <input type="text" id="search">
+        <table class="wp-list-table widefat fixed striped " id="istep-users-list">
             <thead>
             <tr>
                 <th>ID</th>
