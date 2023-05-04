@@ -396,6 +396,8 @@ function display_users_data(): string
     $userAvatar = get_user_avatar($page_author_id);
     var_dump($userData);
     $userTower = convert_tower_into_readable($userData->tourDuBureau);
+    $userTeam = get_team_name_from_id($userData->equipe);
+
     $html = <<<HTML
     <div class="user-info-container">
         <div>
@@ -407,18 +409,15 @@ function display_users_data(): string
                 <p>$userData->fonction</p>
                 
                 <h5>Equipe</h5>
-                <p>$userData->equipe</p>
+                <p>$userTeam->nom_equipe</p>
             </div>
             <div>
                 <h5>Coordonées :</h5>
-                <p><strong>Téléphone :</strong></p>
-                <p>$userData->nTelephone</p>
-                <p><strong>Campus : </strong></p>
-                <p>$userData->campus</p>
-                <p><strong>Tour :</strong></p>
-                <p>$userTower</p>
-                <p><strong>Bureau :</strong></p>
-                <p> $userData->bureau</p>
+                <p><strong>Téléphone : </strong><a href="tel:$userData->nTelephone">$userData->nTelephone</a></p>
+                <p><strong>Email : </strong><a href="mailto:$page_author_info->user_email">$page_author_info->user_email</a> </p>
+                <p><strong>Campus : </strong>$userData->campus</p>
+                <p><strong>Tour :</strong>$userTower</p>
+                <p><strong>Bureau :</strong>$userData->bureau</p>
             </div>
         </div>
 </div>
@@ -428,12 +427,12 @@ HTML;
 
 /**
  * Créer une page personnel lors de l'ajout d'un utilisateur via le formulaire
- * @param $userId
- * @param $userDisplayName
- * @param $userNiceName
+ * @param int $userId
+ * @param string $userDisplayName
+ * @param string $userNiceName
  * @return void
  */
-function create_personal_page($userId, $userDisplayName, $userNiceName): void
+function create_personal_page(int $userId, string $userDisplayName,string $userNiceName): void
 {
     $parent = get_page_by_path('membres-istep');
 
@@ -451,7 +450,13 @@ function create_personal_page($userId, $userDisplayName, $userNiceName): void
 // Insère la page dans la base de données de WordPress
     wp_insert_post($page_data);
 }
-function get_user_avatar($user_id) {
+
+/**
+ * Récupère l'avatar de l'utilisateur passé en paramètre
+ * @param int $user_id
+ * @return string
+ */
+function get_user_avatar(int $user_id) {
     $avatar_id = get_user_meta($user_id, 'wp_user_avatar', true);
     if ($avatar_id) {
         if (is_array(wp_get_attachment_image_src($avatar_id, 'thumbnail'))){
@@ -467,10 +472,10 @@ function get_user_avatar($user_id) {
 
 /**
  * Transforme le nom de la tour enregistré dans la bd
- * @param $rawName
+ * @param string $rawName
  * @return string
  */
-function convert_tower_into_readable($rawName):string{
+function convert_tower_into_readable(string $rawName):string{
 
 $parts = explode('-', $rawName);
 
@@ -482,4 +487,15 @@ $level = $parts[2];
 // Afficher le résultat
 return "$tour $floor"."-"." $level"."ème étage";
 
+}
+
+/**
+ * Renvoie le nom de l'équipe correspondant à l'id passé en paramètre
+ * @param int $id
+ * @return mixed|stdClass
+ */
+function get_team_name_from_id(int $id){
+    global $wpdb;
+    $tableName = TABLE_TEAM_NAME;
+    return $wpdb->get_results("SELECT nom_equipe FROM $tableName WHERE id_equipe = $id")[0];
 }
