@@ -460,8 +460,8 @@ function createDirectoryFromDBUsers(): string{
         //Génère le tableau
         $html = <<<HTML
     <div class="tiny-directory-div">
-    <label for="search-input">Rechercher : </label>
-    <input type="text" id="search-input" placeholder="Robin...">
+    <label for="search-input-members">Rechercher : </label>
+    <input type="text" id="search-input-members"" placeholder="Robin...">
     <div class="scrollable-div">
     <table class="tiny-directory-table">
     <thead >

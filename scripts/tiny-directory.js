@@ -86,9 +86,9 @@ rows.forEach((row) => {
     });
 });
 //Champs de recherche
-const searchInput = document.getElementById('search-input');
-searchInput.addEventListener('input', () => {
-    const filterValue = searchInput.value.trim().toLowerCase();
+const searchInputMembers = document.getElementById('search-input-members');
+searchInputMembers.addEventListener('input', () => {
+    const filterValue = searchInputMembers.value.trim().toLowerCase();
     rows.forEach(row => {
         const userId = row.querySelector('[data-id]').getAttribute('data-id');
         const displayName = row.querySelector(`.name-${userId}`).textContent.trim().toLowerCase();
