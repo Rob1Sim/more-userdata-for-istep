@@ -21,8 +21,10 @@ rows.forEach((row) => {
     //Récupération des informations déjà affichés
     const displayName = "Nom : "+row.querySelector(`.name-${userId}`).textContent;
     const email = "Email : "+row.querySelector(`.email-${userId}`).textContent;
-    const phone = "phone"//row.querySelector(`.phone-${userId}`).textContent;
-    const position = "position"//row.querySelector(`.position-${userId}`).textContent;
+    const phone = "Téléphone : "+row.querySelector(`.phone-${userId}`).textContent;
+    const office = "Bureau : "+row.querySelector(`.office-${userId}`).textContent;
+    const tower = "Tour : "+row.querySelector(`.tower-${userId}`).textContent;
+    const campus = "Campus : "+row.querySelector(`.campus-${userId}`).textContent;
 
     //Créations des élements affiché dans le bloc caché
     const displayNameP = document.createElement('p');
@@ -34,8 +36,12 @@ rows.forEach((row) => {
     const phoneP = document.createElement('p');
     phoneP.textContent = phone;
 
-    const positionP = document.createElement('p');
-    positionP.textContent = position;
+    const campusP = document.createElement('p');
+    campusP.textContent = campus;
+    const towerP = document.createElement('p');
+    towerP.textContent = tower;
+    const officeP = document.createElement('p');
+    officeP.textContent = office;
 
     const linkToProfilePageA = document.createElement('a');
     linkToProfilePageA.textContent = "Page de profile";
@@ -43,18 +49,27 @@ rows.forEach((row) => {
 
     const detailsContent = document.createElement('div');
     detailsContent.classList.add('detail-div-flex');
-    detailsContent.appendChild(ppCopy);
+
+    const imgDiv = document.createElement('div');
+    imgDiv.appendChild(ppCopy);
 
     const detailsTextContent = document.createElement('div')
     detailsTextContent.classList.add('detail-div-flex-text');
 
+    detailsTextContent.appendChild(imgDiv);
     detailsTextContent.appendChild(displayNameP);
     detailsTextContent.appendChild(emailP);
-    //detailsTextContent.appendChild(phone);
-    //detailsTextContent.appendChild(position);
-    detailsTextContent.appendChild(linkToProfilePageA);
+    detailsTextContent.appendChild(phoneP);
+
+    const detailsCoordonates = document.createElement('div')
+    detailsCoordonates.classList.add('detail-div-flex-text');
+    detailsCoordonates.appendChild(campusP);
+    detailsCoordonates.appendChild(towerP);
+    detailsCoordonates.appendChild(officeP);
 
     detailsContent.appendChild(detailsTextContent);
+    detailsContent.appendChild(detailsCoordonates);
+    detailsContent.appendChild(linkToProfilePageA);
 
     detailsCell.appendChild(detailsContent);
     detailsRow.appendChild(detailsCell);

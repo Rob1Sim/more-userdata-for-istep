@@ -480,24 +480,28 @@ function createDirectoryFromDBUsers(): string{
             $istep_users = get_istep_user_by_id($userID);
             $wp_user = get_user_by("id",$userID);
             $linkToProfilePage = home_url()."/membres-istep/$wp_user->user_nicename";
+
+            $tower = convert_tower_into_readable($istep_users->tourDuBureau);
+
             $html.= <<<HTML
         <tr class="user-$userID tiny-directory-tr" tabindex="0">
             <td class="no-display-fields" id="pp-$userID" data-id="$userID">$userAvatar</td>
-            <td class="no-display-fields" ><strong>Téléphone : </strong>$istep_users->nTelephone</td>
-            <td class="no-display-fields" ><strong>Coordonées : </strong>
-                <ul>
-                    <li>$istep_users->campus</li>
-                    <li>$istep_users->tourDuBureau</li>
-                    <li>$istep_users->bureau</li>
-                </ul>
-            </td>
-            <td class="no-display-fields" id="login-$userID">$linkToProfilePage</td>
-            <td class="no-display-fields" id="login-$userID">$linkToProfilePage</td>
             <td class="no-display-fields" id="login-$userID">$linkToProfilePage</td>
             <td class="tiny-directory-td name-$userID">$wp_user->display_name</td>
             <td class="tiny-directory-td email-$userID"><a href="mailto:$wp_user->user_email">$wp_user->user_email</td>
             <td class="tiny-directory-td phone-$userID">$istep_users->nTelephone</td>
-            <td class="tiny-directory-td position-$userID">$istep_users->fonction</td>
+            <td class="tiny-directory-td"$userID">
+            $istep_users->fonction
+            </td>
+            <td class="no-display-fields campus-$userID">
+                $istep_users->campus
+            </td>
+            <td class="no-display-fields tower-$userID">
+                $tower
+            </td>
+            <td class="no-display-fields office-$userID">
+                $istep_users->bureau
+            </td>
         </tr>
 HTML;
         }
