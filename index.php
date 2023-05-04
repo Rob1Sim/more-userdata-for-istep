@@ -9,8 +9,8 @@ Author: Robin Simonneau, Arbër Jonuzi
 Version: 1.0
 Author URI: https://robin-sim.fr/
 */
-wp_enqueue_style('more-userdata-for-istep',plugins_url('more-userdata-for-istep.css',__FILE__));
-wp_enqueue_script('more-userdata-for-istep-js',plugins_url('more-userdata-for-istep.js',__FILE__),array(), false, true);
+wp_enqueue_style('scripts/more-userdata-for-istep',plugins_url('more-userdata-for-istep.css',__FILE__));
+wp_enqueue_script('styles/more-userdata-for-istep-js',plugins_url('more-userdata-for-istep.js',__FILE__),array(), false, true);
 
 require_once(plugin_dir_path(__FILE__).'utilities.php');
 require_once( plugin_dir_path( __FILE__ ) . 'admin-functions.php' );
@@ -390,7 +390,7 @@ function display_users_data(): string
     $page_author_id = get_post_field( 'post_author', $page_id );
     $page_author_info = get_userdata( $page_author_id ); // Récupère les informations de l'utilisateur
 
-    $userData = get_user_name_by_id($page_author_id);
+    $userData = get_istep_user_by_id($page_author_id);
     $userAvatar = get_user_avatar($page_author_id);
     $userTower = convert_tower_into_readable($userData->tourDuBureau);
     $userTeam = get_team_name_by_id($userData->equipe);
@@ -502,7 +502,7 @@ function get_team_name_by_id(int $id){
  * @param int $id
  * @return mixed|stdClass
  */
-function get_user_name_by_id(int $id):mixed{
+function get_istep_user_by_id(int $id):mixed{
     global $wpdb;
     $tableName = TABLE_MEMBERS_NAME;
     return $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $id")[0];
@@ -517,4 +517,73 @@ function get_list_of_table(string $table):array{
     global $wpdb;
     $tableName = $table;
     return $wpdb->get_results("SELECT * FROM $tableName");
+}
+
+// -- Tiny Directory --
+add_shortcode('users_directory','createDirectoryFromDBUsers');
+
+/**
+ * Récupère les utilisateurs dans la base de donnée et les affect à un tableau HTML
+ * @return string Le tableau HTML
+ */
+function createDirectoryFromDBUsers(): string{
+    //Ajout de la feuille de style et du javascript
+    wp_enqueue_style('tiny-directory-css',plugins_url('scripts/tiny-directory.css',__FILE__));
+    wp_enqueue_script('tiny-directory-js',plugins_url('styles/tiny-directory.js',__FILE__),array(), false, true);
+    $users = get_users();
+    // Vérifier s'il y a des utilisateurs
+    if ( !empty( $users ) ) {
+        //Génère le tableau
+        $html = <<<HTML
+    <div class="tiny-directory-div">
+    <label for="search-input">Rechercher : </label>
+    <input type="text" id="search-input" placeholder="Robin...">
+    <div class="scrollable-div">
+    <table class="tiny-directory-table">
+    <thead >
+        <tr class="tiny-directory-tr">
+            <th class="tiny-directory-th" colspan="1">NOM / Prénom</th>
+            <th class="tiny-directory-th" colspan="1">Email</th> 
+            <th class="tiny-directory-th" colspan="1">Téléphone</th> 
+            <th class="tiny-directory-th" colspan="1">Fonction</th> 
+
+    </thead>
+    <tbody>
+    HTML;
+        foreach ( $users as $user ) {
+            $userID = $user->ID;
+            $userAvatar = get_user_avatar($userID);
+            $isetep_user = get_istep_user_by_id($userID);
+            $linkToProfilePage = home_url()."/membres-istep/$user->user_nicename";
+            $html.= <<<HTML
+        <tr class="user-$userID tiny-directory-tr" tabindex="0">
+            <td class="no-display-fields" id="pp-$userID" data-id="$userID">$userAvatar</td>
+            <td class="no-display-fields" ><strong>Téléphone : </strong>$isetep_user->nTelephone</td>
+            <td class="no-display-fields" ><strong>Coordonées : </strong>
+                <ul>
+                    <li>$isetep_user->campus</li>
+                    <li>$isetep_user->tourDuBureau</li>
+                    <li>$isetep_user->bureau</li>
+                </ul>
+            </td>
+            <td class="no-display-fields" id="login-$userID">$linkToProfilePage</td>
+            <td class="no-display-fields" id="login-$userID">$linkToProfilePage</td>
+            <td class="no-display-fields" id="login-$userID">$linkToProfilePage</td>
+            <td class="tiny-directory-td name-$userID">$user->display_name</td>
+            <td class="tiny-directory-td email-$userID"><a href="mailto:$user->user_email">$user->user_email</td>
+            <td class="tiny-directory-td phone-$userID">$isetep_user->nTelephone</td>
+            <td class="tiny-directory-td position-$userID">$isetep_user->fonction</td>
+        </tr>
+HTML;
+        }
+        $html.= <<<HTML
+    </tbody>
+</table>
+</div>
+</div>
+HTML;
+        return $html;
+    } else {
+        return "Error no users has been found :(";
+    }
 }

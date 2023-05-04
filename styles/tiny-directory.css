@@ -1,0 +1,73 @@
+.tiny-directory-table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 600px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+
+}
+
+.tiny-directory-th, .tiny-directory-td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.tiny-directory-th {
+    background-color: #f2f2f2;
+}
+
+.tiny-directory-tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.tiny-directory-caption {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.details {
+    display: none;
+    background-color: #fff;
+    padding: 10px;
+}
+
+.details.active {
+    display: table-row;
+    width:inherit;
+    height:fit-content;
+}
+
+.detail-div-flex,.detail-div-flex-text, .tiny-directory-div{
+    display:flex;
+}
+.no-display-fields{
+    display: none;
+}
+
+.detail-div-flex-text{
+    flex-direction: column;
+    gap:5px;
+
+}
+.detail-div-flex-text>p{
+    margin: 0;
+}
+
+.detail-div-flex{
+    gap:20px;
+    padding-top:1vh;
+    padding-bottom:1vh;
+}
+.tiny-directory-tr{
+    cursor: pointer;
+}
+.scrollable-div{
+    height: 50vh;
+    overflow-x:scroll ;
+}
+
+.tiny-directory-div{
+    flex-direction: column;
+    width: fit-content;
+}
