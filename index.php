@@ -390,11 +390,8 @@ function display_users_data(): string
     $page_author_id = get_post_field( 'post_author', $page_id );
     $page_author_info = get_userdata( $page_author_id ); // Récupère les informations de l'utilisateur
 
-    global $wpdb;
-    $tableName = TABLE_MEMBERS_NAME;
-    $userData = $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $page_author_id")[0];
+    $userData = get_user_name_from_id($page_author_id);
     $userAvatar = get_user_avatar($page_author_id);
-    var_dump($userData);
     $userTower = convert_tower_into_readable($userData->tourDuBureau);
     $userTeam = get_team_name_from_id($userData->equipe);
 
@@ -498,4 +495,26 @@ function get_team_name_from_id(int $id){
     global $wpdb;
     $tableName = TABLE_TEAM_NAME;
     return $wpdb->get_results("SELECT nom_equipe FROM $tableName WHERE id_equipe = $id")[0];
+}
+
+/**
+ * Renvoie toutes les information de l'utilisateur qui possède l'id passé en paramètre
+ * @param int $id
+ * @return mixed|stdClass
+ */
+function get_user_name_from_id(int $id):mixed{
+    global $wpdb;
+    $tableName = TABLE_MEMBERS_NAME;
+    return $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $id")[0];
+}
+
+/**
+ * Récupère tous les élément d'une table donnée
+ * @param string $table
+ * @return array
+ */
+function get_list_of_table(string $table):array{
+    global $wpdb;
+    $tableName = TABLE_MEMBERS_NAME;
+    return $wpdb->get_results("SELECT * FROM $tableName");
 }
