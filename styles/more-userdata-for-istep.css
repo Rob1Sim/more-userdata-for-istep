@@ -1,0 +1,104 @@
+
+
+.role-box{
+    overflow-y: scroll;
+    width: 100%;
+    height: 30vh;
+}
+
+.role-box>label{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+.role-box>label>p{
+    width: 30%;
+}
+.create-istep-user-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.create-istep-user-form> label {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.create-istep-user-form input,
+.create-istep-user-form select {
+    padding: 10px;
+    border: 1px black solid;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+.create-istep-user-form button[type="submit"] {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    background-color: #0073aa;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.create-istep-user-form button[type="submit"]:hover {
+    background-color: #005d8f;
+}
+
+.user-create-error{
+    background-color: #FFD6D6;
+    color: #FF3333;
+    padding: 10px;
+    border: #FF3333 1px solid ;
+    border-radius: .25rem;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+
+}
+
+.user-create-success{
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border: #c3e6cb 1px solid ;
+    border-radius: .25rem;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#random-pws, #show-password{
+    width: 20%;
+}
+
+.user-info-container{
+    display: flex;
+    gap: 5%;
+    height: 50%;
+    flex-wrap: wrap;
+}
+.user-info-container>img{
+    width: initial;
+}
+.user-info-text-container{
+    display: flex;
+    gap: 15%;
+    width: 60%;
+}
+.user-info-text-container>div:nth-child(2){
+    width: 100%;
+}
+
+.user-info-text-container>div>h5{
+    margin-bottom: 1%;
+}
+.user-info-text-container>div>p{
+    margin-top: 1%;
+}
