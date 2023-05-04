@@ -21,6 +21,14 @@ function more_userdata_istep_menu(): void{
         'more_userdata_istep_menu_team_page' // fonction de rappel
     );
     add_submenu_page(
+        'istep_users_options',
+        'Membres de l\'ISTeP',
+        'Membres de l\'ISTeP',
+        'manage_options',
+        'istep_users_list',
+        'more_userdata_istep_users_list'
+    );
+    add_submenu_page(
         'admin.php?page=edit_teams&id=',
         'Modifier équipe',
         'Modifier équipe',
@@ -127,9 +135,7 @@ function more_userdata_istep_menu_team_page() {
             </thead>
             <tbody>
             <?php
-            global $wpdb;
-            $table_name = TABLE_TEAM_NAME;
-            $teams = $wpdb->get_results("SELECT * FROM $table_name");
+            $teams = get_list_of_table(TABLE_TEAM_NAME);
             foreach ($teams as $team) {
                 echo '<tr>';
                 echo '<td>' . $team->id_equipe . '</td>';
@@ -230,4 +236,58 @@ function more_userdata_istep_delete_equipe_page() {
 
     }
 
+}
+
+/**
+ * Affiche toutes les informations des utilisateurs de l'ISTeP
+ * @return void
+ */
+function more_userdata_istep_users_list():void{
+    ?>
+    <div class="wrap">
+        <h1>Liste des membres de l'ISTeP</h1>
+        <table class="wp-list-table widefat fixed striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom de l'utilisateur</th>
+                <th>Login</th>
+                <th>Equipe</th>
+                <th>Fonction</th>
+                <th>Email</th>
+                <th>Numéro de téléphone</th>
+                <th>Rang dans l'équipe</th>
+                <th>Tour du bureau</th>
+                <th>Bureau</th>
+                <th>Campus</th>
+                <th>Employeur</th>
+                <th>Case courrier</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            $users = get_list_of_table(TABLE_MEMBERS_NAME);
+            foreach ($users as $user) {
+                $wp_user = get_userdata( $user->wp_user_id );
+                echo '<tr>';
+                echo '<td>' . $user->id_membre . '</td>';
+                echo '<td>' . $wp_user->display_name . '</td>';
+                echo '<td>' . $wp_user->user_login . '</td>';
+                echo '<td>' . get_team_name_by_id($user->equipe)->nom_equipe . '</td>';
+                echo '<td>' . $user->fonction . '</td>';
+                echo '<td>' . $wp_user->user_email . '</td>';
+                echo '<td>' . $user->nTelephone . '</td>';
+                echo '<td>' . $user->rangEquipe . '</td>';
+                echo '<td>' . convert_tower_into_readable($user->tourDuBureau) . '</td>';
+                echo '<td>' . $user->bureau . '</td>';
+                echo '<td>' . $user->campus . '</td>';
+                echo '<td>' . $user->employeur . '</td>';
+                echo '<td>' . $user->caseCourrier . '</td>';
+                echo '</tr>';
+            }
+            ?>
+            </tbody>
+        </table>
+    </div>
+    <?php
 }
