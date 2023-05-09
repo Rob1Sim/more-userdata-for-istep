@@ -55,6 +55,14 @@ function more_userdata_istep_menu(): void{
         'delete_teams',
         'more_userdata_istep_delete_equipe_page'
     );
+    add_submenu_page(
+        'admin.php?page=edit_team_for_user',
+        'Modifier l\'équipe d\'un membre',
+        'Modifier l\'équipe d\'un membre',
+        "read",
+        'edit_member_team',
+        'more_userdata_istep_edit_member_team_page'
+    );
 }
 add_action( 'admin_menu', 'more_userdata_istep_menu' );
 
@@ -248,7 +256,7 @@ function more_userdata_istep_edit_equipe_page() {
 
     // Vérifie si le formulaire a été soumis
     if (isset($_POST['submit']) && isset($id_equipe)) {
-        if ( current_user_can( 'manage_options' ) ) {
+        if ( current_user_can( ADMIN_CAPACITY ) ) {
             // Met à jour les informations de l'équipe dans la base de données
             $nom_equipe = sanitize_text_field($_POST['nom_equipe']);
             if (isset($nom_equipe)){
@@ -301,7 +309,7 @@ function more_userdata_istep_delete_equipe_page() {
     if ( !can_user_access_this(get_option('admin_user_roles')) ) {
         wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
     }
-    if ( current_user_can( 'manage_options' ) ) {
+    if ( current_user_can( ADMIN_CAPACITY ) ) {
         // Récupère l'ID de l'équipe à supprimer depuis l'URL
         $id_equipe = $_POST['equipe_id_delete'];
 
@@ -329,6 +337,32 @@ function more_userdata_istep_delete_equipe_page() {
 function more_userdata_istep_users_list():void{
     if ( !can_user_access_this(get_option('admin_user_roles')) ) {
         wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+    }
+    // Vérifie si le formulaire a été soumis
+    if (isset($_POST['submit']) && isset($_POST["userID"])) {
+        $id_member = $_POST["userID"];
+        if (current_user_can(ADMIN_CAPACITY)) {
+            // Met à jour les informations de l'équipe dans la base de données celon le membre
+            foreach ($id_member as $user) {
+                if (isset($user)) {
+                    $team_number = $_POST['team-'.$user];
+                    if (is_team_id_valid(intval($team_number))){
+                        global $wpdb;
+                        $wpdb->update(
+                            TABLE_MEMBERS_NAME,
+                            array(
+                                'equipe' => $team_number
+                            ),
+                            array(
+                                'id_membre' => $user
+                            )
+                        );
+                    }
+                    echo '<div id="message" class="updated notice"><p>Équipe modifiée avec succès.</p></div>';
+                }
+            }
+        }
+
     }
     ?>
     <div class="wrap">
@@ -372,6 +406,9 @@ function more_userdata_istep_users_list():void{
             </thead>
             <tbody>
             <?php
+            global $wpdb;
+            $table_name = TABLE_TEAM_NAME;
+            $teams = $wpdb->get_results("SELECT * FROM $table_name");
             $users = get_list_of_table(TABLE_MEMBERS_NAME);
             foreach ($users as $user) {
                 $wp_user = get_userdata( $user->wp_user_id );
@@ -379,7 +416,24 @@ function more_userdata_istep_users_list():void{
                 echo '<td>' . $user->id_membre . '</td>';
                 echo '<td>' . $wp_user->display_name . '</td>';
                 echo '<td>' . $wp_user->user_login . '</td>';
-                echo '<td>' . get_team_name_by_id($user->equipe)->nom_equipe . '</td>';
+                echo '<td>';
+                echo '<form method="post" action="">';
+                echo '<input type="hidden" value="'.$user->id_membre.'" name="userID[]"/>';
+                wp_nonce_field( 'modifier_equipe_membre_nonce', 'modifier_equipe_membre_nonce' );
+                echo '<select name="team-'.$user->id_membre.'" id="team">';
+                foreach ($teams as $team){
+                    $teamName = $team->nom_equipe;
+                    $teamId = $team->id_equipe;
+                    if ($teamId == $user->equipe){
+                        echo "<option value=\"".$teamId."\" selected>".$teamName."</option>";
+                    }else{
+                        echo "<option value=\"".$teamId."\">".$teamName."</option>";
+                    }
+                }
+                echo '</select>';
+                submit_button('Enregistrer', 'primary', 'submit', true);
+                echo '</form></td>';
+
                 echo '<td>' . $user->fonction . '</td>';
                 echo '<td>' . $wp_user->user_email . '</td>';
                 echo '<td>' . $user->nTelephone . '</td>';

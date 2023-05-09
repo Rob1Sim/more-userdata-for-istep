@@ -157,9 +157,10 @@ function is_team_id_valid(int $id): bool{
     global $wpdb;
     $table_name = TABLE_TEAM_NAME;
     $teams = $wpdb->get_results("SELECT id_equipe FROM $table_name");
-    if (gettype($teams) != 'array')
-    {
-        throw new mysqli_sql_exception("Une erreur est survenue lors de la récupéation des équipes");
+    $array_of_id = [];
+    foreach ($teams as $team){
+        $array_of_id[] = $team->id_equipe;
     }
-    return in_array($id,$teams);
+
+    return in_array($id,$array_of_id);
 }
