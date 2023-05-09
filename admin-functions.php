@@ -17,6 +17,14 @@ function more_userdata_istep_menu(): void{
     );
     add_submenu_page(
         'istep_users_options', // slug du parent
+        'Gérer les permissions', // titre de la page
+        'Gérer les permissions', // titre du menu
+        'administrator', // capacité requise
+        'admin_users_options', // slug de la page
+        'more_userdata_istep_menu_give_access' // fonction de rappel
+    );
+    add_submenu_page(
+        'istep_users_options', // slug du parent
         'Gérer les équipes', // titre de la page
         'Gérer les équipes', // titre du menu
         ADMIN_CAPACITY, // capacité requise
@@ -65,56 +73,9 @@ function more_userdata_istep_menu_content(): void {
         update_option('istep_user_roles', $_POST['istep_user_roles']);
         echo '<div id="message" class="updated notice"><p>Rôles mis à jour avec succès.</p></div>';
     }
-    if (isset($_POST['submitRoles'])) {
-        // Met à jour les options avec les rôles sélectionnés
-        if(isset($_POST['admin_user_roles'])){
-            update_option('admin_user_roles', $_POST['admin_user_roles']);
-            foreach (get_option('admin_user_roles') as $role) {
-                $role_obj = get_role($role);
-                $role_obj->add_cap(ADMIN_CAPACITY);
-            }
-            //si l'administrateur n'a plus les droits alors on lui redonne
-            if(!in_array("administrator",get_option('admin_user_roles'))){
-                $roles_already_stored = get_option('admin_user_roles');
-                $roles_already_stored[] = "administrator";
-                update_option('admin_user_roles', $roles_already_stored);
-            }
-            update_option('admin_user_roles',delete_cap_if_no_need_anymore(ADMIN_CAPACITY,get_option('admin_user_roles')));
-        }
-
-        echo '<div id="message" class="updated notice"><p>Rôles mis à jour avec succès.</p></div>';
-    }
     ?>
     <div class="wrap">
         <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-        <form method="post" action="">
-            <?php wp_nonce_field( 'admin_user_roles_nonce', 'admin_user_roles_nonce' ); ?>
-            <table class="form-table">
-                <tr>
-                    <th scope="row"><label for="admin_user_roles"><?php _e( 'Rôles qui peuvent accéder au menu d\'administration:', 'istep_users' ); ?></label></th>
-                    <td>
-                        <?php
-                        // Récupère tous les rôles WordPress
-                        $roles = get_editable_roles();
-
-                        // Récupère les rôles sélectionnés dans la base de données
-                        $selected_roles = get_option('admin_user_roles', array());
-                        // Affiche une checkbox pour chaque rôle
-                        foreach ($roles as $key => $value) {
-                            if ($key == "administrator"){
-                                echo '<label><input type="checkbox" name="admin_user_roles[]" value="'.$key.'" checked disabled>'.$value['name'].'</label><br/>';
-                            } else {
-                                echo '<label><input type="checkbox" name="admin_user_roles[]" value="'.$key.'" '
-                                    .checked(in_array($key, $selected_roles), true, false).'>'.$value['name'].'</label><br/>';
-                            }
-
-                        }
-                        ?>
-                    </td>
-                </tr>
-            </table>
-            <?php submit_button('Enregistrer les rôles', 'primary', 'submitRoles', true); ?>
-        </form>
         <form method="post" action="">
             <?php wp_nonce_field( 'istep_user_roles_nonce', 'istep_user_roles_nonce' ); ?>
             <table class="form-table">
@@ -139,6 +100,66 @@ function more_userdata_istep_menu_content(): void {
             <?php submit_button('Enregistrer les rôles', 'primary', 'submit', true); ?>
         </form>
     </div>
+    <?php
+}
+
+/**
+ * Ajoute le formulaire de gestions des roles qui ont accès au panel administrateur
+ * @return void
+ */
+function more_userdata_istep_menu_give_access(){
+    if ( !can_user_access_this(get_option('admin_user_roles')) ) {
+        wp_die( __( 'You do not have sufficient permissions to access this page.'.get_option('admin_user_roles')[0] ) );
+    }
+    if (isset($_POST['submitRoles'])) {
+        // Met à jour les options avec les rôles sélectionnés
+        if(isset($_POST['admin_user_roles'])){
+            update_option('admin_user_roles', $_POST['admin_user_roles']);
+            foreach (get_option('admin_user_roles') as $role) {
+                $role_obj = get_role($role);
+                $role_obj->add_cap(ADMIN_CAPACITY);
+            }
+            //si l'administrateur n'a plus les droits alors on lui redonne
+            if(!in_array("administrator",get_option('admin_user_roles'))){
+                $roles_already_stored = get_option('admin_user_roles');
+                $roles_already_stored[] = "administrator";
+                update_option('admin_user_roles', $roles_already_stored);
+            }
+            update_option('admin_user_roles',delete_cap_if_no_need_anymore(ADMIN_CAPACITY,get_option('admin_user_roles')));
+        }
+
+        echo '<div id="message" class="updated notice"><p>Rôles mis à jour avec succès.</p></div>';
+    }
+    ?>
+    <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+    <form method="post" action="">
+        <?php wp_nonce_field( 'admin_user_roles_nonce', 'admin_user_roles_nonce' ); ?>
+        <table class="form-table">
+            <tr>
+                <th scope="row"><label for="admin_user_roles"><?php _e( 'Rôles qui peuvent accéder au menu d\'administration:', 'istep_users' ); ?></label></th>
+                <td>
+                    <?php
+                    // Récupère tous les rôles WordPress
+                    $roles = get_editable_roles();
+
+                    // Récupère les rôles sélectionnés dans la base de données
+                    $selected_roles = get_option('admin_user_roles', array());
+                    // Affiche une checkbox pour chaque rôle
+                    foreach ($roles as $key => $value) {
+                        if ($key == "administrator"){
+                            echo '<label><input type="checkbox" name="admin_user_roles[]" value="'.$key.'" checked disabled>'.$value['name'].'</label><br/>';
+                        } else {
+                            echo '<label><input type="checkbox" name="admin_user_roles[]" value="'.$key.'" '
+                                .checked(in_array($key, $selected_roles), true, false).'>'.$value['name'].'</label><br/>';
+                        }
+
+                    }
+                    ?>
+                </td>
+            </tr>
+        </table>
+        <?php submit_button('Enregistrer les rôles', 'primary', 'submitRoles', true); ?>
+    </form>
     <?php
 }
 
