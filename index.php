@@ -4,8 +4,8 @@ Plugin Name: More userData for ISTeP
 Plugin URI: https://wpusermanager.com/
 Description: Ajoute un formulaire de création d'utilisateur pensé pour l'ISTeP et une page personalisé pour les utilsateurs, ainsi qu'une gestions des équipes.
 !Nécéssite un plugin qui gère les permissions pour les roles!
-!l'utilisation de tiny directory est recomandé!
-Author: Robin Simonneau, Arbër Jonuzi
+Plus d'informations dans le fichier README.md
+Author: Robin Simonneau
 Version: 1.0
 Author URI: https://robin-sim.fr/
 */
@@ -444,13 +444,13 @@ function create_personal_page(int $userId, string $userDisplayName,string $userN
 
 
 // -- Tiny Directory --
-add_shortcode('users_directory','createDirectoryFromDBUsers');
+add_shortcode('users_directory', 'create_directory_from_DB_users');
 
 /**
  * Récupère les utilisateurs dans la base de donnée et les affect à un tableau HTML
  * @return string Le tableau HTML
  */
-function createDirectoryFromDBUsers(): string{
+function create_directory_from_DB_users(): string{
     //Ajout de la feuille de style et du javascript
     wp_enqueue_style('tiny-directory-css',plugins_url('styles/tiny-directory.css',__FILE__));
     wp_enqueue_script('tiny-directory-js',plugins_url('scripts/tiny-directory.js',__FILE__),array(), false, true);
