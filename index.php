@@ -444,13 +444,13 @@ function create_personal_page(int $userId, string $userDisplayName,string $userN
 
 
 // -- Tiny Directory --
-add_shortcode('users_directory','createDirectoryFromDBUsers');
+add_shortcode('users_directory', 'create_directory_from_DB_users');
 
 /**
  * Récupère les utilisateurs dans la base de donnée et les affect à un tableau HTML
  * @return string Le tableau HTML
  */
-function createDirectoryFromDBUsers(): string{
+function create_directory_from_DB_users(): string{
     //Ajout de la feuille de style et du javascript
     wp_enqueue_style('tiny-directory-css',plugins_url('styles/tiny-directory.css',__FILE__));
     wp_enqueue_script('tiny-directory-js',plugins_url('scripts/tiny-directory.js',__FILE__),array(), false, true);

@@ -52,3 +52,6 @@ Le dossier __scripts__ contients les scripts utilisé par les différents shortc
 Le dossier __styles__ contients les fichier de style utilisé par les différents shortcode listés au dessus. 
 
 Le fichier __.phpdoc__ contient la documentation du projet, elle utilise l'outils [phpDocumentor]("https://www.phpdoc.org/")
+
+## Liens utiles 
+Le projets utiliser simplement [l'API de wordpress]("https://developer.wordpress.org/") 
