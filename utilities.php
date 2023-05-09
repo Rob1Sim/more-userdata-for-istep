@@ -140,3 +140,19 @@ function delete_cap_if_no_need_anymore(string $cap,array $listOfRoleWithTheCap):
     }
     return $listOfRoleWithTheCap;
 }
+
+/**
+ * Vérifie que l'id passé en paramètre correspond à l'id d'une équipe
+ * @param int $id
+ * @return bool
+ */
+function is_team_id_valid(int $id): bool{
+    global $wpdb;
+    $table_name = TABLE_TEAM_NAME;
+    $teams = $wpdb->get_results("SELECT id_equipe FROM $table_name");
+    if (gettype($teams) != 'array')
+    {
+        throw new mysqli_sql_exception("Une erreur est survenue lors de la récupéation des équipes");
+    }
+    return in_array($id,$teams);
+}
