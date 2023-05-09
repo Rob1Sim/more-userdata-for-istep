@@ -50,10 +50,17 @@ function can_user_access_this(array $roles): bool{
 
 /**
  * Renvoie le nom de l'équipe correspondant à l'id passé en paramètre
- * @param int $id
+ * @param int|null $id
  * @return mixed|stdClass
  */
-function get_team_name_by_id(int $id){
+function get_team_name_by_id(?int $id){
+    //Si la class n'éxiste pas on renvoie un objets avec la meme propriété
+    if (!isset($id)){
+        $obj = new stdClass();
+        $obj->nom_equipe = "Pas d'équipe";
+
+        return $obj;
+    }
     global $wpdb;
     $tableName = TABLE_TEAM_NAME;
     return $wpdb->get_results("SELECT nom_equipe FROM $tableName WHERE id_equipe = $id")[0];
