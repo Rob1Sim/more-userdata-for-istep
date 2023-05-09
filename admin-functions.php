@@ -2,6 +2,7 @@
 // ---- Menu Administrateur ----
 wp_enqueue_script('more-userdata-for-istep-admin-js',plugins_url('scripts/more-userdata-for-istep-admin.js',__FILE__),array(), false, true);
 
+
 /**
  * Génère la page dans le panel administrateur
  * @return void
@@ -10,7 +11,7 @@ function more_userdata_istep_menu(): void{
     add_menu_page(
         "Paramètre création d'utilisteur",
         "Membres de l'ISTeP paramètres",
-        "administrator",
+        ADMIN_CAPACITY,
         "istep_users_options",
         "more_userdata_istep_menu_content"
     );
@@ -18,7 +19,7 @@ function more_userdata_istep_menu(): void{
         'istep_users_options', // slug du parent
         'Gérer les équipes', // titre de la page
         'Gérer les équipes', // titre du menu
-        'manage_options', // capacité requise
+        ADMIN_CAPACITY, // capacité requise
         'istep_manage_teams', // slug de la page
         'more_userdata_istep_menu_team_page' // fonction de rappel
     );
@@ -26,7 +27,7 @@ function more_userdata_istep_menu(): void{
         'istep_users_options',
         'Membres de l\'ISTeP',
         'Membres de l\'ISTeP',
-        'manage_options',
+        ADMIN_CAPACITY,
         'istep_users_list',
         'more_userdata_istep_users_list'
     );
@@ -34,7 +35,7 @@ function more_userdata_istep_menu(): void{
         'admin.php?page=edit_teams&id=',
         'Modifier équipe',
         'Modifier équipe',
-        'administrator',
+        ADMIN_CAPACITY,
         'edit_teams',
         'more_userdata_istep_edit_equipe_page'
     );
@@ -42,7 +43,7 @@ function more_userdata_istep_menu(): void{
         'admin.php?page=delete_teams&id=',
         'Supprimer équipe',
         'Supprimer équipe',
-        'administrator',
+        ADMIN_CAPACITY,
         'delete_teams',
         'more_userdata_istep_delete_equipe_page'
     );
@@ -54,15 +55,66 @@ add_action( 'admin_menu', 'more_userdata_istep_menu' );
  * @return void
  */
 function more_userdata_istep_menu_content(): void {
+    if ( !can_user_access_this(get_option('admin_user_roles')) ) {
+        wp_die( __( 'You do not have sufficient permissions to access this page.'.get_option('admin_user_roles')[0] ) );
+    }
+
     // Vérifie si le formulaire a été soumis
     if (isset($_POST['submit'])) {
         // Met à jour les options avec les rôles sélectionnés
         update_option('istep_user_roles', $_POST['istep_user_roles']);
         echo '<div id="message" class="updated notice"><p>Rôles mis à jour avec succès.</p></div>';
     }
+    if (isset($_POST['submitRoles'])) {
+        // Met à jour les options avec les rôles sélectionnés
+        if(isset($_POST['admin_user_roles'])){
+            update_option('admin_user_roles', $_POST['admin_user_roles']);
+            foreach (get_option('admin_user_roles') as $role) {
+                $role_obj = get_role($role);
+                $role_obj->add_cap(ADMIN_CAPACITY);
+            }
+            //si l'administrateur n'a plus les droits alors on lui redonne
+            if(!in_array("administrator",get_option('admin_user_roles'))){
+                $roles_already_stored = get_option('admin_user_roles');
+                $roles_already_stored[] = "administrator";
+                update_option('admin_user_roles', $roles_already_stored);
+            }
+            update_option('admin_user_roles',delete_cap_if_no_need_anymore(ADMIN_CAPACITY,get_option('admin_user_roles')));
+        }
+
+        echo '<div id="message" class="updated notice"><p>Rôles mis à jour avec succès.</p></div>';
+    }
     ?>
     <div class="wrap">
         <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+        <form method="post" action="">
+            <?php wp_nonce_field( 'admin_user_roles_nonce', 'admin_user_roles_nonce' ); ?>
+            <table class="form-table">
+                <tr>
+                    <th scope="row"><label for="admin_user_roles"><?php _e( 'Rôles qui peuvent accéder au menu d\'administration:', 'istep_users' ); ?></label></th>
+                    <td>
+                        <?php
+                        // Récupère tous les rôles WordPress
+                        $roles = get_editable_roles();
+
+                        // Récupère les rôles sélectionnés dans la base de données
+                        $selected_roles = get_option('admin_user_roles', array());
+                        // Affiche une checkbox pour chaque rôle
+                        foreach ($roles as $key => $value) {
+                            if ($key == "administrator"){
+                                echo '<label><input type="checkbox" name="admin_user_roles[]" value="'.$key.'" checked disabled>'.$value['name'].'</label><br/>';
+                            } else {
+                                echo '<label><input type="checkbox" name="admin_user_roles[]" value="'.$key.'" '
+                                    .checked(in_array($key, $selected_roles), true, false).'>'.$value['name'].'</label><br/>';
+                            }
+
+                        }
+                        ?>
+                    </td>
+                </tr>
+            </table>
+            <?php submit_button('Enregistrer les rôles', 'primary', 'submitRoles', true); ?>
+        </form>
         <form method="post" action="">
             <?php wp_nonce_field( 'istep_user_roles_nonce', 'istep_user_roles_nonce' ); ?>
             <table class="form-table">
@@ -95,6 +147,9 @@ function more_userdata_istep_menu_content(): void {
  * @return void
  */
 function more_userdata_istep_menu_team_page() {
+    if ( !can_user_access_this(get_option('admin_user_roles')) ) {
+        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+    }
     // Vérifie si le formulaire a été soumis
     if (isset($_POST['submit'])) {
         // Ajoute une nouvelle équipe à la base de données
@@ -164,6 +219,9 @@ function more_userdata_istep_menu_team_page() {
 }
 
 function more_userdata_istep_edit_equipe_page() {
+    if ( !can_user_access_this(get_option('admin_user_roles')) ) {
+        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+    }
     // Récupère l'ID de l'équipe à éditer depuis l'URL
     $id_equipe = $_GET['id'];
 
@@ -219,6 +277,9 @@ function more_userdata_istep_edit_equipe_page() {
  * @return void
  */
 function more_userdata_istep_delete_equipe_page() {
+    if ( !can_user_access_this(get_option('admin_user_roles')) ) {
+        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+    }
     if ( current_user_can( 'manage_options' ) ) {
         // Récupère l'ID de l'équipe à supprimer depuis l'URL
         $id_equipe = $_POST['equipe_id_delete'];
@@ -245,6 +306,9 @@ function more_userdata_istep_delete_equipe_page() {
  * @return void
  */
 function more_userdata_istep_users_list():void{
+    if ( !can_user_access_this(get_option('admin_user_roles')) ) {
+        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+    }
     ?>
     <div class="wrap">
         <h1>Liste des membres de l'ISTeP</h1>
