@@ -14,6 +14,11 @@ define("TABLE_MEMBERS_NAME",$wpdb->prefix . 'membre_ISTeP');
  */
 const ADMIN_CAPACITY = "more_data_users_admin_capacity";
 /**
+ * Ajout d'un role par défaut sera sélectionné de base dans les roles lors de la création de l'utilisateur
+ */
+
+
+/**
  * Récupère les roles de l'utilisateur connecté
  * @return array
  */

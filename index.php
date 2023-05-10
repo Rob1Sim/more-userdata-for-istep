@@ -77,6 +77,12 @@ function more_ud_istep_install(): void
             'nom_equipe' => "Pas d'équipe"
         )
     );
+
+    //Role par défaut
+    update_option('default_role', "subscriber");
+    //Lien de redirection par défaut
+    update_option('default_redirect_link', "sample-page");
+
 }
 register_activation_hook( __FILE__, 'more_ud_istep_install' ); //Appelé lors de l'activation du plugin
 
@@ -195,7 +201,11 @@ HTML;
 
         // Affiche une checkbox pour chaque rôle
         foreach ($roles as $key => $value) {
-            $html.= '<label><p></p><input type="checkbox" name="roles[]" value="'.$key.'"><p>'.$value['name'].'</p></label><br/>';
+            $checked ="";
+            if ($key == get_option("default_role")){
+                $checked ="checked";
+            }
+            $html.= '<label><p></p><input type="checkbox" name="roles[]" value="'.$key.'"'.$checked.'><p>'.$value['name'].'</p></label><br/>';
         }
         $html.= <<<HTML
         </div>
@@ -216,7 +226,7 @@ add_action('wp','add_new_user');
  * @return void
  */
 function add_new_user() {
-    $current_url = home_url( "sample-page/?" );
+    $current_url = home_url( get_option('default_redirect_link')."/?" );
     //Affiche une erreur si des informations entréer sont incorrecte
     if (isset($_GET['user-create-error'])){
         $error = sanitize_text_field($_GET['user-create-error']);
@@ -336,13 +346,9 @@ function add_new_user() {
                     wp_redirect($current_url);
                     exit;
                 }else{
-                    $user_data = array(
-                        'ID' => $user_id,
-                        'roles' => $verified_roles
-                    );
-                    //Ajout des roles à l'utilisateur créé
-                    if (is_wp_error(wp_update_user( $user_data ))){
-                        wp_redirect($current_url."user-create-error=3");
+                    $new_user = get_user_by('id', $user_id);
+                    foreach ($verified_roles as $new_role){
+                        $new_user->add_role($new_role);
                     }
 
                     //Ajout de l'image de profile
