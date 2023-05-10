@@ -36,6 +36,11 @@ Search.appendIndex(
             "summary": "Affiche\u0020toutes\u0020les\u0020informations\u0020des\u0020utilisateurs\u0020de\u0020l\u0027ISTeP",
             "url": "namespaces/default.html#function_more_userdata_istep_users_list"
         },                {
+            "fqsen": "\\set_rights_to_administrator\u0028\u0029",
+            "name": "set_rights_to_administrator",
+            "summary": "Ajoute\u0020a\u0020l\u0027option\u0020pass\u00E9\u0020en\u0020param\u00E8tre\u0020l\u0027administrateur",
+            "url": "namespaces/default.html#function_set_rights_to_administrator"
+        },                {
             "fqsen": "\\more_ud_istep_install\u0028\u0029",
             "name": "more_ud_istep_install",
             "summary": "Cr\u00E9er\u0020la\u0020base\u0020de\u0020donn\u00E9e\u0020lors\u0020de\u0020l\u0027activation\u0020du\u0020plugin",
