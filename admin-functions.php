@@ -75,7 +75,7 @@ function more_userdata_istep_menu_content(): void {
         wp_die( __( 'You do not have sufficient permissions to access this page.'.get_option('admin_user_roles')[0] ) );
     }
 
-    // Vérifie si le formulaire a été soumis
+    // Formulaire de la selctions des rôles
     if (isset($_POST['submit']) && isset($_POST['istep_user_roles'])) {
         // Met à jour les options avec les rôles sélectionnés
         if (gettype($_POST['istep_user_roles']) == "string"){
@@ -87,10 +87,24 @@ function more_userdata_istep_menu_content(): void {
         set_rights_to_administrator('istep_user_roles');
         echo '<div id="message" class="updated notice"><p>Rôles mis à jour avec succès.</p></div>';
     }
+    // Formulaire du rôle par défaut
     if(isset($_POST["submit-default-role"])){
-        if (isset($_POST["default-role"]) && gettype($_POST["default-role"]) == "string"){
+        if (isset($_POST["default-role"])
+            && gettype($_POST["default-role"]) == "string"){
+
             update_option('default_role',sanitize_text_field($_POST["default-role"]));
-            echo '<div id="message" class="updated notice"><p>Le rôle par défaut a été mis à jour avec succès. '.get_option('default_role').'</p></div>';
+
+            echo '<div id="message" class="updated notice"><p>Le rôle par défaut a été mis à jour avec succès. </p></div>';
+        }
+    }
+    // Formulaire du lien par défaut
+    if(isset($_POST["submit-redirect-link"])){
+        if (isset($_POST["redirect-link-default"])
+            && gettype($_POST["redirect-link-default"]) == "string") {
+
+            update_option('default_redirect_link',sanitize_text_field($_POST["redirect-link-default"]));
+
+            echo '<div id="message" class="updated notice"><p>Le lien par défaut a été mis à jour avec succès. </p></div>';
         }
     }
     ?>
@@ -141,6 +155,16 @@ function more_userdata_istep_menu_content(): void {
             echo '</select>';
             ?>
             <?php submit_button('Enregistrer', 'primary', 'submit-default-role', true); ?>
+        </form>
+        <form method="post" action="">
+            <h2>Lien de redirection par défaut</h2>
+            <p>Représente le lien vers lequel vous êtes rediriger après avoir envoyer le formulaire:
+             le mieux est de prendre le lien de la page où se situe le formulaire</p>
+
+            <label for="redirect-link-default">Le slug de la page(<i>sur cette page le slug est sample-page : http://localhost:10004/sample-page/</i>)</label>
+            <input type="text" name="redirect-link-default" id="redirect-link-default" value="<?php echo get_option("default_redirect_link")?>">
+
+            <?php submit_button('Enregistrer', 'primary', 'submit-redirect-link', true); ?>
         </form>
     </div>
     <?php

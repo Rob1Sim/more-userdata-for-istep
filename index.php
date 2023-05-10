@@ -80,6 +80,8 @@ function more_ud_istep_install(): void
 
     //Role par défaut
     update_option('default_role', "subscriber");
+    //Lien de redirection par défaut
+    update_option('default_redirect_link', "sample-page");
 
 }
 register_activation_hook( __FILE__, 'more_ud_istep_install' ); //Appelé lors de l'activation du plugin
@@ -224,7 +226,7 @@ add_action('wp','add_new_user');
  * @return void
  */
 function add_new_user() {
-    $current_url = home_url( "sample-page/?" );
+    $current_url = home_url( get_option('default_redirect_link')."/?" );
     //Affiche une erreur si des informations entréer sont incorrecte
     if (isset($_GET['user-create-error'])){
         $error = sanitize_text_field($_GET['user-create-error']);
