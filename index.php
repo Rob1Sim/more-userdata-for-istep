@@ -458,9 +458,6 @@ function create_personal_page(int $userId, string $userDisplayName,string $userN
     wp_insert_post($page_data);
 }
 
-
-
-
 // -- Tiny Directory --
 add_shortcode('users_directory', 'create_directory_from_DB_users');
 

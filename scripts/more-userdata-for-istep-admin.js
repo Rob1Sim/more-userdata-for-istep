@@ -10,9 +10,14 @@ function tableFilter(column) {
     rows.forEach(function(row) {
         let rowData = {};
         let cells = row.querySelectorAll('td');
+        const dropdownInRow = row.querySelector('select');
 
         cells.forEach(function(cell, index) {
-            rowData[index] = cell.textContent.trim();
+            if (dropdownInRow && index === 3){
+                rowData[index] = dropdownInRow.querySelector('option:checked').textContent
+            }else{
+                rowData[index] = cell.textContent.trim();
+            }
         });
 
         data.push(rowData);
@@ -42,6 +47,33 @@ function tableFilter(column) {
         }
 
         tbody.appendChild(row);
+    });
+}
+
+function searchInTable(searchString) {
+    // Récupération des éléments HTML
+    const table = document.querySelector('#istep-users-list');
+    const tbody = table.querySelector('tbody');
+
+    // Récupération des données
+    const rows = tbody.querySelectorAll('tr');
+
+    // Filtrage des données
+    rows.forEach(function(row) {
+        let found = false;
+        let cells = row.querySelectorAll('td');
+
+        cells.forEach(function(cell) {
+            if (cell.textContent.toLowerCase().indexOf(searchString.toLowerCase()) !== -1) {
+                found = true;
+            }
+        });
+
+        if (found) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
     });
 }
 
