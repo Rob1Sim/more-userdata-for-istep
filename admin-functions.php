@@ -491,11 +491,8 @@ function more_userdata_istep_users_list():void{
                 foreach ($teams as $team){
                     $teamName = $team->nom_equipe;
                     $teamId = $team->id_equipe;
-                    if ($teamId == $user->equipe){
-                        echo "<option value=\"".$teamId."\" selected>".$teamName."</option>";
-                    }else{
-                        echo "<option value=\"".$teamId."\">".$teamName."</option>";
-                    }
+                    $selected = ($teamId == $user->equipe) ? 'selected' : '';
+                    echo "<option value=\"$teamId\" $selected>$teamName</option>";
                 }
                 echo '</select>';
                 submit_button('Enregistrer', 'primary', 'submit', true);
