@@ -71,6 +71,12 @@ function more_ud_istep_install(): void
     update_option('istep_user_roles', ["administrator"]);
     $role_obj = get_role("administrator");
     $role_obj->add_cap(ADMIN_CAPACITY);
+    $wpdb->insert(
+        TABLE_TEAM_NAME,
+        array(
+            'nom_equipe' => "Pas d'équipe"
+        )
+    );
 }
 register_activation_hook( __FILE__, 'more_ud_istep_install' ); //Appelé lors de l'activation du plugin
 
