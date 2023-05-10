@@ -76,9 +76,15 @@ function more_userdata_istep_menu_content(): void {
     }
 
     // Vérifie si le formulaire a été soumis
-    if (isset($_POST['submit'])) {
+    if (isset($_POST['submit']) && isset($_POST['istep_user_roles'])) {
         // Met à jour les options avec les rôles sélectionnés
-        update_option('istep_user_roles', $_POST['istep_user_roles']);
+        if (gettype($_POST['istep_user_roles']) == "string"){
+            update_option('istep_user_roles', [$_POST['istep_user_roles']]);
+        } else {
+            update_option('istep_user_roles', $_POST['istep_user_roles']);
+        }
+
+        set_rights_to_administrator('istep_user_roles');
         echo '<div id="message" class="updated notice"><p>Rôles mis à jour avec succès.</p></div>';
     }
     ?>
@@ -98,8 +104,12 @@ function more_userdata_istep_menu_content(): void {
                         $selected_roles = get_option('istep_user_roles', array());
                         // Affiche une checkbox pour chaque rôle
                         foreach ($roles as $key => $value) {
-                            echo '<label><input type="checkbox" name="istep_user_roles[]" value="'.$key.'" '
-                                .checked(in_array($key, $selected_roles), true, false).'>'.$value['name'].'</label><br/>';
+                            if ($key == "administrator") {
+                                echo '<label><input type="checkbox" name="istep_user_roles[]" value="' . $key . '" checked disabled>' . $value['name'] . '</label><br/>';
+                            }else{
+                                echo '<label><input type="checkbox" name="istep_user_roles[]" value="'.$key.'" '
+                                    .checked(in_array($key, $selected_roles), true, false).'>'.$value['name'].'</label><br/>';
+                            }
                         }
                         ?>
                     </td>
@@ -119,7 +129,7 @@ function more_userdata_istep_menu_give_access(){
     if ( !can_user_access_this(get_option('admin_user_roles')) ) {
         wp_die( __( 'You do not have sufficient permissions to access this page.'.get_option('admin_user_roles')[0] ) );
     }
-    if (isset($_POST['submitRoles'])) {
+    if (isset($_POST['submitRoles'])&& isset($_POST['admin_user_roles'])) {
         // Met à jour les options avec les rôles sélectionnés
         if(isset($_POST['admin_user_roles'])){
             update_option('admin_user_roles', $_POST['admin_user_roles']);
@@ -127,12 +137,7 @@ function more_userdata_istep_menu_give_access(){
                 $role_obj = get_role($role);
                 $role_obj->add_cap(ADMIN_CAPACITY);
             }
-            //si l'administrateur n'a plus les droits alors on lui redonne
-            if(!in_array("administrator",get_option('admin_user_roles'))){
-                $roles_already_stored = get_option('admin_user_roles');
-                $roles_already_stored[] = "administrator";
-                update_option('admin_user_roles', $roles_already_stored);
-            }
+            set_rights_to_administrator('admin_user_roles');
             update_option('admin_user_roles',delete_cap_if_no_need_anymore(ADMIN_CAPACITY,get_option('admin_user_roles')));
         }
 
@@ -450,4 +455,18 @@ function more_userdata_istep_users_list():void{
         </table>
     </div>
     <?php
+}
+
+/**
+ * Ajoute a l'option passé en paramètre l'administrateur
+ * @param string $option_name
+ * @return void
+ */
+function set_rights_to_administrator(string $option_name){
+    //si l'administrateur n'a plus les droits alors on lui redonne
+    if(!in_array("administrator",get_option($option_name))){
+        $roles_already_stored = get_option($option_name);
+        $roles_already_stored[] = "administrator";
+        update_option($option_name, $roles_already_stored);
+    }
 }

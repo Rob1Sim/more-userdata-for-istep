@@ -68,6 +68,7 @@ function more_ud_istep_install(): void
 
     //On ajoute les roles de bases pour éditer le plugin
     update_option('admin_user_roles', ["administrator"]);
+    update_option('istep_user_roles', ["administrator"]);
     $role_obj = get_role("administrator");
     $role_obj->add_cap(ADMIN_CAPACITY);
 }
