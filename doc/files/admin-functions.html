@@ -82,7 +82,7 @@
     </ul>
 
     <article class="phpdocumentor-element -file">
-        <h2 class="phpdocumentor-content__title">index.php</h2>
+        <h2 class="phpdocumentor-content__title">admin-functions.php</h2>
 
         
 
@@ -92,7 +92,7 @@
 
 <h3 id="toc">
     Table of Contents
-    <a href="files/index.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="files/admin-functions.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h3>
 
@@ -108,51 +108,64 @@
 
 <h4 id="toc-functions">
     Functions
-    <a href="files/index.html#toc-functions" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="files/admin-functions.html#toc-functions" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -function -">
-    <a href="namespaces/default.html#function_more_ud_istep_install">more_ud_istep_install()</a>
+    <a href="namespaces/default.html#function_more_userdata_istep_menu">more_userdata_istep_menu()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>Créer la base de donnée lors de l&#039;activation du plugin</dd>
+<dd>Génère la page dans le panel administrateur</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -function -">
-    <a href="namespaces/default.html#function_add_new_user_form">add_new_user_form()</a>
-    <span>
-                                &nbsp;: string    </span>
-</dt>
-<dd>Affiche le formulaire de création d&#039;utilisateur</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -function -">
-    <a href="namespaces/default.html#function_add_new_user">add_new_user()</a>
+    <a href="namespaces/default.html#function_more_userdata_istep_menu_content">more_userdata_istep_menu_content()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>Fonction qui vérifie les données entré dans le formulaire et les enregistre dans la base de donnée</dd>
+<dd>Gère le contenue de la page administrateur</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -function -">
-    <a href="namespaces/default.html#function_display_users_data">display_users_data()</a>
-    <span>
-                                &nbsp;: string    </span>
-</dt>
-<dd>Affiche diverses informations de l&#039;utilisateur sur la page de base</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -function -">
-    <a href="namespaces/default.html#function_create_personal_page">create_personal_page()</a>
+    <a href="namespaces/default.html#function_more_userdata_istep_menu_give_access">more_userdata_istep_menu_give_access()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>Créer une page personnel lors de l&#039;ajout d&#039;un utilisateur via le formulaire</dd>
+<dd>Ajoute le formulaire de gestions des roles qui ont accès au panel administrateur</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -function -">
-    <a href="namespaces/default.html#function_create_directory_from_DB_users">create_directory_from_DB_users()</a>
+    <a href="namespaces/default.html#function_more_userdata_istep_menu_team_page">more_userdata_istep_menu_team_page()</a>
     <span>
-                                &nbsp;: string    </span>
+                                &nbsp;: void    </span>
 </dt>
-<dd>Récupère les utilisateurs dans la base de donnée et les affect à un tableau HTML</dd>
+<dd>Sous menu qui gère l&#039;ajout des différentes équipes</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_more_userdata_istep_edit_equipe_page">more_userdata_istep_edit_equipe_page()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_more_userdata_istep_delete_equipe_page">more_userdata_istep_delete_equipe_page()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Supprime de la bd l&#039;équipe avec l&#039;id correspondant</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_more_userdata_istep_users_list">more_userdata_istep_users_list()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Affiche toutes les informations des utilisateurs de l&#039;ISTeP</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_set_rights_to_administrator">set_rights_to_administrator()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Ajoute a l&#039;option passé en paramètre l&#039;administrateur</dd>
 
     </dl>
 
@@ -163,27 +176,27 @@
             <section class="phpdocumentor-functions">
         <h3 class="phpdocumentor-elements__header" id="functions">
             Functions
-            <a href="files/index.html#functions" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="files/admin-functions.html#functions" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
                     <article class="phpdocumentor-element -function - ">
-    <h4 class="phpdocumentor-element__name" id="function_more_ud_istep_install">
-        more_ud_istep_install()
-        <a href="namespaces/default.html#function_more_ud_istep_install" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="function_more_userdata_istep_menu">
+        more_userdata_istep_menu()
+        <a href="namespaces/default.html#function_more_userdata_istep_menu" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="index.php"><a href="files/index.html">index.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">10</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Créer la base de donnée lors de l&#039;activation du plugin</p>
+        <p class="phpdocumentor-summary">Génère la page dans le panel administrateur</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility"></span>
-                    <span class="phpdocumentor-signature__name">more_ud_istep_install</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">more_userdata_istep_menu</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
     
@@ -192,52 +205,23 @@
     
 </article>
                     <article class="phpdocumentor-element -function - ">
-    <h4 class="phpdocumentor-element__name" id="function_add_new_user_form">
-        add_new_user_form()
-        <a href="namespaces/default.html#function_add_new_user_form" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="function_more_userdata_istep_menu_content">
+        more_userdata_istep_menu_content()
+        <a href="namespaces/default.html#function_more_userdata_istep_menu_content" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="index.php"><a href="files/index.html">index.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">84</span>
+    <span class="phpdocumentor-element-found-in__line">73</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Affiche le formulaire de création d&#039;utilisateur</p>
+        <p class="phpdocumentor-summary">Gère le contenue de la page administrateur</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility"></span>
-                    <span class="phpdocumentor-signature__name">add_new_user_form</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
-
-    
-    
-    
-
-            <section>
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type">string</span>
-            </section>
-
-</article>
-                    <article class="phpdocumentor-element -function - ">
-    <h4 class="phpdocumentor-element__name" id="function_add_new_user">
-        add_new_user()
-        <a href="namespaces/default.html#function_add_new_user" class="headerlink"><i class="fas fa-link"></i></a>
-
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="index.php"><a href="files/index.html">index.php</a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">211</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Fonction qui vérifie les données entré dans le formulaire et les enregistre dans la base de donnée</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility"></span>
-                    <span class="phpdocumentor-signature__name">add_new_user</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">more_userdata_istep_menu_content</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
     
@@ -246,72 +230,153 @@
     
 </article>
                     <article class="phpdocumentor-element -function - ">
-    <h4 class="phpdocumentor-element__name" id="function_display_users_data">
-        display_users_data()
-        <a href="namespaces/default.html#function_display_users_data" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="function_more_userdata_istep_menu_give_access">
+        more_userdata_istep_menu_give_access()
+        <a href="namespaces/default.html#function_more_userdata_istep_menu_give_access" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="index.php"><a href="files/index.html">index.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">384</span>
+    <span class="phpdocumentor-element-found-in__line">128</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Affiche diverses informations de l&#039;utilisateur sur la page de base</p>
+        <p class="phpdocumentor-summary">Ajoute le formulaire de gestions des roles qui ont accès au panel administrateur</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility"></span>
-                    <span class="phpdocumentor-signature__name">display_users_data</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                    <span class="phpdocumentor-signature__name">more_userdata_istep_menu_give_access</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
     
     
 
-            <section>
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type">string</span>
-            </section>
-
+    
 </article>
                     <article class="phpdocumentor-element -function - ">
-    <h4 class="phpdocumentor-element__name" id="function_create_personal_page">
-        create_personal_page()
-        <a href="namespaces/default.html#function_create_personal_page" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="function_more_userdata_istep_menu_team_page">
+        more_userdata_istep_menu_team_page()
+        <a href="namespaces/default.html#function_more_userdata_istep_menu_team_page" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="index.php"><a href="files/index.html">index.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">429</span>
+    <span class="phpdocumentor-element-found-in__line">183</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Créer une page personnel lors de l&#039;ajout d&#039;un utilisateur via le formulaire</p>
+        <p class="phpdocumentor-summary">Sous menu qui gère l&#039;ajout des différentes équipes</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility"></span>
-                    <span class="phpdocumentor-signature__name">create_personal_page</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$userId</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$userDisplayName</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$userNiceName</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">more_userdata_istep_menu_team_page</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+    
+    
+
+    
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_more_userdata_istep_edit_equipe_page">
+        more_userdata_istep_edit_equipe_page()
+        <a href="namespaces/default.html#function_more_userdata_istep_edit_equipe_page" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">255</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">more_userdata_istep_edit_equipe_page</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    
+    
+    
+
+    
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_more_userdata_istep_delete_equipe_page">
+        more_userdata_istep_delete_equipe_page()
+        <a href="namespaces/default.html#function_more_userdata_istep_delete_equipe_page" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">313</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Supprime de la bd l&#039;équipe avec l&#039;id correspondant</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">more_userdata_istep_delete_equipe_page</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+    
+    
+
+    
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_more_userdata_istep_users_list">
+        more_userdata_istep_users_list()
+        <a href="namespaces/default.html#function_more_userdata_istep_users_list" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">355</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Affiche toutes les informations des utilisateurs de l&#039;ISTeP</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">more_userdata_istep_users_list</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+    
+    
+
+    
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_set_rights_to_administrator">
+        set_rights_to_administrator()
+        <a href="namespaces/default.html#function_set_rights_to_administrator" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">478</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Ajoute a l&#039;option passé en paramètre l&#039;administrateur</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">set_rights_to_administrator</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$option_name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$userId</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$userDisplayName</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$userNiceName</span>
+                <span class="phpdocumentor-signature__argument__name">$option_name</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
@@ -323,46 +388,13 @@
 
     
 </article>
-                    <article class="phpdocumentor-element -function - ">
-    <h4 class="phpdocumentor-element__name" id="function_create_directory_from_DB_users">
-        create_directory_from_DB_users()
-        <a href="namespaces/default.html#function_create_directory_from_DB_users" class="headerlink"><i class="fas fa-link"></i></a>
-
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="index.php"><a href="files/index.html">index.php</a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">458</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Récupère les utilisateurs dans la base de donnée et les affect à un tableau HTML</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility"></span>
-                    <span class="phpdocumentor-signature__name">create_directory_from_DB_users</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
-
-    
-    
-    
-
-            <section>
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type">string</span>
-                    &mdash;
-                <section class="phpdocumentor-description"><p>Le tableau HTML</p>
-</section>
-
-            </section>
-
-</article>
             </section>
 
         <div class="phpdocumentor-modal" id="source-view">
     <div class="phpdocumentor-modal-bg" data-exit-button></div>
     <div class="phpdocumentor-modal-container">
         <div class="phpdocumentor-modal-content">
-            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/index.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/admin-functions.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
         </div>
         <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
     </div>
@@ -461,7 +493,7 @@
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                                                                                                                                                                        <li><a href="files/index.html#toc-functions">Functions</a></li>
+                                                                                                                                                                                        <li><a href="files/admin-functions.html#toc-functions">Functions</a></li>
                                     </ul>
             </li>
 
@@ -469,12 +501,14 @@
                             <li class="phpdocumentor-on-this-page-section__title">Functions</li>
                 <li>
                     <ul class="phpdocumentor-list -clean">
-                                                    <li><a href="namespaces/default.html#function_add_new_user">add_new_user()</a></li>
-                                                    <li><a href="namespaces/default.html#function_add_new_user_form">add_new_user_form()</a></li>
-                                                    <li><a href="namespaces/default.html#function_create_directory_from_DB_users">create_directory_from_DB_users()</a></li>
-                                                    <li><a href="namespaces/default.html#function_create_personal_page">create_personal_page()</a></li>
-                                                    <li><a href="namespaces/default.html#function_display_users_data">display_users_data()</a></li>
-                                                    <li><a href="namespaces/default.html#function_more_ud_istep_install">more_ud_istep_install()</a></li>
+                                                    <li><a href="namespaces/default.html#function_more_userdata_istep_delete_equipe_page">more_userdata_istep_delete_equipe_page()</a></li>
+                                                    <li><a href="namespaces/default.html#function_more_userdata_istep_edit_equipe_page">more_userdata_istep_edit_equipe_page()</a></li>
+                                                    <li><a href="namespaces/default.html#function_more_userdata_istep_menu">more_userdata_istep_menu()</a></li>
+                                                    <li><a href="namespaces/default.html#function_more_userdata_istep_menu_content">more_userdata_istep_menu_content()</a></li>
+                                                    <li><a href="namespaces/default.html#function_more_userdata_istep_menu_give_access">more_userdata_istep_menu_give_access()</a></li>
+                                                    <li><a href="namespaces/default.html#function_more_userdata_istep_menu_team_page">more_userdata_istep_menu_team_page()</a></li>
+                                                    <li><a href="namespaces/default.html#function_more_userdata_istep_users_list">more_userdata_istep_users_list()</a></li>
+                                                    <li><a href="namespaces/default.html#function_set_rights_to_administrator">set_rights_to_administrator()</a></li>
                                             </ul>
                 </li>
                     </ul>
@@ -494,7 +528,7 @@
     </section>
 </section>
         </div>
-        <a href="files/index.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="files/admin-functions.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 
