@@ -87,6 +87,12 @@ function more_userdata_istep_menu_content(): void {
         set_rights_to_administrator('istep_user_roles');
         echo '<div id="message" class="updated notice"><p>Rôles mis à jour avec succès.</p></div>';
     }
+    if(isset($_POST["submit-default-role"])){
+        if (isset($_POST["default-role"]) && gettype($_POST["default-role"]) == "string"){
+            update_option('default_role',sanitize_text_field($_POST["default-role"]));
+            echo '<div id="message" class="updated notice"><p>Le rôle par défaut a été mis à jour avec succès. '.get_option('default_role').'</p></div>';
+        }
+    }
     ?>
     <div class="wrap">
         <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
@@ -116,6 +122,25 @@ function more_userdata_istep_menu_content(): void {
                 </tr>
             </table>
             <?php submit_button('Enregistrer les rôles', 'primary', 'submit', true); ?>
+        </form>
+        <form method="post" action="">
+            <h2>Rôle par défaut</h2>
+            <p>Représente le rôle attribué par défaut à la création de l'utilisateur via l'utilisation du formulaire.</p>
+            <label for="default-role">Rôle</label>
+            <?php
+            //Choix du rôle selectionné de base
+            $roles = get_editable_roles();
+            echo '<select name="default-role" id="default-role">';
+            foreach ($roles as $key => $value){
+                if ($key == get_option("default_role")){
+                    echo "<option value=\"".$key."\" selected>".$value['name']."</option>";
+                }else{
+                    echo "<option value=\"".$key."\">".$value['name']."</option>";
+                }
+            }
+            echo '</select>';
+            ?>
+            <?php submit_button('Enregistrer', 'primary', 'submit-default-role', true); ?>
         </form>
     </div>
     <?php

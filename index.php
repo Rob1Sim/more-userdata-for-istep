@@ -77,6 +77,10 @@ function more_ud_istep_install(): void
             'nom_equipe' => "Pas d'équipe"
         )
     );
+
+    //Role par défaut
+    update_option('default_role', "subscriber");
+
 }
 register_activation_hook( __FILE__, 'more_ud_istep_install' ); //Appelé lors de l'activation du plugin
 
@@ -195,7 +199,11 @@ HTML;
 
         // Affiche une checkbox pour chaque rôle
         foreach ($roles as $key => $value) {
-            $html.= '<label><p></p><input type="checkbox" name="roles[]" value="'.$key.'"><p>'.$value['name'].'</p></label><br/>';
+            $checked ="";
+            if ($key == get_option("default_role")){
+                $checked ="checked";
+            }
+            $html.= '<label><p></p><input type="checkbox" name="roles[]" value="'.$key.'"'.$checked.'><p>'.$value['name'].'</p></label><br/>';
         }
         $html.= <<<HTML
         </div>
