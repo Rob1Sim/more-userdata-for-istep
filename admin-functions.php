@@ -327,6 +327,19 @@ function more_userdata_istep_delete_equipe_page() {
                 'id_equipe' => $id_equipe
             )
         );
+
+        // Vérifie s'il reste des équipes dans la table
+        $count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
+        if ($count == 0) {
+            // Crée l'équipe "Pas d'équipe"
+            $wpdb->insert(
+                $table_name,
+                array(
+                    'nom_equipe' => 'Pas d\'équipe',
+                )
+            );
+        }
+
         echo '<div id="message" class="updated notice"><p>Équipe supprimée avec succès.</p></div>';
     } else {
         echo '<div id="message" class="notice notice-error"><p>Vous n\'avez pas la permission de faire ça.</p></div>';
