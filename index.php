@@ -336,13 +336,9 @@ function add_new_user() {
                     wp_redirect($current_url);
                     exit;
                 }else{
-                    $user_data = array(
-                        'ID' => $user_id,
-                        'roles' => $verified_roles
-                    );
-                    //Ajout des roles à l'utilisateur créé
-                    if (is_wp_error(wp_update_user( $user_data ))){
-                        wp_redirect($current_url."user-create-error=3");
+                    $new_user = get_user_by('id', $user_id);
+                    foreach ($verified_roles as $new_role){
+                        $new_user->add_role($new_role);
                     }
 
                     //Ajout de l'image de profile
