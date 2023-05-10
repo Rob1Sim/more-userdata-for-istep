@@ -11,6 +11,11 @@ Search.appendIndex(
             "summary": "G\u00E8re\u0020le\u0020contenue\u0020de\u0020la\u0020page\u0020administrateur",
             "url": "namespaces/default.html#function_more_userdata_istep_menu_content"
         },                {
+            "fqsen": "\\more_userdata_istep_menu_give_access\u0028\u0029",
+            "name": "more_userdata_istep_menu_give_access",
+            "summary": "Ajoute\u0020le\u0020formulaire\u0020de\u0020gestions\u0020des\u0020roles\u0020qui\u0020ont\u0020acc\u00E8s\u0020au\u0020panel\u0020administrateur",
+            "url": "namespaces/default.html#function_more_userdata_istep_menu_give_access"
+        },                {
             "fqsen": "\\more_userdata_istep_menu_team_page\u0028\u0029",
             "name": "more_userdata_istep_menu_team_page",
             "summary": "Sous\u0020menu\u0020qui\u0020g\u00E8re\u0020l\u0027ajout\u0020des\u0020diff\u00E9rentes\u0020\u00E9quipes",
@@ -56,10 +61,10 @@ Search.appendIndex(
             "summary": "Cr\u00E9er\u0020une\u0020page\u0020personnel\u0020lors\u0020de\u0020l\u0027ajout\u0020d\u0027un\u0020utilisateur\u0020via\u0020le\u0020formulaire",
             "url": "namespaces/default.html#function_create_personal_page"
         },                {
-            "fqsen": "\\createDirectoryFromDBUsers\u0028\u0029",
-            "name": "createDirectoryFromDBUsers",
+            "fqsen": "\\create_directory_from_DB_users\u0028\u0029",
+            "name": "create_directory_from_DB_users",
             "summary": "R\u00E9cup\u00E8re\u0020les\u0020utilisateurs\u0020dans\u0020la\u0020base\u0020de\u0020donn\u00E9e\u0020et\u0020les\u0020affect\u0020\u00E0\u0020un\u0020tableau\u0020HTML",
-            "url": "namespaces/default.html#function_createDirectoryFromDBUsers"
+            "url": "namespaces/default.html#function_create_directory_from_DB_users"
         },                {
             "fqsen": "\\TABLE_TEAM_NAME",
             "name": "TABLE_TEAM_NAME",
@@ -71,15 +76,20 @@ Search.appendIndex(
             "summary": "Nom\u0020de\u0020la\u0020table\u0020membre\u0020dans\u0020la\u0020base\u0020de\u0020donn\u00E9e",
             "url": "namespaces/default.html#constant_TABLE_MEMBERS_NAME"
         },                {
+            "fqsen": "\\ADMIN_CAPACITY",
+            "name": "ADMIN_CAPACITY",
+            "summary": "D\u00E9finie\u0020la\u0020capacit\u00E9\u0020d\u0027un\u0020role\u0020\u00E0\u0020acc\u00E9der\u0020au\u0020menu\u0020admin\u0020du\u0020plugin",
+            "url": "namespaces/default.html#constant_ADMIN_CAPACITY"
+        },                {
             "fqsen": "\\get_current_user_roles\u0028\u0029",
             "name": "get_current_user_roles",
             "summary": "R\u00E9cup\u00E8re\u0020les\u0020roles\u0020de\u0020l\u0027utilisateur\u0020connect\u00E9",
             "url": "namespaces/default.html#function_get_current_user_roles"
         },                {
-            "fqsen": "\\can_user_create_users\u0028\u0029",
-            "name": "can_user_create_users",
-            "summary": "V\u00E9rifie\u0020si\u0020l\u0027utilisateur\u0020connect\u00E9\u0020poss\u00E8de\u0020les\u0020r\u00F4les\u0020pass\u00E9\u0020en\u0020param\u00E8tres,\n\u0028les\u0020roles\u0020doivent\u0020\u00E9crite\u0020selon\u0020leur\u0020slug,\u003D\u003E\u0020en\u0020minuscule\u0020est\u0020sans\u0020caract\u00E8res\u0020sp\u00E9ciaux\u0020\u003A\u0020espace,\u0020accent\u0029\nA\u0020not\u00E9\u0020que\u0020si\u0020l\u0027utilisateur\u0020n\u0027est\u0020pas\u0020connect\u00E9\u0020la\u0020fonction\u0020renvoie\u0020false",
-            "url": "namespaces/default.html#function_can_user_create_users"
+            "fqsen": "\\can_user_access_this\u0028\u0029",
+            "name": "can_user_access_this",
+            "summary": "V\u00E9rifie\u0020si\u0020l\u0027utilisateur\u0020connect\u00E9\u0020poss\u00E8de\u0020un\u0020des\u0020r\u00F4les\u0020pass\u00E9\u0020en\u0020param\u00E8tres,\n\u0028les\u0020roles\u0020doivent\u0020\u00E9crite\u0020selon\u0020leur\u0020slug,\u003D\u003E\u0020en\u0020minuscule\u0020est\u0020sans\u0020caract\u00E8res\u0020sp\u00E9ciaux\u0020\u003A\u0020espace,\u0020accent\u0029\nA\u0020not\u00E9\u0020que\u0020si\u0020l\u0027utilisateur\u0020n\u0027est\u0020pas\u0020connect\u00E9\u0020la\u0020fonction\u0020renvoie\u0020false",
+            "url": "namespaces/default.html#function_can_user_access_this"
         },                {
             "fqsen": "\\get_team_name_by_id\u0028\u0029",
             "name": "get_team_name_by_id",
@@ -105,6 +115,16 @@ Search.appendIndex(
             "name": "convert_tower_into_readable",
             "summary": "Transforme\u0020le\u0020nom\u0020de\u0020la\u0020tour\u0020enregistr\u00E9\u0020dans\u0020la\u0020bd",
             "url": "namespaces/default.html#function_convert_tower_into_readable"
+        },                {
+            "fqsen": "\\delete_cap_if_no_need_anymore\u0028\u0029",
+            "name": "delete_cap_if_no_need_anymore",
+            "summary": "Supprime\u0020la\u0020capacit\u00E9e\u0020d\u0027un\u0020role\u0020si\u0020celui\u002Dci\u0020ne\u0020fait\u0020pas\u0020partie\u0020de\u0020la\u0020liste\u0020des\u0020personne\u0020qui\u0020devrait\u0020l\u0027avoir,\u0020retourne\u0020la\u0020liste\u0020mis\u0020\u00E0\u0020jour",
+            "url": "namespaces/default.html#function_delete_cap_if_no_need_anymore"
+        },                {
+            "fqsen": "\\is_team_id_valid\u0028\u0029",
+            "name": "is_team_id_valid",
+            "summary": "V\u00E9rifie\u0020que\u0020l\u0027id\u0020pass\u00E9\u0020en\u0020param\u00E8tre\u0020correspond\u0020\u00E0\u0020l\u0027id\u0020d\u0027une\u0020\u00E9quipe",
+            "url": "namespaces/default.html#function_is_team_id_valid"
         },                {
             "fqsen": "\\",
             "name": "\\",

@@ -65,6 +65,12 @@ function more_ud_istep_install(): void
 
 // Insère la page dans la base de données de WordPress
     wp_insert_post($page_data);
+
+    //On ajoute les roles de bases pour éditer le plugin
+    update_option('admin_user_roles', ["administrator"]);
+    update_option('istep_user_roles', ["administrator"]);
+    $role_obj = get_role("administrator");
+    $role_obj->add_cap(ADMIN_CAPACITY);
 }
 register_activation_hook( __FILE__, 'more_ud_istep_install' ); //Appelé lors de l'activation du plugin
 
@@ -78,7 +84,7 @@ add_shortcode('add_istep_user_form','add_new_user_form');
  */
 function add_new_user_form():string {
     $html = "<p>Vous n'êtes pas connecté</p>";
-    if (can_user_create_users(get_option('istep_user_roles')))
+    if (can_user_access_this(get_option('istep_user_roles')))
     {
         if(isset($_GET['error'])){
             $html.= "<div class=\"error\">".sanitize_text_field($_GET['error'])."</div>";
