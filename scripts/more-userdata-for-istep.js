@@ -64,7 +64,7 @@ submit_button.addEventListener('click',(event)=>{
         addErrorMessage("Employeur incorrect",document.querySelector('#employer').parentNode);
         return;
     }
-    if(mailCase.value === "" || mailCase.value === null|| job.value.length > 10){
+    if(mailCase.value === "" || mailCase.value === null|| mailCase.value.length > 10){
         addErrorMessage("Case courrier incorrect",document.querySelector('#mailCase').parentNode);
         return;
     }
