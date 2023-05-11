@@ -129,8 +129,10 @@ function add_new_user_form():string {
             
             <label for="password">Mot de passe : 
                 <input type="password" name="password" id="password" required/>
-                <button type="button" id="random-pws">Générer un mot de passe aléatoire</button>
-                <button type="button" id="show-password">Afficher le mot de passe</button>
+                <div class="password-btn">
+                    <button type="button" id="random-pws">Générer un mot de passe aléatoire</button>
+                    <button type="button" id="show-password">Afficher le mot de passe</button>  
+                </div>
             </label>
             
             <label for="office">Bureau : 
