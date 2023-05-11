@@ -10,6 +10,10 @@ define("TABLE_TEAM_NAME", $wpdb->prefix . 'equipe_ISTeP');
  */
 define("TABLE_MEMBERS_NAME",$wpdb->prefix . 'membre_ISTeP');
 /**
+ * Nom de la table qui fait la relation entre MEMBRE et TEAM dans la base de donnée
+ */
+define("TABLE_MEMBERS_TEAM_NAME",$wpdb->prefix . 'membre_equipe_ISTeP');
+/**
  * Définie la capacité d'un role à accéder au menu admin du plugin
  */
 const ADMIN_CAPACITY = "more_data_users_admin_capacity";

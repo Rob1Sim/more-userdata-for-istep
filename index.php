@@ -24,6 +24,7 @@ function more_ud_istep_install(): void
     global $wpdb;
     $table_name_user_data = TABLE_MEMBERS_NAME;
     $table_name_user_team = TABLE_TEAM_NAME;
+    $table_members_team = TABLE_MEMBERS_TEAM_NAME;
     $charset_collate = $wpdb->get_charset_collate();
 
     $sql = "
@@ -32,6 +33,14 @@ function more_ud_istep_install(): void
         nom_equipe VARCHAR(255) NOT NULL,
         PRIMARY KEY(id_equipe)
     )$charset_collate;
+    
+    CREATE TABLE $table_members_team(
+        id_equipe INT NOT NULL ,
+        id_membre INT NOT NULL,
+        PRIMARY KEY(id_equipe,id_membre)
+    )$charset_collate;
+    
+
     CREATE TABLE $table_name_user_data (
         id_membre INT NOT NULL AUTO_INCREMENT,
         wp_user_id BIGINT UNSIGNED NOT NULL,
@@ -47,7 +56,7 @@ function more_ud_istep_install(): void
         PRIMARY KEY (id_membre),
         FOREIGN KEY (wp_user_id) REFERENCES {$wpdb->prefix}users(ID)
             ON DELETE CASCADE,
-        FOREIGN KEY (equipe) REFERENCES {$wpdb->prefix}equipe_ISTeP(id_equipe)
+        FOREIGN KEY (equipe) REFERENCES {$wpdb->prefix}membre_equipe_ISTeP(id_equipe)
             ON DELETE SET NULL
 ) $charset_collate;";
 
@@ -467,7 +476,27 @@ add_shortcode('users_directory', 'create_directory_from_DB_users');
  * Récupère les utilisateurs dans la base de donnée et les affect à un tableau HTML
  * @return string Le tableau HTML
  */
-function create_directory_from_DB_users(): string{
+function create_directory_from_DB_users( $atts ): string{
+
+    if ( ! function_exists( 'get_editable_roles' ) ) {
+        require_once ABSPATH . 'wp-admin/includes/user.php';
+    }
+    $roles = get_editable_roles();
+
+    //Gestions des paramètres
+    $list_parameters = shortcode_atts( array(
+        'role' => '',
+    ), $atts );
+
+    $role_parameter = $list_parameters['role'];
+    $role_parameter = strtolower(sanitize_text_field($role_parameter));
+    //Si le role n'éxiste pas alors on ne trie pas
+    if ($roles[$role_parameter] == null){
+        $role_parameter = "";
+    }
+
+
+
     //Ajout de la feuille de style et du javascript
     wp_enqueue_style('tiny-directory-css',plugins_url('styles/tiny-directory.css',__FILE__));
     wp_enqueue_script('tiny-directory-js',plugins_url('scripts/tiny-directory.js',__FILE__),array(), false, true);
@@ -479,14 +508,12 @@ function create_directory_from_DB_users(): string{
             <<<HTML
 <div class="tiny-directory-div">
     <label for="search-input-members">Rechercher : </label>
+    <input type="hidden" value="$role_parameter" id="role-parameter">
     <input type="text" id="search-input-members"" placeholder="Robin...">
             <select id="select-role">
 HTML;
-        if ( ! function_exists( 'get_editable_roles' ) ) {
-            require_once ABSPATH . 'wp-admin/includes/user.php';
-        }
 
-        $roles = get_editable_roles();
+
 
         foreach ($roles as $key => $value){
             $html.= "<option value=\"".$key."\">".$value['name']."</option>";

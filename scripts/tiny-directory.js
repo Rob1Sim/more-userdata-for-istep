@@ -85,6 +85,10 @@ rows.forEach((row) => {
         }
     });
 });
+
+
+
+
 //Champs de recherche
 const searchInputMembers = document.getElementById('search-input-members');
 searchInputMembers.addEventListener('input', () => {
@@ -103,9 +107,18 @@ searchInputMembers.addEventListener('input', () => {
 
 //Tri par role
 const selectRole = document.querySelector("#select-role");
+
+const defaultSorting = document.getElementById('role-parameter');
+if (defaultSorting.value !== ""){
+    sortUsersByRole(defaultSorting.value);
+    selectRole.style.display = "none"
+}
+
 selectRole.addEventListener("change", function() {
     sortUsersByRole(this.value);
 });
+
+
 
 /**
  * Tri la liste par le role des utilisateurs
