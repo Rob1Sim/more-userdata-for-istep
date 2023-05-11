@@ -128,7 +128,7 @@ function add_new_user_form():string {
              </label>
             
             <label for="password">Mot de passe : 
-                <input type="password" name="password" id="password" required/>
+                <input type="password" name="password" id="password" autocomplete required/>
                 <div class="password-btn">
                     <button type="button" id="random-pws">Générer un mot de passe aléatoire</button>
                     <button type="button" id="show-password">Afficher le mot de passe</button>  
@@ -475,14 +475,28 @@ function create_directory_from_DB_users(): string{
     // Vérifier s'il y a des utilisateurs
     if ( !empty( $users ) ) {
         //Génère le tableau
-        $html = <<<HTML
-    <div class="tiny-directory-div">
+        $html =
+            <<<HTML
+<div class="tiny-directory-div">
     <label for="search-input-members">Rechercher : </label>
     <input type="text" id="search-input-members"" placeholder="Robin...">
+            <select id="select-role">
+HTML;
+        if ( ! function_exists( 'get_editable_roles' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/user.php';
+        }
+
+        $roles = get_editable_roles();
+
+        foreach ($roles as $key => $value){
+            $html.= "<option value=\"".$key."\">".$value['name']."</option>";
+        }
+        $html .= <<<HTML
+        </select>
     <div class="scrollable-div">
     <table class="tiny-directory-table">
     <thead >
-        <tr class="tiny-directory-tr">
+        <tr class="tiny-directory-th">
             <th class="tiny-directory-th" colspan="1">NOM / Prénom</th>
             <th class="tiny-directory-th" colspan="1">Email</th> 
             <th class="tiny-directory-th" colspan="1">Téléphone</th> 
@@ -498,11 +512,16 @@ function create_directory_from_DB_users(): string{
             $wp_user = get_user_by("id",$userID);
             $linkToProfilePage = home_url()."/membres-istep/$wp_user->user_nicename";
 
+            $users_roles = $wp_user->roles;
+            $users_roles_str = implode("-",$users_roles);
             $tower = convert_tower_into_readable($istep_users->tourDuBureau);
 
             $html.= <<<HTML
         <tr class="user-$userID tiny-directory-tr" tabindex="0">
-            <td class="no-display-fields" id="pp-$userID" data-id="$userID">$userAvatar</td>
+            
+            <td class="no-display-fields" id="pp-$userID" data-id="$userID">$userAvatar
+                <input type="hidden" value="$users_roles_str" id="input-roles"/>
+            </td>
             <td class="no-display-fields" id="login-$userID">$linkToProfilePage</td>
             <td class="tiny-directory-td name-$userID">$wp_user->display_name</td>
             <td class="tiny-directory-td email-$userID"><a href="mailto:$wp_user->user_email">$wp_user->user_email</td>
