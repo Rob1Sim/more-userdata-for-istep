@@ -83,6 +83,7 @@ function more_ud_istep_install(): void
     $wpdb->insert(
         TABLE_TEAM_NAME,
         array(
+            'id_equipe' => 1,
             'nom_equipe' => "Pas d'équipe"
         )
     );
@@ -371,6 +372,10 @@ function add_new_user() {
                     }
                     $last_member = get_istep_user_by_id($user_id);
 
+                    //Si pour une raison quelconque il n'y a pas d'équipe alors on l'attribut à l'équipe "Pas d'équipe"
+                    if (count($verified_teams) == 0){
+                        $verified_teams[] = 1;
+                    }
                     //Création d'entités entre les équipes et l'utilisateur
                     foreach ($verified_teams as $verified_team){
                         $wpdb->insert(
