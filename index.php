@@ -440,7 +440,11 @@ function display_users_data(): string
     $userData = get_istep_user_by_id($page_author_id);
     $userAvatar = get_user_avatar($page_author_id);
     $userTower = convert_tower_into_readable($userData->tourDuBureau);
-    $userTeam = get_team_name_by_id($userData->equipe);
+    $userTeams = get_user_teams_names_by_user_id($userData->id_membre);
+
+
+
+
 
     $html = <<<HTML
     <div class="user-info-container">
@@ -452,8 +456,12 @@ function display_users_data(): string
                 <h5>Fonction</h5>
                 <p>$userData->fonction</p>
                 
-                <h5>Equipe</h5>
-                <p>$userTeam->nom_equipe</p>
+                <h5>Equipes</h5>
+HTML;
+    foreach ($userTeams as $userTeam) {
+        $html.="<p>$userTeam->nom_equipe</p>";
+    }
+    $html.= <<<HTML
             </div>
             <div>
                 <h5>Coordonées :</h5>

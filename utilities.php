@@ -173,3 +173,20 @@ function is_team_id_valid(int $id): bool{
 
     return in_array($id,$array_of_id);
 }
+
+/**
+ * Récupère tous les nom de l'utilisateur passé en paramètre
+ * @param int $id
+ * @return array
+ */
+function get_user_teams_names_by_user_id(int $id): array{
+    global $wpdb;
+    $table_name = TABLE_MEMBERS_TEAM_NAME;
+
+    $teams = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE id_membre = $id");
+    $array_of_name = [];
+    foreach ($teams as $team){
+        $array_of_name[] = get_team_name_by_id($team->id_equipe);
+    }
+    return $array_of_name;
+}
