@@ -37,7 +37,10 @@ function more_ud_istep_install(): void
     CREATE TABLE $table_members_team(
         id_equipe INT NOT NULL ,
         id_membre INT NOT NULL,
-        PRIMARY KEY(id_equipe,id_membre)
+        PRIMARY KEY(id_equipe,id_membre),
+        FOREIGN KEY (id_equipe) REFERENCES {$wpdb->prefix}equipe_ISTeP(id_equipe),
+        FOREIGN KEY (id_membre) REFERENCES {$wpdb->prefix}membre_ISTeP(id_membre)
+
     )$charset_collate;
     
 
@@ -47,7 +50,6 @@ function more_ud_istep_install(): void
         fonction VARCHAR(255),
         nTelephone VARCHAR(10),
         bureau VARCHAR(4),
-        equipe INT,
         rangEquipe VARCHAR(255),
         tourDuBureau VARCHAR(30),
         campus VARCHAR(255),
@@ -56,8 +58,6 @@ function more_ud_istep_install(): void
         PRIMARY KEY (id_membre),
         FOREIGN KEY (wp_user_id) REFERENCES {$wpdb->prefix}users(ID)
             ON DELETE CASCADE,
-        FOREIGN KEY (equipe) REFERENCES {$wpdb->prefix}membre_equipe_ISTeP(id_equipe)
-            ON DELETE SET NULL
 ) $charset_collate;";
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -164,8 +164,7 @@ function add_new_user_form():string {
             </label>
             
             <label id="c">Equipe :
-            <select name="team" id="team">
-                
+             <div class="role-box">   
 HTML;
         //Récupères les équipes existantes
         global $wpdb;
@@ -175,10 +174,10 @@ HTML;
         foreach ($teams as $team){
             $teamName = $team->nom_equipe;
             $teamId = $team->id_equipe;
-            $html .= "<option value=\"".$teamId."\">".$teamName."</option>";
+            $html.= '<label><p></p><input type="checkbox" name="teams[]" value="'.$teamId.'"><p>'.$teamName.'</p></label><br/>';
         }
         $html.=<<<HTML
-        </select>
+        </div>
         </label>
         <label for="teamRank" >
             Rang au sein de l'équipe :
@@ -278,7 +277,6 @@ function add_new_user() {
         $office = sanitize_text_field($_POST['office']);
         $job = sanitize_text_field($_POST['job']);
         $tourBureau = sanitize_text_field($_POST['tourBureau']);
-        $team = sanitize_text_field($_POST['team']);
         $teamRank = sanitize_text_field($_POST['teamRank']);
         $campus = sanitize_text_field($_POST['campus']);
         $employer = sanitize_text_field($_POST['employer']);
@@ -294,6 +292,16 @@ function add_new_user() {
             }
         } else {
             $verified_roles = [get_option('default_role')];
+        }
+
+        if (isset($_POST['teams'])){
+            //Nettoyage des équipes
+            $teams = $_POST['teams'];
+            $verified_teams = [];
+            foreach ($teams as $team){
+                $verified_teams[] = sanitize_text_field($team);
+            }
+
         }
 
         // Validation des données
@@ -329,12 +337,12 @@ function add_new_user() {
                 global $wpdb;
                 $user = get_user_by( 'login', $login ); // récupère l'utilisateur par login
                 $user_id = $user->ID;
+
                 $data = array(
                     'wp_user_id' => $user_id,
                     'fonction' => $job,
                     'nTelephone' => $phone,
                     'bureau' => $office,
-                    'equipe' => intval($team),
                     'rangEquipe' => $teamRank,
                     'tourDuBureau' => $tourBureau,
                     'campus' => $campus,
@@ -361,6 +369,19 @@ function add_new_user() {
                     foreach ($verified_roles as $new_role){
                         $new_user->add_role($new_role);
                     }
+                    $last_member = get_istep_user_by_id($user_id);
+
+                    //Création d'entités entre les équipes et l'utilisateur
+                    foreach ($verified_teams as $verified_team){
+                        $wpdb->insert(
+                            TABLE_MEMBERS_TEAM_NAME,
+                            array(
+                                'id_equipe' => intval($verified_team),
+                                'id_membre' => intval($last_member->id_membre)
+                            )
+                        );
+                    }
+
 
                     //Ajout de l'image de profile
                     create_personal_page($user_id,$name." ".$last_name,strtolower($last_name)."_".strtolower($name));
