@@ -56,13 +56,15 @@ function more_userdata_istep_menu(): void{
         'more_userdata_istep_delete_equipe_page'
     );
     add_submenu_page(
-        'admin.php?page=edit_team_for_user',
-        'Modifier l\'équipe d\'un membre',
-        'Modifier l\'équipe d\'un membre',
-        "read",
-        'edit_member_team',
-        'more_userdata_istep_edit_member_team_page'
+        'admin.php?page=modify_users_teams&id=',
+        'Modifier équipe',
+        'Modifier équipe',
+        ADMIN_CAPACITY,
+        'modify_users_teams',
+        'more_userdata_istep_users_edit_teams'
     );
+
+
 }
 add_action( 'admin_menu', 'more_userdata_istep_menu' );
 
@@ -363,20 +365,19 @@ function more_userdata_istep_delete_equipe_page() {
     if ( !can_user_access_this(get_option('admin_user_roles')) ) {
         wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
     }
-    if ( current_user_can( ADMIN_CAPACITY ) ) {
+    if ( current_user_can( ADMIN_CAPACITY ) && isset($_POST['equipe_id_delete']) ) {
         // Récupère l'ID de l'équipe à supprimer depuis l'URL
         $id_equipe = $_POST['equipe_id_delete'];
-
         // Supprime l'équipe de la base de données
         global $wpdb;
         $table_name = TABLE_TEAM_NAME;
         $wpdb->delete(
             $table_name,
             array(
-                'id_equipe' => $id_equipe
+                'id_equipe' => intval($id_equipe)
             )
         );
-
+        var_dump($wpdb->last_query);
         // Vérifie s'il reste des équipes dans la table
         $count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
         if ($count == 0) {
@@ -405,32 +406,7 @@ function more_userdata_istep_users_list():void{
     if ( !can_user_access_this(get_option('admin_user_roles')) ) {
         wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
     }
-    // Vérifie si le formulaire a été soumis
-    if (isset($_POST['submit']) && isset($_POST["userID"])) {
-        $id_member = $_POST["userID"];
-        if (current_user_can(ADMIN_CAPACITY)) {
-            // Met à jour les informations de l'équipe dans la base de données celon le membre
-            foreach ($id_member as $user) {
-                if (isset($user)) {
-                    $team_number = $_POST['team-'.$user];
-                    if (is_team_id_valid(intval($team_number))){
-                        global $wpdb;
-                        $wpdb->update(
-                            TABLE_MEMBERS_NAME,
-                            array(
-                                'equipe' => $team_number
-                            ),
-                            array(
-                                'id_membre' => $user
-                            )
-                        );
-                    }
-                    echo '<div id="message" class="updated notice"><p>Équipe modifiée avec succès.</p></div>';
-                }
-            }
-        }
 
-    }
     ?>
     <div class="wrap">
         <h1>Liste des membres de l'ISTeP</h1>
@@ -483,21 +459,12 @@ function more_userdata_istep_users_list():void{
                 echo '<td>' . $user->id_membre . '</td>';
                 echo '<td>' . $wp_user->display_name . '</td>';
                 echo '<td>' . $wp_user->user_login . '</td>';
-                echo '<td>';
-                echo '<form method="post" action="">';
-                echo '<input type="hidden" value="'.$user->id_membre.'" name="userID[]"/>';
-                wp_nonce_field( 'modifier_equipe_membre_nonce', 'modifier_equipe_membre_nonce' );
-                echo '<select name="team-'.$user->id_membre.'" id="team">';
-                foreach ($teams as $team){
-                    $teamName = $team->nom_equipe;
-                    $teamId = $team->id_equipe;
-                    $selected = ($teamId == $user->equipe) ? 'selected' : '';
-                    echo "<option value=\"$teamId\" $selected>$teamName</option>";
-                }
-                echo '</select>';
-                submit_button('Enregistrer', 'primary', 'submit', true);
-                echo '</form></td>';
-
+                echo '<td>
+                        <form method="post" action="' . admin_url( 'admin.php?page=modify_users_teams&id=' . $user->id_membre ) . '">
+                            <input type="hidden" name="id" value="' . $user->id_membre . '">
+                            <button type="submit" class="button">Modifier</button>
+                        </form>
+                      </td>';
                 echo '<td>' . $user->fonction . '</td>';
                 echo '<td>' . $wp_user->user_email . '</td>';
                 echo '<td>' . $user->nTelephone . '</td>';
@@ -514,6 +481,83 @@ function more_userdata_istep_users_list():void{
         </table>
     </div>
     <?php
+}
+
+/**
+ * Formulaire de modification de l'équipe d'un utilisateur
+ * @return void
+ */
+function more_userdata_istep_users_edit_teams():void
+{
+    if ( ! current_user_can( ADMIN_CAPACITY ) ) {
+        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+    }
+    if ( isset($_POST['changeTeams']) && isset($_POST['idUser'])) {
+
+        $id_user = $_POST['idUser'];
+        $verified_teams = [];
+        $already_exist_data= get_user_teams_id_by_user_id($id_user);
+        $teams_already_in = [];
+        if (!isset($_POST['teams'])){
+            $verified_teams[] = 1;
+        }else {
+            $teams = $_POST['teams'];
+            foreach ($teams as $team){
+                //Si l'équipe n'éxiste pas on l'ajoute
+                if (!in_array($team,$already_exist_data)){
+                    $verified_teams[] = sanitize_text_field($team);
+                }else{
+                    $teams_already_in[] = sanitize_text_field($team);
+                }
+            }
+        }
+
+        //On récupère les tables qui n'était pas coché mais présent dans les tables de l'utilisateur
+        $teams_to_delete = array_diff($already_exist_data,$teams_already_in);
+        foreach ($teams_to_delete as $team){
+            //on les supprime
+            delete_data_from_team_members($team,sanitize_text_field($id_user));
+        }
+        //on ajoute les nouvelle
+        add_data_to_team_members($verified_teams,$id_user);
+
+
+        echo '<div id="message" class="updated notice"><p>Équipe Mis à jour avec succès.</p></div>';
+        echo '<a href="'.admin_url("admin.php?page=istep_users_list").'">Retour à la liste</a>';
+    }else{
+        if (isset($_POST['id'])){
+            $id_user = sanitize_text_field($_POST['id']);
+            $teams = get_list_of_table(TABLE_TEAM_NAME);
+
+            $users_teams = get_user_teams_id_by_user_id($id_user);
+            echo "<div>";
+            echo "<h1>Modifier l'équipe d'un membre</h1>";
+            echo "<form method='POST' action=''>";
+            echo "<h2>Listes des équipes</h2>";
+            echo "<table class=\"form-table\">";
+            echo '<tr><th>Nom de l\'équipe</th><th>Fait partie de</th></tr>';
+            foreach ($teams as $team){
+
+                $team_name = $team->nom_equipe;
+                $team_id = $team->id_equipe;
+
+                //Coche toute les équipes dont l'utilisateur fait déjà partie
+                $checked = (in_array($team_id,$users_teams))? "checked":"";
+
+                echo '<tr><td>'.$team_name.'</td><td><input type="checkbox" name="teams[]" value="'.$team_id.'"'.$checked.' id="team-'.$team_id.'"></td></tr>';
+            }
+            echo "</table>";
+            echo '<input type="hidden" name="idUser" value="' . $id_user . '">';
+            submit_button('Modifier','primary','changeTeams');
+            echo "</form>";
+            echo "</div>";
+        }else{
+            wp_redirect(admin_url("admin.php?page=istep_users_list"));
+
+        }
+    }
+
+
 }
 
 /**

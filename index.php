@@ -27,38 +27,38 @@ function more_ud_istep_install(): void
     $table_members_team = TABLE_MEMBERS_TEAM_NAME;
     $charset_collate = $wpdb->get_charset_collate();
 
-    $sql = "
-    CREATE TABLE $table_name_user_team(
-        id_equipe INT NOT NULL AUTO_INCREMENT,
-        nom_equipe VARCHAR(255) NOT NULL,
-        PRIMARY KEY(id_equipe)
-    )$charset_collate;
+        $sql = "
+        CREATE TABLE $table_name_user_team(
+            id_equipe INT NOT NULL AUTO_INCREMENT,
+            nom_equipe VARCHAR(255) NOT NULL,
+            PRIMARY KEY(id_equipe)
+        )$charset_collate;
+        
+        CREATE TABLE $table_members_team(
+            id_equipe INT NOT NULL ,
+            id_membre INT NOT NULL,
+            PRIMARY KEY(id_equipe,id_membre),
+            FOREIGN KEY (id_equipe) REFERENCES {$wpdb->prefix}equipe_ISTeP(id_equipe) ON DELETE CASCADE,
+            FOREIGN KEY (id_membre) REFERENCES {$wpdb->prefix}membre_ISTeP(id_membre) ON DELETE CASCADE
     
-    CREATE TABLE $table_members_team(
-        id_equipe INT NOT NULL ,
-        id_membre INT NOT NULL,
-        PRIMARY KEY(id_equipe,id_membre),
-        FOREIGN KEY (id_equipe) REFERENCES {$wpdb->prefix}equipe_ISTeP(id_equipe),
-        FOREIGN KEY (id_membre) REFERENCES {$wpdb->prefix}membre_ISTeP(id_membre)
-
-    )$charset_collate;
+        )$charset_collate;
+        
     
-
-    CREATE TABLE $table_name_user_data (
-        id_membre INT NOT NULL AUTO_INCREMENT,
-        wp_user_id BIGINT UNSIGNED NOT NULL,
-        fonction VARCHAR(255),
-        nTelephone VARCHAR(10),
-        bureau VARCHAR(4),
-        rangEquipe VARCHAR(255),
-        tourDuBureau VARCHAR(30),
-        campus VARCHAR(255),
-        employeur VARCHAR(255),
-        caseCourrier VARCHAR(10),
-        PRIMARY KEY (id_membre),
-        FOREIGN KEY (wp_user_id) REFERENCES {$wpdb->prefix}users(ID)
-            ON DELETE CASCADE,
-) $charset_collate;";
+        CREATE TABLE $table_name_user_data (
+            id_membre INT NOT NULL AUTO_INCREMENT,
+            wp_user_id BIGINT UNSIGNED NOT NULL,
+            fonction VARCHAR(255),
+            nTelephone VARCHAR(10),
+            bureau VARCHAR(4),
+            rangEquipe VARCHAR(255),
+            tourDuBureau VARCHAR(30),
+            campus VARCHAR(255),
+            employeur VARCHAR(255),
+            caseCourrier VARCHAR(10),
+            PRIMARY KEY (id_membre),
+            FOREIGN KEY (wp_user_id) REFERENCES {$wpdb->prefix}users(ID)
+                ON DELETE CASCADE,
+    ) $charset_collate;";
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
@@ -168,9 +168,7 @@ function add_new_user_form():string {
              <div class="role-box">   
 HTML;
         //Récupères les équipes existantes
-        global $wpdb;
-        $table_name = TABLE_TEAM_NAME;
-        $teams = $wpdb->get_results("SELECT * FROM $table_name");
+        $teams = get_list_of_table(TABLE_TEAM_NAME);
 
         foreach ($teams as $team){
             $teamName = $team->nom_equipe;
@@ -372,20 +370,7 @@ function add_new_user() {
                     }
                     $last_member = get_istep_user_by_id($user_id);
 
-                    //Si pour une raison quelconque il n'y a pas d'équipe alors on l'attribut à l'équipe "Pas d'équipe"
-                    if (count($verified_teams) == 0){
-                        $verified_teams[] = 1;
-                    }
-                    //Création d'entités entre les équipes et l'utilisateur
-                    foreach ($verified_teams as $verified_team){
-                        $wpdb->insert(
-                            TABLE_MEMBERS_TEAM_NAME,
-                            array(
-                                'id_equipe' => intval($verified_team),
-                                'id_membre' => intval($last_member->id_membre)
-                            )
-                        );
-                    }
+                    add_data_to_team_members($verified_teams, $last_member->id_membre);
 
 
                     //Ajout de l'image de profile
@@ -424,6 +409,8 @@ function add_new_user() {
         }
     }
 }
+
+
 
 
 add_shortcode('istep_user_data','display_users_data');
