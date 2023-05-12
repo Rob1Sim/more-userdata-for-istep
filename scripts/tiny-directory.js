@@ -85,6 +85,10 @@ rows.forEach((row) => {
         }
     });
 });
+
+
+
+
 //Champs de recherche
 const searchInputMembers = document.getElementById('search-input-members');
 searchInputMembers.addEventListener('input', () => {
@@ -100,3 +104,35 @@ searchInputMembers.addEventListener('input', () => {
         }
     });
 });
+
+//Tri par role
+const selectRole = document.querySelector("#select-role");
+
+const defaultSorting = document.getElementById('role-parameter');
+if (defaultSorting.value !== ""){
+    sortUsersByRole(defaultSorting.value);
+    selectRole.style.display = "none"
+}
+
+selectRole.addEventListener("change", function() {
+    sortUsersByRole(this.value);
+});
+
+
+
+/**
+ * Tri la liste par le role des utilisateurs
+ * @param role
+ */
+function sortUsersByRole(role) {
+    const users = Array.from(document.querySelectorAll(".tiny-directory-tr"));
+    users.forEach(user => {
+        const rolesStr = user.querySelector("td>#input-roles").value;
+        const roles = rolesStr.split("-");
+        if (roles.includes(role)) {
+            user.style.display = "table-row";
+        } else {
+            user.style.display = "none";
+        }
+    });
+}

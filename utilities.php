@@ -10,6 +10,10 @@ define("TABLE_TEAM_NAME", $wpdb->prefix . 'equipe_ISTeP');
  */
 define("TABLE_MEMBERS_NAME",$wpdb->prefix . 'membre_ISTeP');
 /**
+ * Nom de la table qui fait la relation entre MEMBRE et TEAM dans la base de donnée
+ */
+define("TABLE_MEMBERS_TEAM_NAME",$wpdb->prefix . 'membre_equipe_ISTeP');
+/**
  * Définie la capacité d'un role à accéder au menu admin du plugin
  */
 const ADMIN_CAPACITY = "more_data_users_admin_capacity";
@@ -168,4 +172,92 @@ function is_team_id_valid(int $id): bool{
     }
 
     return in_array($id,$array_of_id);
+}
+
+/** Récupérations des données de la table user-teams */
+
+/**
+ * Récupère tous les nom de l'utilisateur passé en paramètre
+ * @param int $id
+ * @return array
+ */
+function get_user_teams_names_by_user_id(int $id): array{
+    $teams = get_user_teams_by_user_id($id);
+    $array_of_name = [];
+    foreach ($teams as $team){
+        $array_of_name[] = get_team_name_by_id($team->id_equipe);
+    }
+    return $array_of_name;
+}
+
+/**
+ * Récupère les équipes d'un utilisateurs
+ * @param int $id
+ * @return array
+ */
+function get_user_teams_by_user_id(int $id): array{
+    global $wpdb;
+    $table_name = TABLE_MEMBERS_TEAM_NAME;
+
+    $teams = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE id_membre = $id");
+    return $teams;
+}
+
+/**
+ * Récupère tous les id des équipes de l'utilisateur passé en paramètre
+ * @param int $id
+ * @return array
+ */
+function get_user_teams_id_by_user_id(int $id): array{
+    $teams = get_user_teams_by_user_id($id);
+    $array_of_id = [];
+    foreach ($teams as $team){
+        $array_of_id[] = $team->id_equipe;
+    }
+    return $array_of_id;
+}
+
+/**
+ * AJoute une entrée à la table
+ * @param array $teams_id_list
+ * @param mixed $member_id
+ * @return void
+ */
+function add_data_to_team_members(array $teams_id_list, int $member_id): void
+{
+    //Si pour une raison quelconque il n'y a pas d'équipe alors on l'attribut à l'équipe "Pas d'équipe"
+    global $wpdb;
+    if (count($teams_id_list) == 0) {
+        $teams_id_list[] = 1;
+    }
+    //Création d'entités entre les équipes et l'utilisateur
+    foreach ($teams_id_list as $team) {
+        $wpdb->insert(
+            TABLE_MEMBERS_TEAM_NAME,
+            array(
+                'id_equipe' => intval($team),
+                'id_membre' => intval($member_id)
+            )
+        );
+    }
+}
+
+/**
+ * Supprime une entrée de la table members teams, avec les données passé en paramètres
+ * @param int $team_id
+ * @param int $member_id
+ * @return void
+ */
+function delete_data_from_team_members(int $team_id, int $member_id): void
+{
+    //Si pour une raison quelconque il n'y a pas d'équipe alors on l'attribut à l'équipe "Pas d'équipe"
+    global $wpdb;
+
+    $wpdb->delete(
+        TABLE_MEMBERS_TEAM_NAME,
+        array(
+            "id_equipe" => $team_id,
+            "id_membre" => $member_id
+        )
+    );
 }

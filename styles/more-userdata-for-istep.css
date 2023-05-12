@@ -102,3 +102,7 @@
 .user-info-text-container>div>p{
     margin-top: 1%;
 }
+.password-btn{
+    display: flex;
+    gap: 1%;
+}

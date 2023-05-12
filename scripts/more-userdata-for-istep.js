@@ -22,7 +22,7 @@ submit_button.addEventListener('click',(event)=>{
     const employer = document.getElementById("employer");
     const mailCase = document.getElementById("mailCase");
     const tower = document.getElementsByName("tourBureau");
-    const team = document.getElementById("team");
+    const teams = document.getElementsByName("teams[]");
 
     if(name.value === "" || name.value === null|| name.value.length > 255){
         addErrorMessage("Prénom incorrect",document.querySelector('#name').parentNode);
@@ -74,8 +74,15 @@ submit_button.addEventListener('click',(event)=>{
         return;
     }
 
-    if(team.value ==="" || team.value === null || isNaN(parseInt(team.value))){
-        console.log(isNaN(parseInt(team.value)))
+    //Vérification qu'au moins une équipe est sélectionné
+    let thereIsAtLeastOneTeam = false;
+    teams.forEach((input)=>{
+        if (input.checked){
+            thereIsAtLeastOneTeam = true;
+        }
+    })
+
+    if (!thereIsAtLeastOneTeam){
         addErrorMessage("Equipe incorrect",document.querySelector('#c'));
         return;
     }

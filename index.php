@@ -24,32 +24,41 @@ function more_ud_istep_install(): void
     global $wpdb;
     $table_name_user_data = TABLE_MEMBERS_NAME;
     $table_name_user_team = TABLE_TEAM_NAME;
+    $table_members_team = TABLE_MEMBERS_TEAM_NAME;
     $charset_collate = $wpdb->get_charset_collate();
 
-    $sql = "
-    CREATE TABLE $table_name_user_team(
-        id_equipe INT NOT NULL AUTO_INCREMENT,
-        nom_equipe VARCHAR(255) NOT NULL,
-        PRIMARY KEY(id_equipe)
-    )$charset_collate;
-    CREATE TABLE $table_name_user_data (
-        id_membre INT NOT NULL AUTO_INCREMENT,
-        wp_user_id BIGINT UNSIGNED NOT NULL,
-        fonction VARCHAR(255),
-        nTelephone VARCHAR(10),
-        bureau VARCHAR(4),
-        equipe INT,
-        rangEquipe VARCHAR(255),
-        tourDuBureau VARCHAR(30),
-        campus VARCHAR(255),
-        employeur VARCHAR(255),
-        caseCourrier VARCHAR(10),
-        PRIMARY KEY (id_membre),
-        FOREIGN KEY (wp_user_id) REFERENCES {$wpdb->prefix}users(ID)
-            ON DELETE CASCADE,
-        FOREIGN KEY (equipe) REFERENCES {$wpdb->prefix}equipe_ISTeP(id_equipe)
-            ON DELETE SET NULL
-) $charset_collate;";
+        $sql = "
+        CREATE TABLE $table_name_user_team(
+            id_equipe INT NOT NULL AUTO_INCREMENT,
+            nom_equipe VARCHAR(255) NOT NULL,
+            PRIMARY KEY(id_equipe)
+        )$charset_collate;
+        
+        CREATE TABLE $table_members_team(
+            id_equipe INT NOT NULL ,
+            id_membre INT NOT NULL,
+            PRIMARY KEY(id_equipe,id_membre),
+            FOREIGN KEY (id_equipe) REFERENCES {$wpdb->prefix}equipe_ISTeP(id_equipe) ON DELETE CASCADE,
+            FOREIGN KEY (id_membre) REFERENCES {$wpdb->prefix}membre_ISTeP(id_membre) ON DELETE CASCADE
+    
+        )$charset_collate;
+        
+    
+        CREATE TABLE $table_name_user_data (
+            id_membre INT NOT NULL AUTO_INCREMENT,
+            wp_user_id BIGINT UNSIGNED NOT NULL,
+            fonction VARCHAR(255),
+            nTelephone VARCHAR(10),
+            bureau VARCHAR(4),
+            rangEquipe VARCHAR(255),
+            tourDuBureau VARCHAR(30),
+            campus VARCHAR(255),
+            employeur VARCHAR(255),
+            caseCourrier VARCHAR(10),
+            PRIMARY KEY (id_membre),
+            FOREIGN KEY (wp_user_id) REFERENCES {$wpdb->prefix}users(ID)
+                ON DELETE CASCADE,
+    ) $charset_collate;";
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
@@ -74,6 +83,7 @@ function more_ud_istep_install(): void
     $wpdb->insert(
         TABLE_TEAM_NAME,
         array(
+            'id_equipe' => 1,
             'nom_equipe' => "Pas d'équipe"
         )
     );
@@ -128,9 +138,11 @@ function add_new_user_form():string {
              </label>
             
             <label for="password">Mot de passe : 
-                <input type="password" name="password" id="password" required/>
-                <button type="button" id="random-pws">Générer un mot de passe aléatoire</button>
-                <button type="button" id="show-password">Afficher le mot de passe</button>
+                <input type="password" name="password" id="password" autocomplete required/>
+                <div class="password-btn">
+                    <button type="button" id="random-pws">Générer un mot de passe aléatoire</button>
+                    <button type="button" id="show-password">Afficher le mot de passe</button>  
+                </div>
             </label>
             
             <label for="office">Bureau : 
@@ -153,21 +165,18 @@ function add_new_user_form():string {
             </label>
             
             <label id="c">Equipe :
-            <select name="team" id="team">
-                
+             <div class="role-box">   
 HTML;
         //Récupères les équipes existantes
-        global $wpdb;
-        $table_name = TABLE_TEAM_NAME;
-        $teams = $wpdb->get_results("SELECT * FROM $table_name");
+        $teams = get_list_of_table(TABLE_TEAM_NAME);
 
         foreach ($teams as $team){
             $teamName = $team->nom_equipe;
             $teamId = $team->id_equipe;
-            $html .= "<option value=\"".$teamId."\">".$teamName."</option>";
+            $html.= '<label><p></p><input type="checkbox" name="teams[]" value="'.$teamId.'"><p>'.$teamName.'</p></label><br/>';
         }
         $html.=<<<HTML
-        </select>
+        </div>
         </label>
         <label for="teamRank" >
             Rang au sein de l'équipe :
@@ -267,7 +276,6 @@ function add_new_user() {
         $office = sanitize_text_field($_POST['office']);
         $job = sanitize_text_field($_POST['job']);
         $tourBureau = sanitize_text_field($_POST['tourBureau']);
-        $team = sanitize_text_field($_POST['team']);
         $teamRank = sanitize_text_field($_POST['teamRank']);
         $campus = sanitize_text_field($_POST['campus']);
         $employer = sanitize_text_field($_POST['employer']);
@@ -283,6 +291,16 @@ function add_new_user() {
             }
         } else {
             $verified_roles = [get_option('default_role')];
+        }
+
+        if (isset($_POST['teams'])){
+            //Nettoyage des équipes
+            $teams = $_POST['teams'];
+            $verified_teams = [];
+            foreach ($teams as $team){
+                $verified_teams[] = sanitize_text_field($team);
+            }
+
         }
 
         // Validation des données
@@ -318,12 +336,12 @@ function add_new_user() {
                 global $wpdb;
                 $user = get_user_by( 'login', $login ); // récupère l'utilisateur par login
                 $user_id = $user->ID;
+
                 $data = array(
                     'wp_user_id' => $user_id,
                     'fonction' => $job,
                     'nTelephone' => $phone,
                     'bureau' => $office,
-                    'equipe' => intval($team),
                     'rangEquipe' => $teamRank,
                     'tourDuBureau' => $tourBureau,
                     'campus' => $campus,
@@ -350,6 +368,10 @@ function add_new_user() {
                     foreach ($verified_roles as $new_role){
                         $new_user->add_role($new_role);
                     }
+                    $last_member = get_istep_user_by_id($user_id);
+
+                    add_data_to_team_members($verified_teams, $last_member->id_membre);
+
 
                     //Ajout de l'image de profile
                     create_personal_page($user_id,$name." ".$last_name,strtolower($last_name)."_".strtolower($name));
@@ -389,6 +411,8 @@ function add_new_user() {
 }
 
 
+
+
 add_shortcode('istep_user_data','display_users_data');
 /**
  * Affiche diverses informations de l'utilisateur sur la page de base
@@ -403,7 +427,11 @@ function display_users_data(): string
     $userData = get_istep_user_by_id($page_author_id);
     $userAvatar = get_user_avatar($page_author_id);
     $userTower = convert_tower_into_readable($userData->tourDuBureau);
-    $userTeam = get_team_name_by_id($userData->equipe);
+    $userTeams = get_user_teams_names_by_user_id($userData->id_membre);
+
+
+
+
 
     $html = <<<HTML
     <div class="user-info-container">
@@ -415,8 +443,12 @@ function display_users_data(): string
                 <h5>Fonction</h5>
                 <p>$userData->fonction</p>
                 
-                <h5>Equipe</h5>
-                <p>$userTeam->nom_equipe</p>
+                <h5>Equipes</h5>
+HTML;
+    foreach ($userTeams as $userTeam) {
+        $html.="<p>$userTeam->nom_equipe</p>";
+    }
+    $html.= <<<HTML
             </div>
             <div>
                 <h5>Coordonées :</h5>
@@ -465,7 +497,27 @@ add_shortcode('users_directory', 'create_directory_from_DB_users');
  * Récupère les utilisateurs dans la base de donnée et les affect à un tableau HTML
  * @return string Le tableau HTML
  */
-function create_directory_from_DB_users(): string{
+function create_directory_from_DB_users( $atts ): string{
+
+    if ( ! function_exists( 'get_editable_roles' ) ) {
+        require_once ABSPATH . 'wp-admin/includes/user.php';
+    }
+    $roles = get_editable_roles();
+
+    //Gestions des paramètres
+    $list_parameters = shortcode_atts( array(
+        'role' => '',
+    ), $atts );
+
+    $role_parameter = $list_parameters['role'];
+    $role_parameter = strtolower(sanitize_text_field($role_parameter));
+    //Si le role n'éxiste pas alors on ne trie pas
+    if ($roles[$role_parameter] == null){
+        $role_parameter = "";
+    }
+
+
+
     //Ajout de la feuille de style et du javascript
     wp_enqueue_style('tiny-directory-css',plugins_url('styles/tiny-directory.css',__FILE__));
     wp_enqueue_script('tiny-directory-js',plugins_url('scripts/tiny-directory.js',__FILE__),array(), false, true);
@@ -473,14 +525,26 @@ function create_directory_from_DB_users(): string{
     // Vérifier s'il y a des utilisateurs
     if ( !empty( $users ) ) {
         //Génère le tableau
-        $html = <<<HTML
-    <div class="tiny-directory-div">
+        $html =
+            <<<HTML
+<div class="tiny-directory-div">
     <label for="search-input-members">Rechercher : </label>
+    <input type="hidden" value="$role_parameter" id="role-parameter">
     <input type="text" id="search-input-members"" placeholder="Robin...">
+            <select id="select-role">
+HTML;
+
+
+
+        foreach ($roles as $key => $value){
+            $html.= "<option value=\"".$key."\">".$value['name']."</option>";
+        }
+        $html .= <<<HTML
+        </select>
     <div class="scrollable-div">
     <table class="tiny-directory-table">
     <thead >
-        <tr class="tiny-directory-tr">
+        <tr class="tiny-directory-th">
             <th class="tiny-directory-th" colspan="1">NOM / Prénom</th>
             <th class="tiny-directory-th" colspan="1">Email</th> 
             <th class="tiny-directory-th" colspan="1">Téléphone</th> 
@@ -496,11 +560,16 @@ function create_directory_from_DB_users(): string{
             $wp_user = get_user_by("id",$userID);
             $linkToProfilePage = home_url()."/membres-istep/$wp_user->user_nicename";
 
+            $users_roles = $wp_user->roles;
+            $users_roles_str = implode("-",$users_roles);
             $tower = convert_tower_into_readable($istep_users->tourDuBureau);
 
             $html.= <<<HTML
         <tr class="user-$userID tiny-directory-tr" tabindex="0">
-            <td class="no-display-fields" id="pp-$userID" data-id="$userID">$userAvatar</td>
+            
+            <td class="no-display-fields" id="pp-$userID" data-id="$userID">$userAvatar
+                <input type="hidden" value="$users_roles_str" id="input-roles"/>
+            </td>
             <td class="no-display-fields" id="login-$userID">$linkToProfilePage</td>
             <td class="tiny-directory-td name-$userID">$wp_user->display_name</td>
             <td class="tiny-directory-td email-$userID"><a href="mailto:$wp_user->user_email">$wp_user->user_email</td>
