@@ -201,7 +201,7 @@ HTML;
         </label>
         <label for="campus" >
             Campus :
-            <select>
+            <select name="campus" id="campus">
 HTML;
         $campus = get_list_of_table(TABLE_LOCATION_NAME);
         foreach ($campus as $one_campus){
@@ -282,6 +282,9 @@ function add_new_user() {
             case "6":
                 echo "<div class=\"user-create-error\">L'extension de l'image n'est pas correcte</div>";
                 break;
+            case "7":
+                echo "<div class=\"user-create-error\">La localisation entrée n'éxiste pas</div>";
+                break;
         }
 
     }
@@ -290,6 +293,7 @@ function add_new_user() {
         echo "<div class=\"user-create-success\">L'utilisateur à été ajouté avec succès</div>";
     }
     if (isset($_POST['submit_create_istep_user'])) {
+        global $wpdb;
         // Récupération des données du formulaire
         $last_name = sanitize_text_field($_POST['last_name']);
         $name = sanitize_text_field($_POST['name']);
@@ -335,6 +339,16 @@ function add_new_user() {
             if (strlen($phone)!=10){
 
                 wp_redirect($current_url."user-create-error=1");
+                exit();
+            }
+
+            //Vérification de l'éxistance du campus
+            $table_name = TABLE_LOCATION_NAME;
+            $is_location_existing = "SELECT * FROM $table_name WHERE id_localisation = $campus";
+            $results = $wpdb->get_results($is_location_existing);
+            if (empty($results)) {
+                wp_redirect($current_url."user-create-error=7");
+                exit();
             }
 
             // Créer un tableau avec les informations de l'utilisateur
@@ -357,9 +371,9 @@ function add_new_user() {
             } else {
 
                 //Si l'utilisateur wp a bien été créer on continue
-                global $wpdb;
                 $user = get_user_by( 'login', $login ); // récupère l'utilisateur par login
                 $user_id = $user->ID;
+
 
                 $data = array(
                     'wp_user_id' => $user_id,
