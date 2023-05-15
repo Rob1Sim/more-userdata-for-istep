@@ -32,6 +32,14 @@ function more_userdata_istep_menu(): void{
         'more_userdata_istep_menu_team_page' // fonction de rappel
     );
     add_submenu_page(
+        'istep_users_options', // slug du parent
+        'Gérer les campus', // titre de la page
+        'Gérer les campus', // titre du menu
+        ADMIN_CAPACITY, // capacité requise
+        'istep_manage_location', // slug de la page
+        'more_userdata_istep_menu_location_page' // fonction de rappel
+    );
+    add_submenu_page(
         'istep_users_options',
         'Membres de l\'ISTeP',
         'Membres de l\'ISTeP',
@@ -303,6 +311,10 @@ function more_userdata_istep_menu_team_page() {
     <?php
 }
 
+/**
+ * Modifie les informations d'une équipe
+ * @return void
+ */
 function more_userdata_istep_edit_equipe_page() {
     if ( !can_user_access_this(get_option('admin_user_roles')) ) {
         wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
@@ -559,6 +571,83 @@ function more_userdata_istep_users_edit_teams():void
 
 
 }
+
+/**
+ * Gère la gestions des différents campus
+ * @return void
+ */
+function more_userdata_istep_menu_location_page(){
+    if ( !can_user_access_this(get_option('admin_user_roles')) ) {
+        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+    }
+    // Vérifie si le formulaire a été soumis
+    if (isset($_POST['submit'])) {
+        // Ajoute une nouvelle équipe à la base de données
+        $location_name = sanitize_text_field($_POST['nom_localisation']);
+        if (isset($location_name) && $location_name !== ""){
+            global $wpdb;
+            $wpdb->insert(
+                TABLE_LOCATION_NAME,
+                array(
+                    'nom_localisation' => $location_name
+                )
+            );
+            echo '<div id="message" class="updated notice"><p>Campus ajoutée avec succès.</p></div>';
+        }
+    }
+    ?>
+    <div class="wrap">
+        <h1></h1>
+        <h2>Ajouter un nouveau campus</h2>
+        <form method="post" action="">
+            <?php wp_nonce_field( 'ajouter_campus_nonce', 'ajouter_campus_nonce' ); ?>
+            <table class="form-table">
+                <tr>
+                    <th scope="row"><label for="nom_campus"><?php _e( 'Nom de l\'équipe:', 'istep_users' ); ?></label></th>
+                    <td>
+                        <input type="text" name="nom_localisation" id="nom_campus" value="" required>
+                    </td>
+                </tr>
+            </table>
+            <?php submit_button('Ajouter', 'primary', 'submit', true); ?>
+        </form>
+        <hr>
+        <h2>Liste des campus</h2>
+        <table class="wp-list-table widefat fixed striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom du campus</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            $locations = get_list_of_table(TABLE_LOCATION_NAME);
+            foreach ($locations as $location) {
+                echo '<tr>';
+                echo '<td>' . $location->id_localisation . '</td>';
+                echo '<td>' . $location->nom_localisation . '</td>';
+                echo '<td>
+                        <form method="post" action="' . admin_url( 'admin.php?page=edit_teams&id=' . $location->id_localisation ) . '">
+                            <input type="hidden" name="id" value="' . $location->id_localisation . '">
+                            <button type="submit" class="button">Modifier</button>
+                        </form>
+                      </td>';
+                echo '<td>
+                        <form method="post" action="' . admin_url( 'admin.php?page=delete_teams&id=' . $location->id_localisation ) . '">
+                            <input type="hidden" name="location_id_delete" value="' . $location->id_localisation . '">
+                            <button type="submit" class="button">Supprimer</button>
+                        </form>
+                      </td>';
+                echo '</tr>';
+            }
+            ?>
+            </tbody>
+        </table>
+    </div>
+    <?php
+}
+
 
 /**
  * Ajoute a l'option passé en paramètre l'administrateur
