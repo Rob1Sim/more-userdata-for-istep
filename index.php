@@ -587,7 +587,6 @@ HTML;
 
     </thead>
     <tbody>
-
     HTML;
         foreach ( $users as $user ) {
             $userID = $user->wp_user_id;
