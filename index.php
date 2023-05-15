@@ -25,6 +25,7 @@ function more_ud_istep_install(): void
     $table_name_user_data = TABLE_MEMBERS_NAME;
     $table_name_user_team = TABLE_TEAM_NAME;
     $table_members_team = TABLE_MEMBERS_TEAM_NAME;
+    $table_name_user_location = TABLE_LOCATION_NAME;
     $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "
@@ -43,7 +44,12 @@ function more_ud_istep_install(): void
     
         )$charset_collate;
         
-    
+        CREATE TABLE $table_name_user_location(
+            id_localisation INT NOT NULL AUTO_INCREMENT,
+            nom_localisation VARCHAR(255) NOT NULL,
+            PRIMARY KEY(id_localisation)
+        )$charset_collate;
+        
         CREATE TABLE $table_name_user_data (
             id_membre INT NOT NULL AUTO_INCREMENT,
             wp_user_id BIGINT UNSIGNED NOT NULL,
@@ -52,13 +58,17 @@ function more_ud_istep_install(): void
             bureau VARCHAR(4),
             rangEquipe VARCHAR(255),
             tourDuBureau VARCHAR(30),
-            campus VARCHAR(255),
+            campus_location VARCHAR(255),
             employeur VARCHAR(255),
             caseCourrier VARCHAR(10),
             PRIMARY KEY (id_membre),
             FOREIGN KEY (wp_user_id) REFERENCES {$wpdb->prefix}users(ID)
                 ON DELETE CASCADE,
-    ) $charset_collate;";
+            FOREIGN KEY(campus_location)  REFERENCES {$wpdb->prefix}localisation_ISTeP(id_localisation)
+                           ON DELETE CASCADE,
+    ) $charset_collate;
+
+";
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
@@ -85,6 +95,13 @@ function more_ud_istep_install(): void
         array(
             'id_equipe' => 1,
             'nom_equipe' => "Pas d'équipe"
+        )
+    );
+    $wpdb->insert(
+        TABLE_LOCATION_NAME,
+        array(
+            'id_localisation' => 1,
+            'nom_localisation' => "Sorbonne Université - Campus Pierre et Marie Curie"
         )
     );
 
@@ -171,9 +188,9 @@ HTML;
         $teams = get_list_of_table(TABLE_TEAM_NAME);
 
         foreach ($teams as $team){
-            $teamName = $team->nom_equipe;
-            $teamId = $team->id_equipe;
-            $html.= '<label><p></p><input type="checkbox" name="teams[]" value="'.$teamId.'"><p>'.$teamName.'</p></label><br/>';
+            $team_name = $team->nom_equipe;
+            $team_id = $team->id_equipe;
+            $html.= '<label><p></p><input type="checkbox" name="teams[]" value="'.$team_id.'"><p>'.$team_name.'</p></label><br/>';
         }
         $html.=<<<HTML
         </div>
@@ -184,7 +201,14 @@ HTML;
         </label>
         <label for="campus" >
             Campus :
-            <input type="text" name="campus" id="campus" required>
+            <select name="campus" id="campus">
+HTML;
+        $campus = get_list_of_table(TABLE_LOCATION_NAME);
+        foreach ($campus as $one_campus){
+            $html.= "<option value=\"".$one_campus->id_localisation."\">".$one_campus->nom_localisation."</option>";
+        }
+        $html .= <<<HTML
+           </select>
         </label>
         <label for="employer">
             Employeur :
@@ -258,6 +282,9 @@ function add_new_user() {
             case "6":
                 echo "<div class=\"user-create-error\">L'extension de l'image n'est pas correcte</div>";
                 break;
+            case "7":
+                echo "<div class=\"user-create-error\">La localisation entrée n'éxiste pas</div>";
+                break;
         }
 
     }
@@ -266,6 +293,7 @@ function add_new_user() {
         echo "<div class=\"user-create-success\">L'utilisateur à été ajouté avec succès</div>";
     }
     if (isset($_POST['submit_create_istep_user'])) {
+        global $wpdb;
         // Récupération des données du formulaire
         $last_name = sanitize_text_field($_POST['last_name']);
         $name = sanitize_text_field($_POST['name']);
@@ -311,6 +339,16 @@ function add_new_user() {
             if (strlen($phone)!=10){
 
                 wp_redirect($current_url."user-create-error=1");
+                exit();
+            }
+
+            //Vérification de l'éxistance du campus
+            $table_name = TABLE_LOCATION_NAME;
+            $is_location_existing = "SELECT * FROM $table_name WHERE id_localisation = $campus";
+            $results = $wpdb->get_results($is_location_existing);
+            if (empty($results)) {
+                wp_redirect($current_url."user-create-error=7");
+                exit();
             }
 
             // Créer un tableau avec les informations de l'utilisateur
@@ -333,9 +371,9 @@ function add_new_user() {
             } else {
 
                 //Si l'utilisateur wp a bien été créer on continue
-                global $wpdb;
                 $user = get_user_by( 'login', $login ); // récupère l'utilisateur par login
                 $user_id = $user->ID;
+
 
                 $data = array(
                     'wp_user_id' => $user_id,
@@ -409,9 +447,6 @@ function add_new_user() {
         }
     }
 }
-
-
-
 
 add_shortcode('istep_user_data','display_users_data');
 /**
@@ -512,7 +547,7 @@ function create_directory_from_DB_users( $atts ): string{
     $role_parameter = $list_parameters['role'];
     $role_parameter = strtolower(sanitize_text_field($role_parameter));
     //Si le role n'éxiste pas alors on ne trie pas
-    if ($roles[$role_parameter] == null){
+    if (!isset($role_parameter) ||$role_parameter == "" ||$roles[$role_parameter] == null){
         $role_parameter = "";
     }
 
@@ -551,7 +586,7 @@ HTML;
             <th class="tiny-directory-th" colspan="1">Fonction</th> 
 
     </thead>
-    <tbody>
+    <tbody> 
     HTML;
         foreach ( $users as $user ) {
             $userID = $user->wp_user_id;
@@ -563,7 +598,7 @@ HTML;
             $users_roles = $wp_user->roles;
             $users_roles_str = implode("-",$users_roles);
             $tower = convert_tower_into_readable($istep_users->tourDuBureau);
-
+            $campus = get_name_of_location_by_id(intval($istep_users->campus));
             $html.= <<<HTML
         <tr class="user-$userID tiny-directory-tr" tabindex="0">
             
@@ -578,7 +613,7 @@ HTML;
             $istep_users->fonction
             </td>
             <td class="no-display-fields campus-$userID">
-                $istep_users->campus
+                $campus
             </td>
             <td class="no-display-fields tower-$userID">
                 $tower

@@ -14,6 +14,10 @@ define("TABLE_MEMBERS_NAME",$wpdb->prefix . 'membre_ISTeP');
  */
 define("TABLE_MEMBERS_TEAM_NAME",$wpdb->prefix . 'membre_equipe_ISTeP');
 /**
+ * Nom de la table qui enregistre les différents campus
+ */
+define("TABLE_LOCATION_NAME",$wpdb->prefix . 'localisation_ISTeP');
+/**
  * Définie la capacité d'un role à accéder au menu admin du plugin
  */
 const ADMIN_CAPACITY = "more_data_users_admin_capacity";
@@ -260,4 +264,20 @@ function delete_data_from_team_members(int $team_id, int $member_id): void
             "id_membre" => $member_id
         )
     );
+}
+
+/**
+ * Retourne le nom d'un campus grâce à son id
+ * @param int $id
+ * @return string
+ */
+function get_name_of_location_by_id(int $id):string{
+    global $wpdb;
+    $table_name = TABLE_LOCATION_NAME;
+
+    $name = $wpdb->get_results("SELECT nom_localisation FROM $table_name WHERE id_localisation = $id");
+    if(count($name)>0){
+        return $name[0]->nom_localisation;
+    }
+    return "Pas de campus";
 }
