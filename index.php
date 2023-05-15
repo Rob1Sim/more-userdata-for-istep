@@ -448,9 +448,6 @@ function add_new_user() {
     }
 }
 
-
-
-
 add_shortcode('istep_user_data','display_users_data');
 /**
  * Affiche diverses informations de l'utilisateur sur la page de base
@@ -601,7 +598,7 @@ HTML;
             $users_roles = $wp_user->roles;
             $users_roles_str = implode("-",$users_roles);
             $tower = convert_tower_into_readable($istep_users->tourDuBureau);
-
+            $campus = get_name_of_location_by_id(intval($istep_users->campus));
             $html.= <<<HTML
         <tr class="user-$userID tiny-directory-tr" tabindex="0">
             
@@ -616,7 +613,7 @@ HTML;
             $istep_users->fonction
             </td>
             <td class="no-display-fields campus-$userID">
-                $istep_users->campus
+                $campus
             </td>
             <td class="no-display-fields tower-$userID">
                 $tower
