@@ -586,7 +586,7 @@ HTML;
             <th class="tiny-directory-th" colspan="1">Fonction</th> 
 
     </thead>
-    <tbody>
+    <tbody> 
     HTML;
         foreach ( $users as $user ) {
             $userID = $user->wp_user_id;
