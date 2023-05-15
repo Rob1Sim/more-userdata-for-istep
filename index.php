@@ -188,9 +188,9 @@ HTML;
         $teams = get_list_of_table(TABLE_TEAM_NAME);
 
         foreach ($teams as $team){
-            $teamName = $team->nom_equipe;
-            $teamId = $team->id_equipe;
-            $html.= '<label><p></p><input type="checkbox" name="teams[]" value="'.$teamId.'"><p>'.$teamName.'</p></label><br/>';
+            $team_name = $team->nom_equipe;
+            $team_id = $team->id_equipe;
+            $html.= '<label><p></p><input type="checkbox" name="teams[]" value="'.$team_id.'"><p>'.$team_name.'</p></label><br/>';
         }
         $html.=<<<HTML
         </div>
@@ -201,7 +201,14 @@ HTML;
         </label>
         <label for="campus" >
             Campus :
-            <input type="text" name="campus" id="campus" required>
+            <select>
+HTML;
+        $campus = get_list_of_table(TABLE_LOCATION_NAME);
+        foreach ($campus as $one_campus){
+            $html.= "<option value=\"".$one_campus->id_localisation."\">".$one_campus->nom_localisation."</option>";
+        }
+        $html .= <<<HTML
+           </select>
         </label>
         <label for="employer">
             Employeur :
@@ -529,7 +536,7 @@ function create_directory_from_DB_users( $atts ): string{
     $role_parameter = $list_parameters['role'];
     $role_parameter = strtolower(sanitize_text_field($role_parameter));
     //Si le role n'éxiste pas alors on ne trie pas
-    if ($roles[$role_parameter] == null){
+    if (!isset($role_parameter) ||$role_parameter == "" ||$roles[$role_parameter] == null){
         $role_parameter = "";
     }
 
