@@ -265,3 +265,19 @@ function delete_data_from_team_members(int $team_id, int $member_id): void
         )
     );
 }
+
+/**
+ * Retourne le nom d'un campus grâce à son id
+ * @param int $id
+ * @return string
+ */
+function get_name_of_location_by_id(int $id):string{
+    global $wpdb;
+    $table_name = TABLE_LOCATION_NAME;
+
+    $name = $wpdb->get_results("SELECT nom_localisation FROM $table_name WHERE id_localisation = $id");
+    if(count($name)>0){
+        return $name[0]->nom_localisation;
+    }
+    return "Pas de campus";
+}
