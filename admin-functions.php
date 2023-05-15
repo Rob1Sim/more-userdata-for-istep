@@ -413,6 +413,7 @@ function more_userdata_istep_delete_equipe_page() {
             $wpdb->insert(
                 $table_name,
                 array(
+                    'id_equipe' => 1,
                     'nom_equipe' => 'Pas d\'équipe',
                 )
             );
@@ -747,6 +748,7 @@ function more_userdata_istep_delete_location_page() {
             $wpdb->insert(
                 $table_name,
                 array(
+                    'id_localisation' => 1,
                     'nom_localisation' => 'Sorbonne Université - Campus Pierre et Marie Curie',
                 )
             );
