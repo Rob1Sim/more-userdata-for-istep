@@ -14,6 +14,10 @@ define("TABLE_MEMBERS_NAME",$wpdb->prefix . 'membre_ISTeP');
  */
 define("TABLE_MEMBERS_TEAM_NAME",$wpdb->prefix . 'membre_equipe_ISTeP');
 /**
+ * Nom de la table qui enregistre les différents campus
+ */
+define("TABLE_LOCATION_NAME",$wpdb->prefix . 'localisation_ISTeP');
+/**
  * Définie la capacité d'un role à accéder au menu admin du plugin
  */
 const ADMIN_CAPACITY = "more_data_users_admin_capacity";

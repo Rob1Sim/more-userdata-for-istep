@@ -25,6 +25,7 @@ function more_ud_istep_install(): void
     $table_name_user_data = TABLE_MEMBERS_NAME;
     $table_name_user_team = TABLE_TEAM_NAME;
     $table_members_team = TABLE_MEMBERS_TEAM_NAME;
+    $table_name_user_location = TABLE_LOCATION_NAME;
     $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "
@@ -43,7 +44,12 @@ function more_ud_istep_install(): void
     
         )$charset_collate;
         
-    
+        CREATE TABLE $table_name_user_location(
+            id_localisation INT NOT NULL AUTO_INCREMENT,
+            nom_localisation VARCHAR(255) NOT NULL,
+            PRIMARY KEY(id_localisation)
+        )$charset_collate;
+        
         CREATE TABLE $table_name_user_data (
             id_membre INT NOT NULL AUTO_INCREMENT,
             wp_user_id BIGINT UNSIGNED NOT NULL,
@@ -52,13 +58,17 @@ function more_ud_istep_install(): void
             bureau VARCHAR(4),
             rangEquipe VARCHAR(255),
             tourDuBureau VARCHAR(30),
-            campus VARCHAR(255),
+            campus_location VARCHAR(255),
             employeur VARCHAR(255),
             caseCourrier VARCHAR(10),
             PRIMARY KEY (id_membre),
             FOREIGN KEY (wp_user_id) REFERENCES {$wpdb->prefix}users(ID)
                 ON DELETE CASCADE,
-    ) $charset_collate;";
+            FOREIGN KEY(campus_location)  REFERENCES {$wpdb->prefix}localisation_ISTeP(id_localisation)
+                           ON DELETE CASCADE,
+    ) $charset_collate;
+
+";
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
@@ -85,6 +95,13 @@ function more_ud_istep_install(): void
         array(
             'id_equipe' => 1,
             'nom_equipe' => "Pas d'équipe"
+        )
+    );
+    $wpdb->insert(
+        TABLE_LOCATION_NAME,
+        array(
+            'id_localisation' => 1,
+            'nom_localisation' => "Sorbonne Université - Campus Pierre et Marie Curie"
         )
     );
 
