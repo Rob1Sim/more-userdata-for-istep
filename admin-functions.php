@@ -48,23 +48,6 @@ function more_userdata_istep_menu(): void{
         'delete_teams',
         'more_userdata_istep_delete_equipe_page'
     );
-    // --- Les utilisateurs ---
-    add_submenu_page(
-        'istep_users_options',
-        'Membres de l\'ISTeP',
-        'Membres de l\'ISTeP',
-        ADMIN_CAPACITY,
-        'istep_users_list',
-        'more_userdata_istep_users_list'
-    );
-    add_submenu_page(
-        'admin.php?page=modify_users_teams&id=',
-        'Modifier équipe',
-        'Modifier équipe',
-        ADMIN_CAPACITY,
-        'modify_users_teams',
-        'more_userdata_istep_users_edit_teams'
-    );
     // --- Les campus ---
     add_submenu_page(
         'istep_users_options', // slug du parent
@@ -89,6 +72,23 @@ function more_userdata_istep_menu(): void{
         ADMIN_CAPACITY,
         'suppress_location',
         'more_userdata_istep_delete_location_page'
+    );
+    // --- Les utilisateurs ---
+    add_submenu_page(
+        'istep_users_options',
+        'Membres de l\'ISTeP',
+        'Membres de l\'ISTeP',
+        ADMIN_CAPACITY,
+        'istep_users_list',
+        'more_userdata_istep_users_list'
+    );
+    add_submenu_page(
+        'admin.php?page=modify_users_teams&id=',
+        'Modifier équipe',
+        'Modifier équipe',
+        ADMIN_CAPACITY,
+        'modify_users_teams',
+        'more_userdata_istep_users_edit_teams'
     );
 }
 add_action( 'admin_menu', 'more_userdata_istep_menu' );
