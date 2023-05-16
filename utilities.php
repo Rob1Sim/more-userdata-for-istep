@@ -281,3 +281,18 @@ function get_name_of_location_by_id(int $id):string{
     }
     return "Pas de campus";
 }
+
+/**
+ * Retourne l'utilisateur WP depuis l'id d'un utilisateur de l'ISTeP
+ * @param int $id
+ * @return WP_User|false
+ */
+function get_wp_user_from_istep_user(int $id): WP_User|false{
+    global $wpdb;
+    $member_table = TABLE_MEMBERS_NAME;
+    $query = $wpdb->get_results("SELECT wp_user_id FROM $member_table WHERE id_membre = $id ");
+    if (empty($query)){
+        return false;
+    }
+    return get_user_by('id',$query[0]->wp_user_id);
+}

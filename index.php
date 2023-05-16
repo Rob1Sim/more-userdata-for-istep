@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: More userData for ISTeP
-Plugin URI: https://wpusermanager.com/
+Plugin URI: https://github.com/Rob1Sim/more-userdata-for-istep
 Description: Ajoute un formulaire de création d'utilisateur pensé pour l'ISTeP et une page personalisé pour les utilsateurs, ainsi qu'une gestions des équipes.
 !Nécéssite un plugin qui gère les permissions pour les roles!
 Plus d'informations dans le fichier README.md

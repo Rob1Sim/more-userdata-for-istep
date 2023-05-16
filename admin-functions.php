@@ -90,6 +90,14 @@ function more_userdata_istep_menu(): void{
         'modify_users_teams',
         'more_userdata_istep_users_edit_teams'
     );
+    add_submenu_page(
+        'admin.php?page=erase_user&id=',
+        'Supprimer un utilisateur',
+        'Supprimer un utilisateur',
+        ADMIN_CAPACITY,
+        'erase_user',
+        'more_userdata_istep_users_delete_user'
+    );
 }
 add_action( 'admin_menu', 'more_userdata_istep_menu' );
 
@@ -474,6 +482,7 @@ function more_userdata_istep_users_list():void{
                 <th>Campus</th>
                 <th>Employeur</th>
                 <th>Case courrier</th>
+                <th>Supprimer</th>
             </tr>
             </thead>
             <tbody>
@@ -502,6 +511,12 @@ function more_userdata_istep_users_list():void{
                 echo '<td>' . get_name_of_location_by_id(intval($user->campus)) . '</td>';
                 echo '<td>' . $user->employeur . '</td>';
                 echo '<td>' . $user->caseCourrier . '</td>';
+                echo '<td>
+                        <form method="post" action="' . admin_url( 'admin.php?page=erase_user&id=' . $user->id_membre ) . '">
+                            <input type="hidden" name="user_delete_id" value="' . $user->id_membre . '">
+                            <button type="submit" class="button button-primary" style="background: #d0021b; border-color: #d0021b">Supprimer</button>
+                        </form>
+                      </td>';
                 echo '</tr>';
             }
             ?>
@@ -588,6 +603,25 @@ function more_userdata_istep_users_edit_teams():void
 
 }
 
+/**
+ * Supprime l'utilisateur passé dans la requête
+ * @return void
+ */
+function more_userdata_istep_users_delete_user():void{
+    if ( !can_user_access_this(get_option('admin_user_roles')) ) {
+        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+    }
+    if ( current_user_can( ADMIN_CAPACITY ) && isset($_POST['user_delete_id']) ){
+        $id = sanitize_text_field($_POST['user_delete_id']);
+        $wp_user = get_wp_user_from_istep_user($id);
+        if( $wp_user !== false ){
+            wp_delete_user($wp_user->ID);
+            echo '<div id="message" class="updated notice"><p>L\'utilisateur à été supprimé avec succès.</p></div>';
+        }else{
+            echo '<div class="notice notice-error"><p>Une erreur est survenue lors de la suppression</p></div>';
+        }
+    }
+}
 /**
  * Gère la gestions des différents campus
  * @return void
@@ -773,3 +807,4 @@ function set_rights_to_administrator(string $option_name){
         update_option($option_name, $roles_already_stored);
     }
 }
+

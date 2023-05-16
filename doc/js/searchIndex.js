@@ -23,7 +23,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\more_userdata_istep_edit_equipe_page\u0028\u0029",
             "name": "more_userdata_istep_edit_equipe_page",
-            "summary": "",
+            "summary": "Modifie\u0020les\u0020informations\u0020d\u0027une\u0020\u00E9quipe",
             "url": "namespaces/default.html#function_more_userdata_istep_edit_equipe_page"
         },                {
             "fqsen": "\\more_userdata_istep_delete_equipe_page\u0028\u0029",
@@ -35,6 +35,31 @@ Search.appendIndex(
             "name": "more_userdata_istep_users_list",
             "summary": "Affiche\u0020toutes\u0020les\u0020informations\u0020des\u0020utilisateurs\u0020de\u0020l\u0027ISTeP",
             "url": "namespaces/default.html#function_more_userdata_istep_users_list"
+        },                {
+            "fqsen": "\\more_userdata_istep_users_edit_teams\u0028\u0029",
+            "name": "more_userdata_istep_users_edit_teams",
+            "summary": "Formulaire\u0020de\u0020modification\u0020de\u0020l\u0027\u00E9quipe\u0020d\u0027un\u0020utilisateur",
+            "url": "namespaces/default.html#function_more_userdata_istep_users_edit_teams"
+        },                {
+            "fqsen": "\\more_userdata_istep_users_delete_user\u0028\u0029",
+            "name": "more_userdata_istep_users_delete_user",
+            "summary": "Supprime\u0020l\u0027utilisateur\u0020pass\u00E9\u0020dans\u0020la\u0020requ\u00EAte",
+            "url": "namespaces/default.html#function_more_userdata_istep_users_delete_user"
+        },                {
+            "fqsen": "\\more_userdata_istep_menu_location_page\u0028\u0029",
+            "name": "more_userdata_istep_menu_location_page",
+            "summary": "G\u00E8re\u0020la\u0020gestions\u0020des\u0020diff\u00E9rents\u0020campus",
+            "url": "namespaces/default.html#function_more_userdata_istep_menu_location_page"
+        },                {
+            "fqsen": "\\more_userdata_istep_edit_location_page\u0028\u0029",
+            "name": "more_userdata_istep_edit_location_page",
+            "summary": "Modifie\u0020les\u0020informations\u0020d\u0027un\u0020campus",
+            "url": "namespaces/default.html#function_more_userdata_istep_edit_location_page"
+        },                {
+            "fqsen": "\\more_userdata_istep_delete_location_page\u0028\u0029",
+            "name": "more_userdata_istep_delete_location_page",
+            "summary": "Supprime\u0020de\u0020la\u0020bd\u0020le\u0020campus\u0020avec\u0020l\u0027id\u0020correspondant",
+            "url": "namespaces/default.html#function_more_userdata_istep_delete_location_page"
         },                {
             "fqsen": "\\set_rights_to_administrator\u0028\u0029",
             "name": "set_rights_to_administrator",
@@ -80,6 +105,16 @@ Search.appendIndex(
             "name": "TABLE_MEMBERS_NAME",
             "summary": "Nom\u0020de\u0020la\u0020table\u0020membre\u0020dans\u0020la\u0020base\u0020de\u0020donn\u00E9e",
             "url": "namespaces/default.html#constant_TABLE_MEMBERS_NAME"
+        },                {
+            "fqsen": "\\TABLE_MEMBERS_TEAM_NAME",
+            "name": "TABLE_MEMBERS_TEAM_NAME",
+            "summary": "Nom\u0020de\u0020la\u0020table\u0020qui\u0020fait\u0020la\u0020relation\u0020entre\u0020MEMBRE\u0020et\u0020TEAM\u0020dans\u0020la\u0020base\u0020de\u0020donn\u00E9e",
+            "url": "namespaces/default.html#constant_TABLE_MEMBERS_TEAM_NAME"
+        },                {
+            "fqsen": "\\TABLE_LOCATION_NAME",
+            "name": "TABLE_LOCATION_NAME",
+            "summary": "Nom\u0020de\u0020la\u0020table\u0020qui\u0020enregistre\u0020les\u0020diff\u00E9rents\u0020campus",
+            "url": "namespaces/default.html#constant_TABLE_LOCATION_NAME"
         },                {
             "fqsen": "\\ADMIN_CAPACITY",
             "name": "ADMIN_CAPACITY",
@@ -130,6 +165,41 @@ Search.appendIndex(
             "name": "is_team_id_valid",
             "summary": "V\u00E9rifie\u0020que\u0020l\u0027id\u0020pass\u00E9\u0020en\u0020param\u00E8tre\u0020correspond\u0020\u00E0\u0020l\u0027id\u0020d\u0027une\u0020\u00E9quipe",
             "url": "namespaces/default.html#function_is_team_id_valid"
+        },                {
+            "fqsen": "\\get_user_teams_names_by_user_id\u0028\u0029",
+            "name": "get_user_teams_names_by_user_id",
+            "summary": "R\u00E9cup\u00E8re\u0020tous\u0020les\u0020nom\u0020de\u0020l\u0027utilisateur\u0020pass\u00E9\u0020en\u0020param\u00E8tre",
+            "url": "namespaces/default.html#function_get_user_teams_names_by_user_id"
+        },                {
+            "fqsen": "\\get_user_teams_by_user_id\u0028\u0029",
+            "name": "get_user_teams_by_user_id",
+            "summary": "R\u00E9cup\u00E8re\u0020les\u0020\u00E9quipes\u0020d\u0027un\u0020utilisateurs",
+            "url": "namespaces/default.html#function_get_user_teams_by_user_id"
+        },                {
+            "fqsen": "\\get_user_teams_id_by_user_id\u0028\u0029",
+            "name": "get_user_teams_id_by_user_id",
+            "summary": "R\u00E9cup\u00E8re\u0020tous\u0020les\u0020id\u0020des\u0020\u00E9quipes\u0020de\u0020l\u0027utilisateur\u0020pass\u00E9\u0020en\u0020param\u00E8tre",
+            "url": "namespaces/default.html#function_get_user_teams_id_by_user_id"
+        },                {
+            "fqsen": "\\add_data_to_team_members\u0028\u0029",
+            "name": "add_data_to_team_members",
+            "summary": "AJoute\u0020une\u0020entr\u00E9e\u0020\u00E0\u0020la\u0020table",
+            "url": "namespaces/default.html#function_add_data_to_team_members"
+        },                {
+            "fqsen": "\\delete_data_from_team_members\u0028\u0029",
+            "name": "delete_data_from_team_members",
+            "summary": "Supprime\u0020une\u0020entr\u00E9e\u0020de\u0020la\u0020table\u0020members\u0020teams,\u0020avec\u0020les\u0020donn\u00E9es\u0020pass\u00E9\u0020en\u0020param\u00E8tres",
+            "url": "namespaces/default.html#function_delete_data_from_team_members"
+        },                {
+            "fqsen": "\\get_name_of_location_by_id\u0028\u0029",
+            "name": "get_name_of_location_by_id",
+            "summary": "Retourne\u0020le\u0020nom\u0020d\u0027un\u0020campus\u0020gr\u00E2ce\u0020\u00E0\u0020son\u0020id",
+            "url": "namespaces/default.html#function_get_name_of_location_by_id"
+        },                {
+            "fqsen": "\\get_wp_user_from_istep_user\u0028\u0029",
+            "name": "get_wp_user_from_istep_user",
+            "summary": "Retourne\u0020l\u0027utilisateur\u0020WP\u0020depuis\u0020l\u0027id\u0020d\u0027un\u0020utilisateur\u0020de\u0020l\u0027ISTeP",
+            "url": "namespaces/default.html#function_get_wp_user_from_istep_user"
         },                {
             "fqsen": "\\",
             "name": "\\",

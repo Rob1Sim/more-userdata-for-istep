@@ -110,11 +110,25 @@
 <dd>Définie la capacité d&#039;un role à accéder au menu admin du plugin</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="namespaces/default.html#constant_TABLE_LOCATION_NAME">TABLE_LOCATION_NAME</a>
+    <span>
+        &nbsp;= $wpdb-&gt;prefix . &#039;localisation_ISTeP&#039;                            </span>
+</dt>
+<dd>Nom de la table qui enregistre les différents campus</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a href="namespaces/default.html#constant_TABLE_MEMBERS_NAME">TABLE_MEMBERS_NAME</a>
     <span>
         &nbsp;= $wpdb-&gt;prefix . &#039;membre_ISTeP&#039;                            </span>
 </dt>
 <dd>Nom de la table membre dans la base de donnée</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="namespaces/default.html#constant_TABLE_MEMBERS_TEAM_NAME">TABLE_MEMBERS_TEAM_NAME</a>
+    <span>
+        &nbsp;= $wpdb-&gt;prefix . &#039;membre_equipe_ISTeP&#039;                            </span>
+</dt>
+<dd>Nom de la table qui fait la relation entre MEMBRE et TEAM dans la base de donnée</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a href="namespaces/default.html#constant_TABLE_TEAM_NAME">TABLE_TEAM_NAME</a>
@@ -165,8 +179,9 @@
             <dt class="phpdocumentor-table-of-contents__entry -function -">
     <a href="namespaces/default.html#function_more_userdata_istep_edit_equipe_page">more_userdata_istep_edit_equipe_page()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: void    </span>
 </dt>
+<dd>Modifie les informations d&#039;une équipe</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -function -">
     <a href="namespaces/default.html#function_more_userdata_istep_delete_equipe_page">more_userdata_istep_delete_equipe_page()</a>
@@ -181,6 +196,41 @@
                                 &nbsp;: void    </span>
 </dt>
 <dd>Affiche toutes les informations des utilisateurs de l&#039;ISTeP</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_more_userdata_istep_users_edit_teams">more_userdata_istep_users_edit_teams()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Formulaire de modification de l&#039;équipe d&#039;un utilisateur</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_more_userdata_istep_users_delete_user">more_userdata_istep_users_delete_user()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Supprime l&#039;utilisateur passé dans la requête</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_more_userdata_istep_menu_location_page">more_userdata_istep_menu_location_page()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Gère la gestions des différents campus</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_more_userdata_istep_edit_location_page">more_userdata_istep_edit_location_page()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Modifie les informations d&#039;un campus</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_more_userdata_istep_delete_location_page">more_userdata_istep_delete_location_page()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Supprime de la bd le campus avec l&#039;id correspondant</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -function -">
     <a href="namespaces/default.html#function_set_rights_to_administrator">set_rights_to_administrator()</a>
@@ -296,6 +346,55 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 </dt>
 <dd>Vérifie que l&#039;id passé en paramètre correspond à l&#039;id d&#039;une équipe</dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_get_user_teams_names_by_user_id">get_user_teams_names_by_user_id()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Récupère tous les nom de l&#039;utilisateur passé en paramètre</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_get_user_teams_by_user_id">get_user_teams_by_user_id()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Récupère les équipes d&#039;un utilisateurs</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_get_user_teams_id_by_user_id">get_user_teams_id_by_user_id()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Récupère tous les id des équipes de l&#039;utilisateur passé en paramètre</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_add_data_to_team_members">add_data_to_team_members()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>AJoute une entrée à la table</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_delete_data_from_team_members">delete_data_from_team_members()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Supprime une entrée de la table members teams, avec les données passé en paramètres</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_get_name_of_location_by_id">get_name_of_location_by_id()</a>
+    <span>
+                                &nbsp;: string    </span>
+</dt>
+<dd>Retourne le nom d&#039;un campus grâce à son id</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_get_wp_user_from_istep_user">get_wp_user_from_istep_user()</a>
+    <span>
+                                &nbsp;: <abbr title="\WP_User">WP_User</abbr>|false    </span>
+</dt>
+<dd>Retourne l&#039;utilisateur WP depuis l&#039;id d&#039;un utilisateur de l&#039;ISTeP</dd>
+
     </dl>
 
         
@@ -315,7 +414,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">15</span>
+    <span class="phpdocumentor-element-found-in__line">23</span>
 
     </aside>
 
@@ -326,6 +425,35 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
         <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">ADMIN_CAPACITY</span>
     = <span class="phpdocumentor-signature__default-value">&quot;more_data_users_admin_capacity&quot;</span>
+</code>
+
+
+    
+    
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_TABLE_LOCATION_NAME">
+        TABLE_LOCATION_NAME
+        <a href="namespaces/default.html#constant_TABLE_LOCATION_NAME" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">19</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Nom de la table qui enregistre les différents campus</p>
+
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">TABLE_LOCATION_NAME</span>
+    = <span class="phpdocumentor-signature__default-value">$wpdb-&gt;prefix . &#039;localisation_ISTeP&#039;</span>
 </code>
 
 
@@ -355,6 +483,35 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
         <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">TABLE_MEMBERS_NAME</span>
     = <span class="phpdocumentor-signature__default-value">$wpdb-&gt;prefix . &#039;membre_ISTeP&#039;</span>
+</code>
+
+
+    
+    
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_TABLE_MEMBERS_TEAM_NAME">
+        TABLE_MEMBERS_TEAM_NAME
+        <a href="namespaces/default.html#constant_TABLE_MEMBERS_TEAM_NAME" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">15</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Nom de la table qui fait la relation entre MEMBRE et TEAM dans la base de donnée</p>
+
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">TABLE_MEMBERS_TEAM_NAME</span>
+    = <span class="phpdocumentor-signature__default-value">$wpdb-&gt;prefix . &#039;membre_equipe_ISTeP&#039;</span>
 </code>
 
 
@@ -434,7 +591,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">73</span>
+    <span class="phpdocumentor-element-found-in__line">108</span>
 
     </aside>
 
@@ -459,7 +616,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">128</span>
+    <span class="phpdocumentor-element-found-in__line">212</span>
 
     </aside>
 
@@ -484,7 +641,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">183</span>
+    <span class="phpdocumentor-element-found-in__line">267</span>
 
     </aside>
 
@@ -509,14 +666,15 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">255</span>
+    <span class="phpdocumentor-element-found-in__line">343</span>
 
     </aside>
 
-    
+        <p class="phpdocumentor-summary">Modifie les informations d&#039;une équipe</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility"></span>
-                    <span class="phpdocumentor-signature__name">more_userdata_istep_edit_equipe_page</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">more_userdata_istep_edit_equipe_page</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
     
@@ -533,7 +691,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">313</span>
+    <span class="phpdocumentor-element-found-in__line">401</span>
 
     </aside>
 
@@ -558,7 +716,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">355</span>
+    <span class="phpdocumentor-element-found-in__line">442</span>
 
     </aside>
 
@@ -575,6 +733,131 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     
 </article>
                     <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_more_userdata_istep_users_edit_teams">
+        more_userdata_istep_users_edit_teams()
+        <a href="namespaces/default.html#function_more_userdata_istep_users_edit_teams" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">533</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Formulaire de modification de l&#039;équipe d&#039;un utilisateur</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">more_userdata_istep_users_edit_teams</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+    
+    
+
+    
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_more_userdata_istep_users_delete_user">
+        more_userdata_istep_users_delete_user()
+        <a href="namespaces/default.html#function_more_userdata_istep_users_delete_user" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">610</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Supprime l&#039;utilisateur passé dans la requête</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">more_userdata_istep_users_delete_user</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+    
+    
+
+    
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_more_userdata_istep_menu_location_page">
+        more_userdata_istep_menu_location_page()
+        <a href="namespaces/default.html#function_more_userdata_istep_menu_location_page" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">629</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Gère la gestions des différents campus</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">more_userdata_istep_menu_location_page</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+    
+    
+
+    
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_more_userdata_istep_edit_location_page">
+        more_userdata_istep_edit_location_page()
+        <a href="namespaces/default.html#function_more_userdata_istep_edit_location_page" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">705</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Modifie les informations d&#039;un campus</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">more_userdata_istep_edit_location_page</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+    
+    
+
+    
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_more_userdata_istep_delete_location_page">
+        more_userdata_istep_delete_location_page()
+        <a href="namespaces/default.html#function_more_userdata_istep_delete_location_page" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">761</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Supprime de la bd le campus avec l&#039;id correspondant</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">more_userdata_istep_delete_location_page</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+    
+    
+
+    
+</article>
+                    <article class="phpdocumentor-element -function - ">
     <h4 class="phpdocumentor-element__name" id="function_set_rights_to_administrator">
         set_rights_to_administrator()
         <a href="namespaces/default.html#function_set_rights_to_administrator" class="headerlink"><i class="fas fa-link"></i></a>
@@ -583,7 +866,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="admin-functions.php"><a href="files/admin-functions.html">admin-functions.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">478</span>
+    <span class="phpdocumentor-element-found-in__line">802</span>
 
     </aside>
 
@@ -643,7 +926,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="index.php"><a href="files/index.html">index.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">91</span>
+    <span class="phpdocumentor-element-found-in__line">124</span>
 
     </aside>
 
@@ -672,7 +955,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="index.php"><a href="files/index.html">index.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">218</span>
+    <span class="phpdocumentor-element-found-in__line">261</span>
 
     </aside>
 
@@ -697,7 +980,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="index.php"><a href="files/index.html">index.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">391</span>
+    <span class="phpdocumentor-element-found-in__line">456</span>
 
     </aside>
 
@@ -726,7 +1009,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="index.php"><a href="files/index.html">index.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">436</span>
+    <span class="phpdocumentor-element-found-in__line">509</span>
 
     </aside>
 
@@ -775,7 +1058,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="index.php"><a href="files/index.html">index.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">465</span>
+    <span class="phpdocumentor-element-found-in__line">535</span>
 
     </aside>
 
@@ -783,10 +1066,20 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility"></span>
-                    <span class="phpdocumentor-signature__name">create_directory_from_DB_users</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                    <span class="phpdocumentor-signature__name">create_directory_from_DB_users</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$atts</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
     
-    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$atts</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
     
 
             <section>
@@ -808,7 +1101,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">20</span>
+    <span class="phpdocumentor-element-found-in__line">33</span>
 
     </aside>
 
@@ -837,7 +1130,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">38</span>
+    <span class="phpdocumentor-element-found-in__line">51</span>
 
     </aside>
 
@@ -878,7 +1171,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">56</span>
+    <span class="phpdocumentor-element-found-in__line">69</span>
 
     </aside>
 
@@ -917,7 +1210,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">74</span>
+    <span class="phpdocumentor-element-found-in__line">87</span>
 
     </aside>
 
@@ -956,7 +1249,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">85</span>
+    <span class="phpdocumentor-element-found-in__line">98</span>
 
     </aside>
 
@@ -995,7 +1288,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">97</span>
+    <span class="phpdocumentor-element-found-in__line">110</span>
 
     </aside>
 
@@ -1034,7 +1327,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">116</span>
+    <span class="phpdocumentor-element-found-in__line">129</span>
 
     </aside>
 
@@ -1073,7 +1366,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">136</span>
+    <span class="phpdocumentor-element-found-in__line">149</span>
 
     </aside>
 
@@ -1119,7 +1412,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">156</span>
+    <span class="phpdocumentor-element-found-in__line">169</span>
 
     </aside>
 
@@ -1146,6 +1439,285 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_get_user_teams_names_by_user_id">
+        get_user_teams_names_by_user_id()
+        <a href="namespaces/default.html#function_get_user_teams_names_by_user_id" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">188</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Récupère tous les nom de l&#039;utilisateur passé en paramètre</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">get_user_teams_names_by_user_id</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            </section>
+
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_get_user_teams_by_user_id">
+        get_user_teams_by_user_id()
+        <a href="namespaces/default.html#function_get_user_teams_by_user_id" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">202</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Récupère les équipes d&#039;un utilisateurs</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">get_user_teams_by_user_id</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            </section>
+
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_get_user_teams_id_by_user_id">
+        get_user_teams_id_by_user_id()
+        <a href="namespaces/default.html#function_get_user_teams_id_by_user_id" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">215</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Récupère tous les id des équipes de l&#039;utilisateur passé en paramètre</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">get_user_teams_id_by_user_id</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            </section>
+
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_add_data_to_team_members">
+        add_data_to_team_members()
+        <a href="namespaces/default.html#function_add_data_to_team_members" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">230</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">AJoute une entrée à la table</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">add_data_to_team_members</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$teams_id_list</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$member_id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$teams_id_list</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$member_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+    
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_delete_data_from_team_members">
+        delete_data_from_team_members()
+        <a href="namespaces/default.html#function_delete_data_from_team_members" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">255</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Supprime une entrée de la table members teams, avec les données passé en paramètres</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">delete_data_from_team_members</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$team_id</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$member_id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$team_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$member_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+    
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_get_name_of_location_by_id">
+        get_name_of_location_by_id()
+        <a href="namespaces/default.html#function_get_name_of_location_by_id" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">274</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Retourne le nom d&#039;un campus grâce à son id</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">get_name_of_location_by_id</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string</span>
+            </section>
+
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_get_wp_user_from_istep_user">
+        get_wp_user_from_istep_user()
+        <a href="namespaces/default.html#function_get_wp_user_from_istep_user" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">290</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Retourne l&#039;utilisateur WP depuis l&#039;id d&#039;un utilisateur de l&#039;ISTeP</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">get_wp_user_from_istep_user</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\WP_User">WP_User</abbr>|false</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\WP_User">WP_User</abbr>|false</span>
             </section>
 
 </article>
@@ -1263,7 +1835,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
                 <li>
                     <ul class="phpdocumentor-list -clean">
                                                     <li><a href="namespaces/default.html#constant_ADMIN_CAPACITY">ADMIN_CAPACITY</a></li>
+                                                    <li><a href="namespaces/default.html#constant_TABLE_LOCATION_NAME">TABLE_LOCATION_NAME</a></li>
                                                     <li><a href="namespaces/default.html#constant_TABLE_MEMBERS_NAME">TABLE_MEMBERS_NAME</a></li>
+                                                    <li><a href="namespaces/default.html#constant_TABLE_MEMBERS_TEAM_NAME">TABLE_MEMBERS_TEAM_NAME</a></li>
                                                     <li><a href="namespaces/default.html#constant_TABLE_TEAM_NAME">TABLE_TEAM_NAME</a></li>
                                             </ul>
                 </li>
@@ -1271,6 +1845,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
                             <li class="phpdocumentor-on-this-page-section__title">Functions</li>
                 <li>
                     <ul class="phpdocumentor-list -clean">
+                                                    <li><a href="namespaces/default.html#function_add_data_to_team_members">add_data_to_team_members()</a></li>
                                                     <li><a href="namespaces/default.html#function_add_new_user">add_new_user()</a></li>
                                                     <li><a href="namespaces/default.html#function_add_new_user_form">add_new_user_form()</a></li>
                                                     <li><a href="namespaces/default.html#function_can_user_access_this">can_user_access_this()</a></li>
@@ -1278,20 +1853,31 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
                                                     <li><a href="namespaces/default.html#function_create_directory_from_DB_users">create_directory_from_DB_users()</a></li>
                                                     <li><a href="namespaces/default.html#function_create_personal_page">create_personal_page()</a></li>
                                                     <li><a href="namespaces/default.html#function_delete_cap_if_no_need_anymore">delete_cap_if_no_need_anymore()</a></li>
+                                                    <li><a href="namespaces/default.html#function_delete_data_from_team_members">delete_data_from_team_members()</a></li>
                                                     <li><a href="namespaces/default.html#function_display_users_data">display_users_data()</a></li>
                                                     <li><a href="namespaces/default.html#function_get_current_user_roles">get_current_user_roles()</a></li>
                                                     <li><a href="namespaces/default.html#function_get_istep_user_by_id">get_istep_user_by_id()</a></li>
                                                     <li><a href="namespaces/default.html#function_get_list_of_table">get_list_of_table()</a></li>
+                                                    <li><a href="namespaces/default.html#function_get_name_of_location_by_id">get_name_of_location_by_id()</a></li>
                                                     <li><a href="namespaces/default.html#function_get_team_name_by_id">get_team_name_by_id()</a></li>
                                                     <li><a href="namespaces/default.html#function_get_user_avatar">get_user_avatar()</a></li>
+                                                    <li><a href="namespaces/default.html#function_get_user_teams_by_user_id">get_user_teams_by_user_id()</a></li>
+                                                    <li><a href="namespaces/default.html#function_get_user_teams_id_by_user_id">get_user_teams_id_by_user_id()</a></li>
+                                                    <li><a href="namespaces/default.html#function_get_user_teams_names_by_user_id">get_user_teams_names_by_user_id()</a></li>
+                                                    <li><a href="namespaces/default.html#function_get_wp_user_from_istep_user">get_wp_user_from_istep_user()</a></li>
                                                     <li><a href="namespaces/default.html#function_is_team_id_valid">is_team_id_valid()</a></li>
                                                     <li><a href="namespaces/default.html#function_more_ud_istep_install">more_ud_istep_install()</a></li>
                                                     <li><a href="namespaces/default.html#function_more_userdata_istep_delete_equipe_page">more_userdata_istep_delete_equipe_page()</a></li>
+                                                    <li><a href="namespaces/default.html#function_more_userdata_istep_delete_location_page">more_userdata_istep_delete_location_page()</a></li>
                                                     <li><a href="namespaces/default.html#function_more_userdata_istep_edit_equipe_page">more_userdata_istep_edit_equipe_page()</a></li>
+                                                    <li><a href="namespaces/default.html#function_more_userdata_istep_edit_location_page">more_userdata_istep_edit_location_page()</a></li>
                                                     <li><a href="namespaces/default.html#function_more_userdata_istep_menu">more_userdata_istep_menu()</a></li>
                                                     <li><a href="namespaces/default.html#function_more_userdata_istep_menu_content">more_userdata_istep_menu_content()</a></li>
                                                     <li><a href="namespaces/default.html#function_more_userdata_istep_menu_give_access">more_userdata_istep_menu_give_access()</a></li>
+                                                    <li><a href="namespaces/default.html#function_more_userdata_istep_menu_location_page">more_userdata_istep_menu_location_page()</a></li>
                                                     <li><a href="namespaces/default.html#function_more_userdata_istep_menu_team_page">more_userdata_istep_menu_team_page()</a></li>
+                                                    <li><a href="namespaces/default.html#function_more_userdata_istep_users_delete_user">more_userdata_istep_users_delete_user()</a></li>
+                                                    <li><a href="namespaces/default.html#function_more_userdata_istep_users_edit_teams">more_userdata_istep_users_edit_teams()</a></li>
                                                     <li><a href="namespaces/default.html#function_more_userdata_istep_users_list">more_userdata_istep_users_list()</a></li>
                                                     <li><a href="namespaces/default.html#function_set_rights_to_administrator">set_rights_to_administrator()</a></li>
                                             </ul>
