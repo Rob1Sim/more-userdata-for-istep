@@ -8,7 +8,7 @@ Plugin wordpress conçue pour le laboratoire ISTeP, il offre la possibilité de 
 - [@Rob1Sim](https://github.com/Rob1Sim)
 
 ## Configuration  
-la configuration et création des équipes est trouvable dans le menu administrateur, pour les administrateurs: Pour changer les droits de vision de cette page il faut modifier la configuration.
+la configuration et création des équipes et des lieu est trouvable dans le menu administrateur, pour les administrateurs: Pour changer les droits de vision de cette page il faut modifier la configuration dans la page __Gérer les permissions__, toutes les personnes cochés auront le droit de gérer les équipes, les utilisateurs , les campus, ansi que donné la permissions au différents roles pour la création d'un utilisateur.
 
 ## Installation
 
@@ -42,7 +42,8 @@ Le projets est constituer de 3 fichier php : __index.php__ contient  :
 __admin-functions.php__ contient :
 - Le formulaire de gestion de qui à accès a l'ajout d'utilisateur
 - Le formulaire de création/Modification/Suppression d'équipe
-- La liste des membres de l'ISTeP et la possibilité de modifier leur équipe
+- Le formulaire de création/Modification/Suppression de campus
+- La liste des membres de l'ISTeP et la possibilité de modifier leur équipe ou de les supprimés
 - Le formulaire de gestion de qui à l'accès de voir le menu administrateur
 
 __utilities.php__ contients des fonctions utilitaire qui sont utilisé dans les deux fichier au dessus.
@@ -51,7 +52,8 @@ Le dossier __scripts__ contients les scripts utilisé par les différents shortc
 
 Le dossier __styles__ contients les fichier de style utilisé par les différents shortcode listés au dessus. 
 
-Le fichier __.phpdoc__ contient la documentation du projet, elle utilise l'outils [phpDocumentor]("https://www.phpdoc.org/")
+Le fichier __doc__ contient la documentation du projet, elle utilise l'outils [phpDocumentor]("https://www.phpdoc.org/")
 
 ## Liens utiles 
 Le projets utiliser simplement [l'API de wordpress]("https://developer.wordpress.org/") 
+

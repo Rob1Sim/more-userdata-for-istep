@@ -109,27 +109,33 @@ searchInputMembers.addEventListener('input', () => {
 const selectRole = document.querySelector("#select-role");
 
 const defaultSorting = document.getElementById('role-parameter');
+const teamSorting = document.getElementById('team-parameter');
 if (defaultSorting.value !== ""){
-    sortUsersByRole(defaultSorting.value);
+    sortBy(defaultSorting.value,"td>#input-roles");
     selectRole.style.display = "none"
 }
-
+if (teamSorting.value !== ""){
+    sortBy(teamSorting.value,"td>#input-teams");
+    selectRole.style.display = "none"
+}
 selectRole.addEventListener("change", function() {
-    sortUsersByRole(this.value);
+    sortBy(this.value,"td>#input-roles");
 });
 
 
 
 /**
- * Tri la liste par le role des utilisateurs
- * @param role
+ * Trie l'annuaire selon un critère spécifique, cela n'affichera que les éléments qui possède ce critère spécifique
+ * @param criteria
+ * @param querrySelector Le querrySelector de l'input qui contient le critère
  */
-function sortUsersByRole(role) {
+function sortBy(criteria, querrySelector){
+    console.log(criteria)
     const users = Array.from(document.querySelectorAll(".tiny-directory-tr"));
     users.forEach(user => {
-        const rolesStr = user.querySelector("td>#input-roles").value;
+        const rolesStr = user.querySelector(querrySelector).value;
         const roles = rolesStr.split("-");
-        if (roles.includes(role)) {
+        if (roles.includes(criteria)) {
             user.style.display = "table-row";
         } else {
             user.style.display = "none";

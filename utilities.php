@@ -178,6 +178,19 @@ function is_team_id_valid(int $id): bool{
     return in_array($id,$array_of_id);
 }
 
+/**
+ * Retourne une liste de string contenant le nom de chaque équipe
+ * @return array
+ */
+function get_all_teams_name():array{
+    $list_of_team_table = get_list_of_table(TABLE_TEAM_NAME);
+    $list_of_team = [];
+    foreach ($list_of_team_table as $team){
+        $list_of_team[]= $team->nom_equipe;
+    }
+    return $list_of_team;
+}
+
 /** Récupérations des données de la table user-teams */
 
 /**
@@ -189,7 +202,7 @@ function get_user_teams_names_by_user_id(int $id): array{
     $teams = get_user_teams_by_user_id($id);
     $array_of_name = [];
     foreach ($teams as $team){
-        $array_of_name[] = get_team_name_by_id($team->id_equipe);
+        $array_of_name[] = get_team_name_by_id($team->id_equipe)->nom_equipe;
     }
     return $array_of_name;
 }

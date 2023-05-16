@@ -481,7 +481,7 @@ function display_users_data(): string
                 <h5>Equipes</h5>
 HTML;
     foreach ($userTeams as $userTeam) {
-        $html.="<p>$userTeam->nom_equipe</p>";
+        $html.="<p>$userTeam</p>";
     }
     $html.= <<<HTML
             </div>
@@ -542,8 +542,10 @@ function create_directory_from_DB_users( $atts ): string{
     //Gestions des paramètres
     $list_parameters = shortcode_atts( array(
         'role' => '',
+        'team' => ''
     ), $atts );
 
+    //Paramètre Role
     $role_parameter = $list_parameters['role'];
     $role_parameter = strtolower(sanitize_text_field($role_parameter));
     //Si le role n'éxiste pas alors on ne trie pas
@@ -551,6 +553,12 @@ function create_directory_from_DB_users( $atts ): string{
         $role_parameter = "";
     }
 
+    //Paramètre équipe
+    $team = $list_parameters['team'];
+    $team = sanitize_text_field($team);
+    if (!isset($team) ||$team == "" ||!in_array($team,get_all_teams_name())){
+        $team = "";
+    }
 
 
     //Ajout de la feuille de style et du javascript
@@ -565,6 +573,7 @@ function create_directory_from_DB_users( $atts ): string{
 <div class="tiny-directory-div">
     <label for="search-input-members">Rechercher : </label>
     <input type="hidden" value="$role_parameter" id="role-parameter">
+    <input type="hidden" value="$team" id="team-parameter">
     <input type="text" id="search-input-members"" placeholder="Robin...">
             <select id="select-role">
 HTML;
@@ -595,8 +604,14 @@ HTML;
             $wp_user = get_user_by("id",$userID);
             $linkToProfilePage = home_url()."/membres-istep/$wp_user->user_nicename";
 
+            //Listes des roles
             $users_roles = $wp_user->roles;
             $users_roles_str = implode("-",$users_roles);
+
+            //Listes des équipes
+            $users_teams = get_user_teams_names_by_user_id($user->id_membre);
+            $users_teams_str = implode("-",$users_teams);
+
             $tower = convert_tower_into_readable($istep_users->tourDuBureau);
             $campus = get_name_of_location_by_id(intval($istep_users->campus));
             $html.= <<<HTML
@@ -604,6 +619,7 @@ HTML;
             
             <td class="no-display-fields" id="pp-$userID" data-id="$userID">$userAvatar
                 <input type="hidden" value="$users_roles_str" id="input-roles"/>
+                <input type="hidden" value="$users_teams_str" id="input-teams"/>
             </td>
             <td class="no-display-fields" id="login-$userID">$linkToProfilePage</td>
             <td class="tiny-directory-td name-$userID">$wp_user->display_name</td>
