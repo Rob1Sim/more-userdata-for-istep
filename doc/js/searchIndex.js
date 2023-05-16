@@ -41,6 +41,11 @@ Search.appendIndex(
             "summary": "Formulaire\u0020de\u0020modification\u0020de\u0020l\u0027\u00E9quipe\u0020d\u0027un\u0020utilisateur",
             "url": "namespaces/default.html#function_more_userdata_istep_users_edit_teams"
         },                {
+            "fqsen": "\\more_userdata_istep_users_delete_user\u0028\u0029",
+            "name": "more_userdata_istep_users_delete_user",
+            "summary": "Supprime\u0020l\u0027utilisateur\u0020pass\u00E9\u0020dans\u0020la\u0020requ\u00EAte",
+            "url": "namespaces/default.html#function_more_userdata_istep_users_delete_user"
+        },                {
             "fqsen": "\\more_userdata_istep_menu_location_page\u0028\u0029",
             "name": "more_userdata_istep_menu_location_page",
             "summary": "G\u00E8re\u0020la\u0020gestions\u0020des\u0020diff\u00E9rents\u0020campus",
@@ -190,6 +195,11 @@ Search.appendIndex(
             "name": "get_name_of_location_by_id",
             "summary": "Retourne\u0020le\u0020nom\u0020d\u0027un\u0020campus\u0020gr\u00E2ce\u0020\u00E0\u0020son\u0020id",
             "url": "namespaces/default.html#function_get_name_of_location_by_id"
+        },                {
+            "fqsen": "\\get_wp_user_from_istep_user\u0028\u0029",
+            "name": "get_wp_user_from_istep_user",
+            "summary": "Retourne\u0020l\u0027utilisateur\u0020WP\u0020depuis\u0020l\u0027id\u0020d\u0027un\u0020utilisateur\u0020de\u0020l\u0027ISTeP",
+            "url": "namespaces/default.html#function_get_wp_user_from_istep_user"
         },                {
             "fqsen": "\\",
             "name": "\\",
