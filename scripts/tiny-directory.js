@@ -114,6 +114,7 @@ if (defaultSorting.value !== ""){
     sortBy(defaultSorting.value,"td>#input-roles");
     selectRole.style.display = "none"
 }
+
 if (teamSorting.value !== ""){
     sortBy(teamSorting.value,"td>#input-teams");
     selectRole.style.display = "none"
