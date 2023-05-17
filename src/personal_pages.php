@@ -159,3 +159,32 @@ function create_modify_personal_page(): void
 
     wp_insert_post($page_data);
 }
+
+/**
+ * Affiche les données enregistré dans l'entité page_personel
+ * @return string
+ */
+function display_section_personal_pages(): string
+{
+    $current_page_slug = get_post_field('post_name', get_queried_object_id());
+    $user = get_user_by('slug', $current_page_slug);
+    $sections = get_user_personal_pages_categories($user->ID);
+    $html = "<div>";
+    foreach ($sections as $key => $section){
+        if(strtolower($key) !== "id_page" && strtolower($key) !== "wp_user_id"){
+            $title = ucfirst(strtolower(str_replace('_',' ',$key)));
+            if ($section != "" && $section != null){
+                $html .= <<<HTML
+                <h5>$title</h5>
+                <div>$section</div>
+HTML;
+            }
+        }
+    }
+    if ($html == "<div>"){
+        return "<h4>Aucune donnée disponible</h4>";
+    }
+    $html.="</div>";
+    return $html;
+}
+add_shortcode('personal_page_display', 'display_section_personal_pages');
