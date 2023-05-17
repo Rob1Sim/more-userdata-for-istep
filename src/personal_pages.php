@@ -10,7 +10,7 @@ add_shortcode('istep_user_data','display_users_data');
 function display_users_data(): string
 {
     $current_page_slug = get_post_field('post_name', get_queried_object_id());
-    $page_author_info = get_user_by('slug', $current_page_slug);
+    $page_author_info = get_user_by('login', $current_page_slug);
 
     $userData = get_istep_user_by_id($page_author_info->ID);
     $userAvatar = get_user_avatar($page_author_info->ID);
@@ -56,21 +56,25 @@ HTML;
  * Créer une page personnel lors de l'ajout d'un utilisateur via le formulaire
  * @param int $userId
  * @param string $userDisplayName
- * @param string $userNiceName
+ * @param string $login
  * @return void
  */
-function create_personal_page(string $userDisplayName,string $userNiceName): void
+function create_personal_page(string $userDisplayName,string $login): void
 {
 
     $parent = get_page_by_path('membres-istep');
 
+    $content = "[istep_user_data]
+                [personal_page_display]
+                [edit_personal_page_btn]";
+
     $page_data = array(
         'post_title' => $userDisplayName,
-        'post_content' => '[istep_user_data][personal_page_display]',
+        'post_content' => $content,
         'post_status' => 'publish',
         'post_type' => 'page',
         'post_author'=>1,
-        'post_name' => $userNiceName,
+        'post_name' => $login,
         'post_parent' => $parent->ID,
     );
 
@@ -169,7 +173,7 @@ function create_modify_personal_page(): void
 function display_section_personal_pages(): string
 {
     $current_page_slug = get_post_field('post_name', get_queried_object_id());
-    $user = get_user_by('slug', $current_page_slug);
+    $user = get_user_by('login', $current_page_slug);
     $sections = get_user_personal_pages_categories($user->ID);
     $html = "<div>";
     foreach ($sections as $key => $section){
@@ -190,3 +194,24 @@ HTML;
     return $html;
 }
 add_shortcode('personal_page_display', 'display_section_personal_pages');
+
+/**
+ * Shortcode qui vérifie si le bouton d'édition de page doit s'afficher pour l'utilisateur courant
+ * Si un "error" c'est que la page "modifier-votre-page-personnel" n'éxiste plus
+ * @return string
+ */
+function display_button_to_edit_personal_pages(): string
+{
+    $current_page_slug = get_post_field('post_name', get_queried_object_id());
+    $user = get_user_by('login', $current_page_slug);
+    if (wp_get_current_user() == $user){
+        $page_url = get_permalink(get_page_by_path("modifier-votre-page-personnel"));
+        if (!empty($page_url)){
+            return'<a href="' . esc_url($page_url) . '" class="button">Modifier votre page</a>';
+        }else{
+            return "error";
+        }
+    }
+    return "";
+}
+add_shortcode('edit_personal_page_btn', 'display_button_to_edit_personal_pages');
