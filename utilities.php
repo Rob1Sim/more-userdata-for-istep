@@ -18,6 +18,10 @@ define("TABLE_MEMBERS_TEAM_NAME",$wpdb->prefix . 'membre_equipe_ISTeP');
  */
 define("TABLE_LOCATION_NAME",$wpdb->prefix . 'localisation_ISTeP');
 /**
+ * Nom de la table qui enregistre les informations affichées sur la page personnel
+ */
+define("TABLE_PERSONAL_PAGE_NAME",$wpdb->prefix . 'personal_page_ISTeP');
+/**
  * Définie la capacité d'un role à accéder au menu admin du plugin
  */
 const ADMIN_CAPACITY = "more_data_users_admin_capacity";
@@ -309,3 +313,20 @@ function get_wp_user_from_istep_user(int $id): WP_User|false{
     }
     return get_user_by('id',$query[0]->wp_user_id);
 }
+
+/**
+ * Récupère toutes les infos présente sur la page de l'utilisateur et les renvoie sous la forme d'un tableau
+ * @param int $id l'id de l'utilisateur
+ * @return array
+ */
+function get_user_personal_pages_categories(int $id):array{
+    global $wpdb;
+    $table = TABLE_PERSONAL_PAGE_NAME;
+    $results = $wpdb->get_results("SELECT * FROM $table where wp_user_id = $id");
+    $data = array(); // Tableau pour stocker les résultats
+    if (!empty($results)) {
+        $data = get_object_vars($results[0]);
+    }
+    return $data;
+}
+
