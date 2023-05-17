@@ -26,6 +26,7 @@ function more_ud_istep_install(): void
     $table_name_user_team = TABLE_TEAM_NAME;
     $table_members_team = TABLE_MEMBERS_TEAM_NAME;
     $table_name_user_location = TABLE_LOCATION_NAME;
+    $table_personal_page = TABLE_PERSONAL_PAGE_NAME;
     $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "
@@ -67,6 +68,20 @@ function more_ud_istep_install(): void
             FOREIGN KEY(campus_location)  REFERENCES {$wpdb->prefix}localisation_ISTeP(id_localisation)
                            ON DELETE CASCADE,
     ) $charset_collate;
+        CREATE TABLE $table_personal_page(
+            id_page INT NOT NULL AUTO_INCREMENT,
+            wp_user_id BIGINT UNSIGNED NOT NULL,
+            bibliographie LONGTEXT,
+            enseignement LONGTEXT,
+            responsabilite LONGTEXT,
+            projets LONGTEXT,
+            parcours LONGTEXT,
+            activite_technique LONGTEXT,
+            divers LONGTEXT,
+            PRIMARY KEY(id_page),
+            FOREIGN KEY (wp_user_id) REFERENCES {$wpdb->prefix}users(ID)
+            ON DELETE CASCADE
+            )$charset_collate;
 
 ";
 
@@ -110,6 +125,7 @@ function more_ud_istep_install(): void
     //Lien de redirection par défaut
     update_option('default_redirect_link', "sample-page");
 
+    create_modify_personal_page();
 }
 register_activation_hook( __FILE__, 'more_ud_istep_install' ); //Appelé lors de l'activation du plugin
 
@@ -410,6 +426,10 @@ function add_new_user() {
 
                     add_data_to_team_members($verified_teams, $last_member->id_membre);
 
+                    //Création de la page perso
+                    $wpdb->insert(TABLE_PERSONAL_PAGE_NAME,array(
+                        "wp_user_id"=>$user_id,
+                    ));
 
                     //Ajout de l'image de profile
                     create_personal_page($user_id,$name." ".$last_name,strtolower($last_name)."_".strtolower($name));
@@ -651,3 +671,91 @@ HTML;
         return "Error no users has been found :(";
     }
 }
+
+/**
+ * Shortcode qui affiche l'éditeur de page personnel
+ * @return string
+ */
+function edit_personal_page_form():string{
+
+    //Récupération des données de l'utilisateur
+    $current_user_id = get_current_user_id();
+    //Récupération des champs déjà existant
+    $wp_page = get_user_personal_pages_categories($current_user_id);
+    //Création du formulaire
+    //Cherche tous les champs de la bd pour les affiché
+    ob_start();
+    ?>
+    <form method="POST" action="">
+        <?php foreach ($wp_page as $key => $value){
+            if(strtolower($key) !== "id_page" && strtolower($key) !== "wp_user_id"){
+                $title = ucfirst(strtolower(str_replace('_',' ',$key)));
+                echo "<h5>$title :</h5>";
+                wp_editor(($value ?? ""), 'personal_page_'.$key.'_editor', array('textarea_name' => 'personal_page_'.$key));
+            }
+
+        }?>
+        <input type="submit" value="Mettre à jour" name="personal_page_form_submit" class="submit-btn">
+    </form>
+    <?php
+
+    return ob_get_clean();
+}
+
+add_shortcode('personal_page_form', 'edit_personal_page_form');
+
+/**
+ * Gère la sauvegarde des données du formulaire de création de page dans la dans la base de donnée.
+ * @return void
+ */
+function handle_personal_page_form(): void
+{
+    if (isset($_POST["personal_page_form_submit"])){
+        $data = [];
+
+        //Récupération des données envoyé via le formulaire
+        foreach ($_POST as $post_data_key => $post_data_value){
+            if (str_starts_with($post_data_key,'personal_page_')){
+                $data[str_replace('personal_page_', '', $post_data_key)] = wp_kses_post($post_data_value);
+            }
+        }
+
+        //Sauvegarde des données
+        global $wpdb;
+        if (!$wpdb->insert(TABLE_PERSONAL_PAGE_NAME,$data)){
+            echo "Erreur lors de la Mis à jour";
+        }else{
+            echo "Mis à jour réussi";
+        }
+    }
+}
+add_action('wp','handle_personal_page_form');
+
+/**
+ * Créer la page de modification de page personel, elle est unique donc disponible pour tous le monde à la même adresse
+ * @return void
+ */
+function create_modify_personal_page(): void
+{
+
+    $page_data = array(
+        'post_title' => "Modifier votre page personnel",
+        'post_content' => '[personal_page_form]',
+        'post_status' => 'publish',
+        'post_type' => 'page',
+        'post_name' => "modifier-votre-page-personnel",
+    );
+
+    wp_insert_post($page_data);
+}
+/**
+ * Est lancé lorsque le plugin est désactivé
+ * @return void
+ */
+function on_deactivating(){
+    $page = get_page_by_path('modifier-votre-page-personnel');
+    $page_id = $page->ID;
+    wp_delete_post($page_id, true); // Déplace la page vers la corbeille
+
+}
+register_deactivation_hook(__FILE__, 'on_deactivating');
