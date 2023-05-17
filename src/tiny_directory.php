@@ -79,7 +79,7 @@ HTML;
             $userAvatar = get_user_avatar($userID);
             $istep_users = get_istep_user_by_id($userID);
             $wp_user = get_user_by("id",$userID);
-            $linkToProfilePage = home_url()."/membres-istep/$wp_user->user_nicename";
+            $linkToProfilePage = home_url()."/membres-istep/$wp_user->user_login";
 
             //Listes des roles
             $users_roles = $wp_user->roles;
