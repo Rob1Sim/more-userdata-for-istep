@@ -693,7 +693,7 @@ function edit_personal_page_form():string{
             }
 
         }?>
-        <input type="submit" value="Mettre à jour" name="personal_page_form_submit" class="submit-btn">
+        <input type="submit" value="Mettre à jour" name="form_submit_personal_page" class="submit-btn">
     </form>
     <?php
 
@@ -708,8 +708,8 @@ add_shortcode('personal_page_form', 'edit_personal_page_form');
  */
 function handle_personal_page_form(): void
 {
-    if (isset($_POST["personal_page_form_submit"])){
-        $data = [];
+    if (isset($_POST["form_submit_personal_page"])){
+        $data = array();
 
         //Récupération des données envoyé via le formulaire
         foreach ($_POST as $post_data_key => $post_data_value){
@@ -720,10 +720,15 @@ function handle_personal_page_form(): void
 
         //Sauvegarde des données
         global $wpdb;
-        if (!$wpdb->insert(TABLE_PERSONAL_PAGE_NAME,$data)){
-            echo "Erreur lors de la Mis à jour";
+        if (!$wpdb->update(TABLE_PERSONAL_PAGE_NAME,
+            $data,
+            array(
+            "wp_user_id"=>get_current_user_id()
+        )))
+        {
+            echo '<div id="message" class="updated notice"><p>Erreur lors de la mis à jour.</p></div>';
         }else{
-            echo "Mis à jour réussi";
+            echo '<div id="message" class="updated notice"><p>Mis à jour réussie</p></div>';;
         }
     }
 }
