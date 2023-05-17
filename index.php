@@ -526,7 +526,7 @@ HTML;
  * @param string $userNiceName
  * @return void
  */
-function create_personal_page(int $userId, string $userDisplayName,string $userNiceName): void
+function create_personal_page(string $userDisplayName,string $userNiceName): void
 {
     $parent = get_page_by_path('membres-istep');
 
@@ -535,10 +535,8 @@ function create_personal_page(int $userId, string $userDisplayName,string $userN
         'post_content' => '[istep_user_data]',
         'post_status' => 'publish',
         'post_type' => 'page',
-        'post_author' => $userId,
         'post_name' => $userNiceName,
         'post_parent' => $parent->ID,
-
     );
 
 // Insère la page dans la base de données de WordPress
