@@ -82,9 +82,10 @@
     </ul>
 
     <article class="phpdocumentor-element -file">
-        <h2 class="phpdocumentor-content__title">index.php</h2>
+        <h2 class="phpdocumentor-content__title">add_user_form.php</h2>
 
-        
+            <p class="phpdocumentor-summary">Gère le formulaire de création d&#039;utilisateur</p>
+
 
 
 
@@ -92,7 +93,7 @@
 
 <h3 id="toc">
     Table of Contents
-    <a href="files/index.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="files/src-add-user-form.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h3>
 
@@ -108,23 +109,23 @@
 
 <h4 id="toc-functions">
     Functions
-    <a href="files/index.html#toc-functions" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="files/src-add-user-form.html#toc-functions" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -function -">
-    <a href="namespaces/default.html#function_more_ud_istep_install">more_ud_istep_install()</a>
+    <a href="namespaces/default.html#function_add_new_user_form">add_new_user_form()</a>
     <span>
-                                &nbsp;: void    </span>
+                                &nbsp;: string    </span>
 </dt>
-<dd>Créer la base de donnée lors de l&#039;activation du plugin</dd>
+<dd>Affiche le formulaire de création d&#039;utilisateur</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -function -">
-    <a href="namespaces/default.html#function_on_deactivating">on_deactivating()</a>
+    <a href="namespaces/default.html#function_add_new_user">add_new_user()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>Est lancé lorsque le plugin est désactivé</dd>
+<dd>Fonction qui vérifie les données entré dans le formulaire et les enregistre dans la base de donnée</dd>
 
     </dl>
 
@@ -135,52 +136,56 @@
             <section class="phpdocumentor-functions">
         <h3 class="phpdocumentor-elements__header" id="functions">
             Functions
-            <a href="files/index.html#functions" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="files/src-add-user-form.html#functions" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
                     <article class="phpdocumentor-element -function - ">
-    <h4 class="phpdocumentor-element__name" id="function_more_ud_istep_install">
-        more_ud_istep_install()
-        <a href="namespaces/default.html#function_more_ud_istep_install" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="function_add_new_user_form">
+        add_new_user_form()
+        <a href="namespaces/default.html#function_add_new_user_form" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="index.php"><a href="files/index.html">index.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/add_user_form.php"><a href="files/src-add-user-form.html"><abbr title="src/add_user_form.php">add_user_form.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">25</span>
+    <span class="phpdocumentor-element-found-in__line">11</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Créer la base de donnée lors de l&#039;activation du plugin</p>
+        <p class="phpdocumentor-summary">Affiche le formulaire de création d&#039;utilisateur</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility"></span>
-                    <span class="phpdocumentor-signature__name">more_ud_istep_install</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">add_new_user_form</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
     
     
     
 
-    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string</span>
+            </section>
+
 </article>
                     <article class="phpdocumentor-element -function - ">
-    <h4 class="phpdocumentor-element__name" id="function_on_deactivating">
-        on_deactivating()
-        <a href="namespaces/default.html#function_on_deactivating" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="function_add_new_user">
+        add_new_user()
+        <a href="namespaces/default.html#function_add_new_user" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="index.php"><a href="files/index.html">index.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/add_user_form.php"><a href="files/src-add-user-form.html"><abbr title="src/add_user_form.php">add_user_form.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">140</span>
+    <span class="phpdocumentor-element-found-in__line">148</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Est lancé lorsque le plugin est désactivé</p>
+        <p class="phpdocumentor-summary">Fonction qui vérifie les données entré dans le formulaire et les enregistre dans la base de donnée</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility"></span>
-                    <span class="phpdocumentor-signature__name">on_deactivating</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">add_new_user</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
     
@@ -194,7 +199,7 @@
     <div class="phpdocumentor-modal-bg" data-exit-button></div>
     <div class="phpdocumentor-modal-container">
         <div class="phpdocumentor-modal-content">
-            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/index.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/add_user_form.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
         </div>
         <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
     </div>
@@ -293,7 +298,7 @@
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                                                                                                                                                                        <li><a href="files/index.html#toc-functions">Functions</a></li>
+                                                                                                                                                                                        <li><a href="files/src-add-user-form.html#toc-functions">Functions</a></li>
                                     </ul>
             </li>
 
@@ -301,8 +306,8 @@
                             <li class="phpdocumentor-on-this-page-section__title">Functions</li>
                 <li>
                     <ul class="phpdocumentor-list -clean">
-                                                    <li><a href="namespaces/default.html#function_more_ud_istep_install">more_ud_istep_install()</a></li>
-                                                    <li><a href="namespaces/default.html#function_on_deactivating">on_deactivating()</a></li>
+                                                    <li><a href="namespaces/default.html#function_add_new_user">add_new_user()</a></li>
+                                                    <li><a href="namespaces/default.html#function_add_new_user_form">add_new_user_form()</a></li>
                                             </ul>
                 </li>
                     </ul>
@@ -322,7 +327,7 @@
     </section>
 </section>
         </div>
-        <a href="files/index.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="files/src-add-user-form.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 
