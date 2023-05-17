@@ -1,20 +1,40 @@
 Search.appendIndex(
     [
                 {
-            "fqsen": "\\more_userdata_istep_menu\u0028\u0029",
-            "name": "more_userdata_istep_menu",
-            "summary": "G\u00E9n\u00E8re\u0020la\u0020page\u0020dans\u0020le\u0020panel\u0020administrateur",
-            "url": "namespaces/default.html#function_more_userdata_istep_menu"
+            "fqsen": "\\more_ud_istep_install\u0028\u0029",
+            "name": "more_ud_istep_install",
+            "summary": "Cr\u00E9er\u0020la\u0020base\u0020de\u0020donn\u00E9e\u0020lors\u0020de\u0020l\u0027activation\u0020du\u0020plugin",
+            "url": "namespaces/default.html#function_more_ud_istep_install"
         },                {
-            "fqsen": "\\more_userdata_istep_menu_content\u0028\u0029",
-            "name": "more_userdata_istep_menu_content",
-            "summary": "G\u00E8re\u0020le\u0020contenue\u0020de\u0020la\u0020page\u0020administrateur",
-            "url": "namespaces/default.html#function_more_userdata_istep_menu_content"
+            "fqsen": "\\on_deactivating\u0028\u0029",
+            "name": "on_deactivating",
+            "summary": "Est\u0020lanc\u00E9\u0020lorsque\u0020le\u0020plugin\u0020est\u0020d\u00E9sactiv\u00E9",
+            "url": "namespaces/default.html#function_on_deactivating"
         },                {
-            "fqsen": "\\more_userdata_istep_menu_give_access\u0028\u0029",
-            "name": "more_userdata_istep_menu_give_access",
-            "summary": "Ajoute\u0020le\u0020formulaire\u0020de\u0020gestions\u0020des\u0020roles\u0020qui\u0020ont\u0020acc\u00E8s\u0020au\u0020panel\u0020administrateur",
-            "url": "namespaces/default.html#function_more_userdata_istep_menu_give_access"
+            "fqsen": "\\add_new_user_form\u0028\u0029",
+            "name": "add_new_user_form",
+            "summary": "Affiche\u0020le\u0020formulaire\u0020de\u0020cr\u00E9ation\u0020d\u0027utilisateur",
+            "url": "namespaces/default.html#function_add_new_user_form"
+        },                {
+            "fqsen": "\\add_new_user\u0028\u0029",
+            "name": "add_new_user",
+            "summary": "Fonction\u0020qui\u0020v\u00E9rifie\u0020les\u0020donn\u00E9es\u0020entr\u00E9\u0020dans\u0020le\u0020formulaire\u0020et\u0020les\u0020enregistre\u0020dans\u0020la\u0020base\u0020de\u0020donn\u00E9e",
+            "url": "namespaces/default.html#function_add_new_user"
+        },                {
+            "fqsen": "\\more_userdata_istep_menu_location_page\u0028\u0029",
+            "name": "more_userdata_istep_menu_location_page",
+            "summary": "G\u00E8re\u0020la\u0020gestions\u0020des\u0020diff\u00E9rents\u0020campus",
+            "url": "namespaces/default.html#function_more_userdata_istep_menu_location_page"
+        },                {
+            "fqsen": "\\more_userdata_istep_edit_location_page\u0028\u0029",
+            "name": "more_userdata_istep_edit_location_page",
+            "summary": "Modifie\u0020les\u0020informations\u0020d\u0027un\u0020campus",
+            "url": "namespaces/default.html#function_more_userdata_istep_edit_location_page"
+        },                {
+            "fqsen": "\\more_userdata_istep_delete_location_page\u0028\u0029",
+            "name": "more_userdata_istep_delete_location_page",
+            "summary": "Supprime\u0020de\u0020la\u0020bd\u0020le\u0020campus\u0020avec\u0020l\u0027id\u0020correspondant",
+            "url": "namespaces/default.html#function_more_userdata_istep_delete_location_page"
         },                {
             "fqsen": "\\more_userdata_istep_menu_team_page\u0028\u0029",
             "name": "more_userdata_istep_menu_team_page",
@@ -46,40 +66,25 @@ Search.appendIndex(
             "summary": "Supprime\u0020l\u0027utilisateur\u0020pass\u00E9\u0020dans\u0020la\u0020requ\u00EAte",
             "url": "namespaces/default.html#function_more_userdata_istep_users_delete_user"
         },                {
-            "fqsen": "\\more_userdata_istep_menu_location_page\u0028\u0029",
-            "name": "more_userdata_istep_menu_location_page",
-            "summary": "G\u00E8re\u0020la\u0020gestions\u0020des\u0020diff\u00E9rents\u0020campus",
-            "url": "namespaces/default.html#function_more_userdata_istep_menu_location_page"
+            "fqsen": "\\more_userdata_istep_menu\u0028\u0029",
+            "name": "more_userdata_istep_menu",
+            "summary": "G\u00E9n\u00E8re\u0020la\u0020page\u0020dans\u0020le\u0020panel\u0020administrateur",
+            "url": "namespaces/default.html#function_more_userdata_istep_menu"
         },                {
-            "fqsen": "\\more_userdata_istep_edit_location_page\u0028\u0029",
-            "name": "more_userdata_istep_edit_location_page",
-            "summary": "Modifie\u0020les\u0020informations\u0020d\u0027un\u0020campus",
-            "url": "namespaces/default.html#function_more_userdata_istep_edit_location_page"
+            "fqsen": "\\more_userdata_istep_menu_content\u0028\u0029",
+            "name": "more_userdata_istep_menu_content",
+            "summary": "G\u00E8re\u0020le\u0020contenue\u0020de\u0020la\u0020page\u0020administrateur",
+            "url": "namespaces/default.html#function_more_userdata_istep_menu_content"
         },                {
-            "fqsen": "\\more_userdata_istep_delete_location_page\u0028\u0029",
-            "name": "more_userdata_istep_delete_location_page",
-            "summary": "Supprime\u0020de\u0020la\u0020bd\u0020le\u0020campus\u0020avec\u0020l\u0027id\u0020correspondant",
-            "url": "namespaces/default.html#function_more_userdata_istep_delete_location_page"
+            "fqsen": "\\more_userdata_istep_menu_give_access\u0028\u0029",
+            "name": "more_userdata_istep_menu_give_access",
+            "summary": "Ajoute\u0020le\u0020formulaire\u0020de\u0020gestions\u0020des\u0020roles\u0020qui\u0020ont\u0020acc\u00E8s\u0020au\u0020panel\u0020administrateur",
+            "url": "namespaces/default.html#function_more_userdata_istep_menu_give_access"
         },                {
             "fqsen": "\\set_rights_to_administrator\u0028\u0029",
             "name": "set_rights_to_administrator",
             "summary": "Ajoute\u0020a\u0020l\u0027option\u0020pass\u00E9\u0020en\u0020param\u00E8tre\u0020l\u0027administrateur",
             "url": "namespaces/default.html#function_set_rights_to_administrator"
-        },                {
-            "fqsen": "\\more_ud_istep_install\u0028\u0029",
-            "name": "more_ud_istep_install",
-            "summary": "Cr\u00E9er\u0020la\u0020base\u0020de\u0020donn\u00E9e\u0020lors\u0020de\u0020l\u0027activation\u0020du\u0020plugin",
-            "url": "namespaces/default.html#function_more_ud_istep_install"
-        },                {
-            "fqsen": "\\add_new_user_form\u0028\u0029",
-            "name": "add_new_user_form",
-            "summary": "Affiche\u0020le\u0020formulaire\u0020de\u0020cr\u00E9ation\u0020d\u0027utilisateur",
-            "url": "namespaces/default.html#function_add_new_user_form"
-        },                {
-            "fqsen": "\\add_new_user\u0028\u0029",
-            "name": "add_new_user",
-            "summary": "Fonction\u0020qui\u0020v\u00E9rifie\u0020les\u0020donn\u00E9es\u0020entr\u00E9\u0020dans\u0020le\u0020formulaire\u0020et\u0020les\u0020enregistre\u0020dans\u0020la\u0020base\u0020de\u0020donn\u00E9e",
-            "url": "namespaces/default.html#function_add_new_user"
         },                {
             "fqsen": "\\display_users_data\u0028\u0029",
             "name": "display_users_data",
@@ -90,6 +95,31 @@ Search.appendIndex(
             "name": "create_personal_page",
             "summary": "Cr\u00E9er\u0020une\u0020page\u0020personnel\u0020lors\u0020de\u0020l\u0027ajout\u0020d\u0027un\u0020utilisateur\u0020via\u0020le\u0020formulaire",
             "url": "namespaces/default.html#function_create_personal_page"
+        },                {
+            "fqsen": "\\edit_personal_page_form\u0028\u0029",
+            "name": "edit_personal_page_form",
+            "summary": "Shortcode\u0020qui\u0020affiche\u0020l\u0027\u00E9diteur\u0020de\u0020page\u0020personnel",
+            "url": "namespaces/default.html#function_edit_personal_page_form"
+        },                {
+            "fqsen": "\\handle_personal_page_form\u0028\u0029",
+            "name": "handle_personal_page_form",
+            "summary": "G\u00E8re\u0020la\u0020sauvegarde\u0020des\u0020donn\u00E9es\u0020du\u0020formulaire\u0020de\u0020cr\u00E9ation\u0020de\u0020page\u0020dans\u0020la\u0020dans\u0020la\u0020base\u0020de\u0020donn\u00E9e.",
+            "url": "namespaces/default.html#function_handle_personal_page_form"
+        },                {
+            "fqsen": "\\create_modify_personal_page\u0028\u0029",
+            "name": "create_modify_personal_page",
+            "summary": "Cr\u00E9er\u0020la\u0020page\u0020de\u0020modification\u0020de\u0020page\u0020personel,\u0020elle\u0020est\u0020unique\u0020donc\u0020disponible\u0020pour\u0020tous\u0020le\u0020monde\u0020\u00E0\u0020la\u0020m\u00EAme\u0020adresse",
+            "url": "namespaces/default.html#function_create_modify_personal_page"
+        },                {
+            "fqsen": "\\display_section_personal_pages\u0028\u0029",
+            "name": "display_section_personal_pages",
+            "summary": "Affiche\u0020les\u0020donn\u00E9es\u0020enregistr\u00E9\u0020dans\u0020l\u0027entit\u00E9\u0020page_personel",
+            "url": "namespaces/default.html#function_display_section_personal_pages"
+        },                {
+            "fqsen": "\\display_button_to_edit_personal_pages\u0028\u0029",
+            "name": "display_button_to_edit_personal_pages",
+            "summary": "Shortcode\u0020qui\u0020v\u00E9rifie\u0020si\u0020le\u0020bouton\u0020d\u0027\u00E9dition\u0020de\u0020page\u0020doit\u0020s\u0027afficher\u0020pour\u0020l\u0027utilisateur\u0020courant\nSi\u0020un\u0020\u0022error\u0022\u0020c\u0027est\u0020que\u0020la\u0020page\u0020\u0022modifier\u002Dvotre\u002Dpage\u002Dpersonnel\u0022\u0020n\u0027\u00E9xiste\u0020plus",
+            "url": "namespaces/default.html#function_display_button_to_edit_personal_pages"
         },                {
             "fqsen": "\\create_directory_from_DB_users\u0028\u0029",
             "name": "create_directory_from_DB_users",
@@ -115,6 +145,11 @@ Search.appendIndex(
             "name": "TABLE_LOCATION_NAME",
             "summary": "Nom\u0020de\u0020la\u0020table\u0020qui\u0020enregistre\u0020les\u0020diff\u00E9rents\u0020campus",
             "url": "namespaces/default.html#constant_TABLE_LOCATION_NAME"
+        },                {
+            "fqsen": "\\TABLE_PERSONAL_PAGE_NAME",
+            "name": "TABLE_PERSONAL_PAGE_NAME",
+            "summary": "Nom\u0020de\u0020la\u0020table\u0020qui\u0020enregistre\u0020les\u0020informations\u0020affich\u00E9es\u0020sur\u0020la\u0020page\u0020personnel",
+            "url": "namespaces/default.html#constant_TABLE_PERSONAL_PAGE_NAME"
         },                {
             "fqsen": "\\ADMIN_CAPACITY",
             "name": "ADMIN_CAPACITY",
@@ -166,6 +201,11 @@ Search.appendIndex(
             "summary": "V\u00E9rifie\u0020que\u0020l\u0027id\u0020pass\u00E9\u0020en\u0020param\u00E8tre\u0020correspond\u0020\u00E0\u0020l\u0027id\u0020d\u0027une\u0020\u00E9quipe",
             "url": "namespaces/default.html#function_is_team_id_valid"
         },                {
+            "fqsen": "\\get_all_teams_name\u0028\u0029",
+            "name": "get_all_teams_name",
+            "summary": "Retourne\u0020une\u0020liste\u0020de\u0020string\u0020contenant\u0020le\u0020nom\u0020de\u0020chaque\u0020\u00E9quipe",
+            "url": "namespaces/default.html#function_get_all_teams_name"
+        },                {
             "fqsen": "\\get_user_teams_names_by_user_id\u0028\u0029",
             "name": "get_user_teams_names_by_user_id",
             "summary": "R\u00E9cup\u00E8re\u0020tous\u0020les\u0020nom\u0020de\u0020l\u0027utilisateur\u0020pass\u00E9\u0020en\u0020param\u00E8tre",
@@ -200,6 +240,11 @@ Search.appendIndex(
             "name": "get_wp_user_from_istep_user",
             "summary": "Retourne\u0020l\u0027utilisateur\u0020WP\u0020depuis\u0020l\u0027id\u0020d\u0027un\u0020utilisateur\u0020de\u0020l\u0027ISTeP",
             "url": "namespaces/default.html#function_get_wp_user_from_istep_user"
+        },                {
+            "fqsen": "\\get_user_personal_pages_categories\u0028\u0029",
+            "name": "get_user_personal_pages_categories",
+            "summary": "R\u00E9cup\u00E8re\u0020toutes\u0020les\u0020infos\u0020pr\u00E9sente\u0020sur\u0020la\u0020page\u0020de\u0020l\u0027utilisateur\u0020et\u0020les\u0020renvoie\u0020sous\u0020la\u0020forme\u0020d\u0027un\u0020tableau",
+            "url": "namespaces/default.html#function_get_user_personal_pages_categories"
         },                {
             "fqsen": "\\",
             "name": "\\",

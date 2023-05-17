@@ -92,7 +92,7 @@
 
 <h3 id="toc">
     Table of Contents
-    <a href="files/utilities.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="files/src-utilities.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h3>
 
@@ -104,7 +104,7 @@
 
 <h4 id="toc-constants">
     Constants
-    <a href="files/utilities.html#toc-constants" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="files/src-utilities.html#toc-constants" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
@@ -137,6 +137,13 @@
 <dd>Nom de la table qui fait la relation entre MEMBRE et TEAM dans la base de donnée</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="namespaces/default.html#constant_TABLE_PERSONAL_PAGE_NAME">TABLE_PERSONAL_PAGE_NAME</a>
+    <span>
+        &nbsp;= $wpdb-&gt;prefix . &#039;personal_page_ISTeP&#039;                            </span>
+</dt>
+<dd>Nom de la table qui enregistre les informations affichées sur la page personnel</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a href="namespaces/default.html#constant_TABLE_TEAM_NAME">TABLE_TEAM_NAME</a>
     <span>
         &nbsp;= $wpdb-&gt;prefix . &#039;equipe_ISTeP&#039;                            </span>
@@ -150,7 +157,7 @@
 
 <h4 id="toc-functions">
     Functions
-    <a href="files/utilities.html#toc-functions" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="files/src-utilities.html#toc-functions" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
@@ -220,6 +227,13 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 <dd>Vérifie que l&#039;id passé en paramètre correspond à l&#039;id d&#039;une équipe</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_get_all_teams_name">get_all_teams_name()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Retourne une liste de string contenant le nom de chaque équipe</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
     <a href="namespaces/default.html#function_get_user_teams_names_by_user_id">get_user_teams_names_by_user_id()</a>
     <span>
                                 &nbsp;: array&lt;string|int, mixed&gt;    </span>
@@ -268,6 +282,13 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 </dt>
 <dd>Retourne l&#039;utilisateur WP depuis l&#039;id d&#039;un utilisateur de l&#039;ISTeP</dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_get_user_personal_pages_categories">get_user_personal_pages_categories()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Récupère toutes les infos présente sur la page de l&#039;utilisateur et les renvoie sous la forme d&#039;un tableau</dd>
+
     </dl>
 
 
@@ -276,7 +297,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <section class="phpdocumentor-constants">
         <h3 class="phpdocumentor-elements__header" id="constants">
             Constants
-            <a href="files/utilities.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="files/src-utilities.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
                     <article class="phpdocumentor-element -constant -public ">
@@ -287,9 +308,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">27</span>
 
     </aside>
 
@@ -316,7 +337,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">19</span>
 
@@ -345,7 +366,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">11</span>
 
@@ -374,7 +395,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">15</span>
 
@@ -396,6 +417,35 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
 </article>
                     <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_TABLE_PERSONAL_PAGE_NAME">
+        TABLE_PERSONAL_PAGE_NAME
+        <a href="namespaces/default.html#constant_TABLE_PERSONAL_PAGE_NAME" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">23</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Nom de la table qui enregistre les informations affichées sur la page personnel</p>
+
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">TABLE_PERSONAL_PAGE_NAME</span>
+    = <span class="phpdocumentor-signature__default-value">$wpdb-&gt;prefix . &#039;personal_page_ISTeP&#039;</span>
+</code>
+
+
+    
+    
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_TABLE_TEAM_NAME">
         TABLE_TEAM_NAME
         <a href="namespaces/default.html#constant_TABLE_TEAM_NAME" class="headerlink"><i class="fas fa-link"></i></a>
@@ -403,7 +453,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">7</span>
 
@@ -429,7 +479,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
             <section class="phpdocumentor-functions">
         <h3 class="phpdocumentor-elements__header" id="functions">
             Functions
-            <a href="files/utilities.html#functions" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="files/src-utilities.html#functions" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
                     <article class="phpdocumentor-element -function - ">
@@ -439,9 +489,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">33</span>
+    <span class="phpdocumentor-element-found-in__line">37</span>
 
     </aside>
 
@@ -468,9 +518,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">51</span>
+    <span class="phpdocumentor-element-found-in__line">55</span>
 
     </aside>
 
@@ -509,9 +559,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">69</span>
+    <span class="phpdocumentor-element-found-in__line">73</span>
 
     </aside>
 
@@ -548,9 +598,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">87</span>
+    <span class="phpdocumentor-element-found-in__line">91</span>
 
     </aside>
 
@@ -587,9 +637,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">98</span>
+    <span class="phpdocumentor-element-found-in__line">102</span>
 
     </aside>
 
@@ -626,9 +676,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">110</span>
+    <span class="phpdocumentor-element-found-in__line">114</span>
 
     </aside>
 
@@ -665,9 +715,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">129</span>
+    <span class="phpdocumentor-element-found-in__line">133</span>
 
     </aside>
 
@@ -704,9 +754,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">149</span>
+    <span class="phpdocumentor-element-found-in__line">153</span>
 
     </aside>
 
@@ -750,9 +800,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">169</span>
+    <span class="phpdocumentor-element-found-in__line">173</span>
 
     </aside>
 
@@ -783,15 +833,44 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
 </article>
                     <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_get_all_teams_name">
+        get_all_teams_name()
+        <a href="namespaces/default.html#function_get_all_teams_name" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">189</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Retourne une liste de string contenant le nom de chaque équipe</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">get_all_teams_name</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            </section>
+
+</article>
+                    <article class="phpdocumentor-element -function - ">
     <h4 class="phpdocumentor-element__name" id="function_get_user_teams_names_by_user_id">
         get_user_teams_names_by_user_id()
         <a href="namespaces/default.html#function_get_user_teams_names_by_user_id" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">188</span>
+    <span class="phpdocumentor-element-found-in__line">205</span>
 
     </aside>
 
@@ -828,9 +907,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">202</span>
+    <span class="phpdocumentor-element-found-in__line">219</span>
 
     </aside>
 
@@ -867,9 +946,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">215</span>
+    <span class="phpdocumentor-element-found-in__line">232</span>
 
     </aside>
 
@@ -906,9 +985,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">230</span>
+    <span class="phpdocumentor-element-found-in__line">247</span>
 
     </aside>
 
@@ -948,9 +1027,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">255</span>
+    <span class="phpdocumentor-element-found-in__line">272</span>
 
     </aside>
 
@@ -990,9 +1069,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">274</span>
+    <span class="phpdocumentor-element-found-in__line">291</span>
 
     </aside>
 
@@ -1029,9 +1108,9 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="utilities.php"><a href="files/utilities.html">utilities.php</a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">290</span>
+    <span class="phpdocumentor-element-found-in__line">307</span>
 
     </aside>
 
@@ -1061,13 +1140,54 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
             </section>
 
 </article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_get_user_personal_pages_categories">
+        get_user_personal_pages_categories()
+        <a href="namespaces/default.html#function_get_user_personal_pages_categories" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">322</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Récupère toutes les infos présente sur la page de l&#039;utilisateur et les renvoie sous la forme d&#039;un tableau</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">get_user_personal_pages_categories</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>l'id de l'utilisateur</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            </section>
+
+</article>
             </section>
 
         <div class="phpdocumentor-modal" id="source-view">
     <div class="phpdocumentor-modal-bg" data-exit-button></div>
     <div class="phpdocumentor-modal-container">
         <div class="phpdocumentor-modal-content">
-            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/utilities.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/utilities.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
         </div>
         <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
     </div>
@@ -1166,8 +1286,8 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                                                                                                                                                    <li><a href="files/utilities.html#toc-constants">Constants</a></li>
-                                                                <li><a href="files/utilities.html#toc-functions">Functions</a></li>
+                                                                                                                                                                    <li><a href="files/src-utilities.html#toc-constants">Constants</a></li>
+                                                                <li><a href="files/src-utilities.html#toc-functions">Functions</a></li>
                                     </ul>
             </li>
 
@@ -1178,6 +1298,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
                                                     <li><a href="namespaces/default.html#constant_TABLE_LOCATION_NAME">TABLE_LOCATION_NAME</a></li>
                                                     <li><a href="namespaces/default.html#constant_TABLE_MEMBERS_NAME">TABLE_MEMBERS_NAME</a></li>
                                                     <li><a href="namespaces/default.html#constant_TABLE_MEMBERS_TEAM_NAME">TABLE_MEMBERS_TEAM_NAME</a></li>
+                                                    <li><a href="namespaces/default.html#constant_TABLE_PERSONAL_PAGE_NAME">TABLE_PERSONAL_PAGE_NAME</a></li>
                                                     <li><a href="namespaces/default.html#constant_TABLE_TEAM_NAME">TABLE_TEAM_NAME</a></li>
                                             </ul>
                 </li>
@@ -1190,12 +1311,14 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
                                                     <li><a href="namespaces/default.html#function_convert_tower_into_readable">convert_tower_into_readable()</a></li>
                                                     <li><a href="namespaces/default.html#function_delete_cap_if_no_need_anymore">delete_cap_if_no_need_anymore()</a></li>
                                                     <li><a href="namespaces/default.html#function_delete_data_from_team_members">delete_data_from_team_members()</a></li>
+                                                    <li><a href="namespaces/default.html#function_get_all_teams_name">get_all_teams_name()</a></li>
                                                     <li><a href="namespaces/default.html#function_get_current_user_roles">get_current_user_roles()</a></li>
                                                     <li><a href="namespaces/default.html#function_get_istep_user_by_id">get_istep_user_by_id()</a></li>
                                                     <li><a href="namespaces/default.html#function_get_list_of_table">get_list_of_table()</a></li>
                                                     <li><a href="namespaces/default.html#function_get_name_of_location_by_id">get_name_of_location_by_id()</a></li>
                                                     <li><a href="namespaces/default.html#function_get_team_name_by_id">get_team_name_by_id()</a></li>
                                                     <li><a href="namespaces/default.html#function_get_user_avatar">get_user_avatar()</a></li>
+                                                    <li><a href="namespaces/default.html#function_get_user_personal_pages_categories">get_user_personal_pages_categories()</a></li>
                                                     <li><a href="namespaces/default.html#function_get_user_teams_by_user_id">get_user_teams_by_user_id()</a></li>
                                                     <li><a href="namespaces/default.html#function_get_user_teams_id_by_user_id">get_user_teams_id_by_user_id()</a></li>
                                                     <li><a href="namespaces/default.html#function_get_user_teams_names_by_user_id">get_user_teams_names_by_user_id()</a></li>
@@ -1220,7 +1343,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     </section>
 </section>
         </div>
-        <a href="files/utilities.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="files/src-utilities.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 
