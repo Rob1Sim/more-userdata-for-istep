@@ -9,12 +9,11 @@ add_shortcode('istep_user_data','display_users_data');
  */
 function display_users_data(): string
 {
-    $page_id = get_queried_object_id();
-    $page_author_id = get_post_field( 'post_author', $page_id );
-    $page_author_info = get_userdata( $page_author_id ); // Récupère les informations de l'utilisateur
+    $current_page_slug = get_post_field('post_name', get_queried_object_id());
+    $page_author_info = get_user_by('slug', $current_page_slug);
 
-    $userData = get_istep_user_by_id($page_author_id);
-    $userAvatar = get_user_avatar($page_author_id);
+    $userData = get_istep_user_by_id($page_author_info->ID);
+    $userAvatar = get_user_avatar($page_author_info->ID);
     $userTower = convert_tower_into_readable($userData->tourDuBureau);
     $userTeams = get_user_teams_names_by_user_id($userData->id_membre);
 
@@ -62,19 +61,22 @@ HTML;
  */
 function create_personal_page(string $userDisplayName,string $userNiceName): void
 {
+
     $parent = get_page_by_path('membres-istep');
 
     $page_data = array(
         'post_title' => $userDisplayName,
-        'post_content' => '[istep_user_data]',
+        'post_content' => '[istep_user_data][personal_page_display]',
         'post_status' => 'publish',
         'post_type' => 'page',
+        'post_author'=>1,
         'post_name' => $userNiceName,
         'post_parent' => $parent->ID,
     );
 
 // Insère la page dans la base de données de WordPress
     wp_insert_post($page_data);
+
 }
 
 
