@@ -1,6 +1,6 @@
 <?php
 // ---- Menu Administrateur ----
-wp_enqueue_script('more-userdata-for-istep-admin-js',plugins_url('scripts/more-userdata-for-istep-admin.js',__FILE__),array(), false, true);
+wp_enqueue_script('more-userdata-for-istep-admin-js',plugins_url('../scripts/more-userdata-for-istep-admin.js',__FILE__),array(), false, true);
 
 
 /**
