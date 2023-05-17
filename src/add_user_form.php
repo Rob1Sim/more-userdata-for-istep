@@ -303,7 +303,7 @@ function add_new_user() {
                     ));
 
                     //Ajout de l'image de profile
-                    create_personal_page($user_id,$name." ".$last_name,strtolower($last_name)."_".strtolower($name));
+                    create_personal_page($name." ".$last_name,strtolower($last_name)."_".strtolower($name));
                     if (isset($_FILES['async-upload']["name"]) && $_FILES['async-upload']["name"]!== ""){
                         // Vérifie si le fichier est au format JPG, PNG ou GIF
                         $allowed_formats = array('jpg', 'jpeg', 'png', 'gif');
