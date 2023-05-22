@@ -110,7 +110,7 @@ function edit_personal_page_form():string{
             </label>
             <label for="tower" id="tower">Tour du bureau :
                 <ul>
-                    <?
+                    <?php
                     $towerList = ["tour-46-00-2e","tour-46-00-3e","tour-46-00-4e","tour-46-45-2e","tour-56-66-5e","tour-56-55-5e"];
                     foreach($towerList as $tower){
                         echo '<li><label></label><input type="radio" name="tourBureau" value="'.$tower.'"'.($tower == $istep_user->tourDuBureau ? "checked":""). ' />' .convert_tower_into_readable($tower).'</label> </li>';
