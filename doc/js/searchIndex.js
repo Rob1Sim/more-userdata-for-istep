@@ -173,7 +173,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\get_istep_user_by_id\u0028\u0029",
             "name": "get_istep_user_by_id",
-            "summary": "Renvoie\u0020toutes\u0020les\u0020information\u0020de\u0020l\u0027utilisateur\u0020qui\u0020poss\u00E8de\u0020l\u0027id\u0020pass\u00E9\u0020en\u0020param\u00E8tre",
+            "summary": "Renvoie\u0020toutes\u0020les\u0020information\u0020de\u0020l\u0027utilisateur\u0020qui\u0020poss\u00E8de\u0020l\u0027id\u0020wp\u0020pass\u00E9\u0020en\u0020param\u00E8tre",
             "url": "namespaces/default.html#function_get_istep_user_by_id"
         },                {
             "fqsen": "\\get_list_of_table\u0028\u0029",
@@ -245,6 +245,16 @@ Search.appendIndex(
             "name": "get_user_personal_pages_categories",
             "summary": "R\u00E9cup\u00E8re\u0020toutes\u0020les\u0020infos\u0020pr\u00E9sente\u0020sur\u0020la\u0020page\u0020de\u0020l\u0027utilisateur\u0020et\u0020les\u0020renvoie\u0020sous\u0020la\u0020forme\u0020d\u0027un\u0020tableau",
             "url": "namespaces/default.html#function_get_user_personal_pages_categories"
+        },                {
+            "fqsen": "\\is_location_existing_redirect_if_not\u0028\u0029",
+            "name": "is_location_existing_redirect_if_not",
+            "summary": "V\u00E9rifie\u0020si\u0020le\u0020campus\u0020entr\u00E9e\u0020existe,\u0020si\u0020il\u0020n\u0027\u00E9xiste\u0020pas\u0020alors\u0020l\u0027utilisateur\u0020est\u0020redirig\u00E9\u0020\u0028vers\u0020une\u0020page\u0020d\u0027erreur\u0029",
+            "url": "namespaces/default.html#function_is_location_existing_redirect_if_not"
+        },                {
+            "fqsen": "\\add_profile_picture_or_redirect\u0028\u0029",
+            "name": "add_profile_picture_or_redirect",
+            "summary": "Ajoute\u0020ou\u0020mets\u0020\u00E0\u0020jour\u0020la\u0020photo\u0020de\u0020profile\u0020pass\u00E9\u0020dans\u0020le\u0020formulaire\nRedirige\u0020l\u0027utilisateur\u0020vers\u0020les\u0020sous\u002Dliens",
+            "url": "namespaces/default.html#function_add_profile_picture_or_redirect"
         },                {
             "fqsen": "\\",
             "name": "\\",
