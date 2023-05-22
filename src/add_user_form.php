@@ -269,7 +269,7 @@ function add_new_user() {
                     'bureau' => $office,
                     'rangEquipe' => $teamRank,
                     'tourDuBureau' => $tourBureau,
-                    'campus' => $campus,
+                    'campus_location' => $campus,
                     'employeur' => $employer,
                     'caseCourrier' => $mailCase,
                 );
