@@ -84,7 +84,7 @@ function get_team_name_by_id(?int $id){
 }
 
 /**
- * Renvoie toutes les information de l'utilisateur qui possède l'id passé en paramètre
+ * Renvoie toutes les information de l'utilisateur qui possède l'id wp passé en paramètre
  * @param int $id
  * @return mixed|stdClass
  */
