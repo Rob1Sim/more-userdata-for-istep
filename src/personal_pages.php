@@ -17,10 +17,6 @@ function display_users_data(): string
     $userTower = convert_tower_into_readable($userData->tourDuBureau);
     $userTeams = get_user_teams_names_by_user_id($userData->id_membre);
 
-
-
-
-
     $html = <<<HTML
     <div class="user-info-container">
         <div>
@@ -94,12 +90,58 @@ function edit_personal_page_form():string{
     $current_user_id = get_current_user_id();
     //Récupération des champs déjà existant
     $wp_page = get_user_personal_pages_categories($current_user_id);
+    $istep_user = get_istep_user_by_id($current_user_id);
+
     //Création du formulaire
-    //Cherche tous les champs de la bd pour les affiché
     ob_start();
     ?>
+    <form method="POST" action="" class="update-user-profile-istep" enctype="multipart/form-data">
+        <div class="personal-information">
+            <h5>Informations personnelles</h5>
+            <label for="phone" id="phoneParent">Numéro de téléphone :
+                <?php
+                echo '<input type="tel" name="phone" id="phoneNumber" value="'.$istep_user->nTelephone.'"required/>';
+                ?>
+            </label>
+            <label for="office">Bureau :
+                <?php
+                echo '<input type="text" name="office" id="office" value="'.$istep_user->bureau.'" required/>';
+                ?>
+            </label>
+            <label for="tower" id="tower">Tour du bureau :
+                <ul>
+                    <?
+                    $towerList = ["tour-46-00-2e","tour-46-00-3e","tour-46-00-4e","tour-46-45-2e","tour-56-66-5e","tour-56-55-5e"];
+                    foreach($towerList as $tower){
+                        echo '<li><label></label><input type="radio" name="tourBureau" value="'.$tower.'"'.($tower == $istep_user->tourDuBureau ? "checked":""). ' />' .convert_tower_into_readable($tower).'</label> </li>';
+                    }
+                    ?>
+                </ul>
+            </label>
+            <label for="campus" >
+                Campus :
+                <select name="campus" id="campus">
+                    <?php
+                    $campus = get_list_of_table(TABLE_LOCATION_NAME);
+                    foreach ($campus as $one_campus){
+                        echo "<option value=\"".$one_campus->id_localisation."\">".$one_campus->nom_localisation."</option>";
+                    }
+                    ?>
+                </select>
+            </label>
+            <label>
+                Photo de profile :
+                <input type="file" accept="image/jpeg, image/png" name="async-upload" >
+            </label>
+            <input type="submit" class="update-user-submit-btn" value="Mettre à jour" name="form_submit_personal_information" class="submit-btn">
+
+        </div>
+    </form>
     <form method="POST" action="">
+
+        <div class="role-box">
         <?php foreach ($wp_page as $key => $value){
+            //Cherche tous les champs de la bd pour les affiché
             if(strtolower($key) !== "id_page" && strtolower($key) !== "wp_user_id"){
                 $title = ucfirst(strtolower(str_replace('_',' ',$key)));
                 echo "<h5>$title :</h5>";
@@ -122,6 +164,33 @@ add_shortcode('personal_page_form', 'edit_personal_page_form');
  */
 function handle_personal_page_form(): void
 {
+    //Gestion des erreurs
+    $success_url = home_url( "membres-istep/".wp_get_current_user()->user_login."?" );
+    $error_url = home_url( "modifier-votre-page-personnel/?" );
+    if (isset($_GET['user-create-error'])){
+        $error = sanitize_text_field($_GET['user-create-error']);
+        switch ($error) {
+            case "1":
+                echo "<div class=\"user-update-error\">La localisation entrée n'éxiste pas</div>";
+                break;
+            case "2":
+                echo "<div class=\"user-update-error\">Le numéro de téléphone est incorrecte</div>";
+                break;
+            case "3":
+                echo "<div class=\"user-update-error\">L'extension de l'image n'est pas correcte</div>";
+                break;
+            case "4":
+                echo "<div class=\"user-update-error\">Erreur lors de l'ajout de l'avatar : ".sanitize_text_field($_GET["error-message"])."</div>";
+                break;
+            case "5":
+                echo "<div class=\"user-update-error\">Erreur lors de la mis à jour</div>";
+                break;
+        }
+        if (isset($_GET['user-update-success'])){
+            echo "<div class=\"user-update-success\">L'Mis à jour effectué avec succès</div>";
+        }
+    }
+    //Donnée bibliographique
     if (isset($_POST["form_submit_personal_page"])){
         $data = array();
 
@@ -140,9 +209,50 @@ function handle_personal_page_form(): void
                 "wp_user_id"=>get_current_user_id()
             )))
         {
-            echo '<div id="message" class="updated notice"><p>Erreur lors de la mis à jour.</p></div>';
+            wp_redirect($error_url."user-update-error=5",302);
         }else{
-            echo '<div id="message" class="updated notice"><p>Mis à jour réussie</p></div>';;
+            wp_redirect($success_url."user-update-success=0",302);
+
+        }
+    }
+    //Donnée personnel
+    if(isset($_POST["form_submit_personal_information"])){
+        $campus = sanitize_text_field($_POST['campus']);
+        $office_tower = sanitize_text_field($_POST['tourBureau']);
+        $office = sanitize_text_field($_POST['office']);
+        $phone = sanitize_text_field($_POST['phone']);
+
+        if(isset($campus) && isset($office_tower) && isset($office) && isset($phone)){
+
+            //Vérification du campus
+            is_location_existing_redirect_if_not($campus,$error_url."user-update-error=1");
+
+            //Vérification du téléphone
+            if (strlen($phone)!=10){
+                wp_redirect($error_url."user-update-error=2");
+                exit();
+            }
+            //Mis à jour de l'utilisateur
+            global $wpdb;
+            $wpdb->update(TABLE_MEMBERS_NAME,array(
+                    "nTelephone" => $phone,
+                    "tourDuBureau" => $office_tower,
+                    "bureau"=>$office,
+                    "campus_location"=>$campus
+            ),array(
+                    "wp_user_id"=>get_current_user_id()
+            ));
+        }
+        //ajout de la pp
+        if(add_profile_picture_or_redirect(
+            'async-upload',
+            $error_url,
+            get_current_user_id(),
+            "user-update-error=3",
+            "user-update-error=4&error-message="))
+        {
+
+            wp_redirect($success_url."user-update-success=0",302);
         }
     }
 }
