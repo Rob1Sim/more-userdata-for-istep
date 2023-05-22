@@ -230,13 +230,7 @@ function add_new_user() {
             }
 
             //Vérification de l'éxistance du campus
-            $table_name = TABLE_LOCATION_NAME;
-            $is_location_existing = "SELECT * FROM $table_name WHERE id_localisation = $campus";
-            $results = $wpdb->get_results($is_location_existing);
-            if (empty($results)) {
-                wp_redirect($current_url."user-create-error=7");
-                exit();
-            }
+            is_location_existing_redirect_if_not($campus,$current_url."user-create-error=7");
 
             // Créer un tableau avec les informations de l'utilisateur
             $user_data = array(
@@ -304,33 +298,16 @@ function add_new_user() {
 
                     //Ajout de l'image de profile
                     create_personal_page($name." ".$last_name,$login);
-                    if (isset($_FILES['async-upload']["name"]) && $_FILES['async-upload']["name"]!== ""){
-                        // Vérifie si le fichier est au format JPG, PNG ou GIF
-                        $allowed_formats = array('jpg', 'jpeg', 'png', 'gif');
-                        $extension = strtolower(pathinfo($_FILES['async-upload']['name'], PATHINFO_EXTENSION));
 
-                        if(!in_array($extension, $allowed_formats)) {
-                            wp_redirect($current_url."user-create-error=6");
+                    if(add_profile_picture_or_redirect(
+                        'async-upload',
+                        $current_url,
+                        $user_id,
+                        "user-create-error=6",
+                        "user-create-error=4&error-message="))
+                    {
 
-                        } else {
-                            require_once(ABSPATH . 'wp-admin/includes/media.php');
-                            require_once(ABSPATH . 'wp-admin/includes/file.php');
-                            require_once(ABSPATH . 'wp-admin/includes/image.php');
-                            $attachment_id = media_handle_upload('async-upload', 0);
-                            if(is_wp_error($attachment_id)) {
-                                wp_redirect($current_url."user-create-error=4&error-message=". $attachment_id->get_error_message());
-                            } else {
-                                // Mettez à jour le champ de méta de l'utilisateur avec l'ID de l'attachement
-                                add_user_meta($user_id,"wp_user_avatar",$attachment_id);
-                            }
-
-                            wp_redirect($current_url."user-create-success=0",302);
-                        }
-
-
-                    }else{
                         wp_redirect($current_url."user-create-success=0",302);
-
                     }
                 }
 
@@ -338,3 +315,4 @@ function add_new_user() {
         }
     }
 }
+

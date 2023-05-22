@@ -106,3 +106,8 @@
     display: flex;
     gap: 1%;
 }
+
+.personal-information{
+    display: flex;
+    flex-direction: column;
+}
