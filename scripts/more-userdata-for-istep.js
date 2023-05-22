@@ -100,10 +100,8 @@ submit_button.addEventListener('click',(event)=>{
 const updateForm = document.getElementById("update-user-profile-istep");
 const updateFormBtn = document.getElementById("update-user-submit-btn");
 console.log(updateFormBtn)
-console.log("TAMERE")
 updateFormBtn.addEventListener('click',(event)=>{
     event.preventDefault();
-    console.log("IMHERE");
     const office = document.getElementById("office");
     const phone = document.getElementById("phoneNumber");
     const campus = document.getElementById("campus");
