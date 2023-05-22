@@ -364,7 +364,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <span>
                                 &nbsp;: mixed|<abbr title="\stdClass">stdClass</abbr>    </span>
 </dt>
-<dd>Renvoie toutes les information de l&#039;utilisateur qui possède l&#039;id passé en paramètre</dd>
+<dd>Renvoie toutes les information de l&#039;utilisateur qui possède l&#039;id wp passé en paramètre</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -function -">
     <a href="namespaces/default.html#function_get_list_of_table">get_list_of_table()</a>
@@ -463,6 +463,21 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
                                 &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
 <dd>Récupère toutes les infos présente sur la page de l&#039;utilisateur et les renvoie sous la forme d&#039;un tableau</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_is_location_existing_redirect_if_not">is_location_existing_redirect_if_not()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Vérifie si le campus entrée existe, si il n&#039;éxiste pas alors l&#039;utilisateur est redirigé (vers une page d&#039;erreur)</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -function -">
+    <a href="namespaces/default.html#function_add_profile_picture_or_redirect">add_profile_picture_or_redirect()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Ajoute ou mets à jour la photo de profile passé dans le formulaire
+Redirige l&#039;utilisateur vers les sous-liens</dd>
 
     </dl>
 
@@ -1132,7 +1147,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/personal_pages.php"><a href="files/src-personal-pages.html"><abbr title="src/personal_pages.php">personal_pages.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">62</span>
+    <span class="phpdocumentor-element-found-in__line">58</span>
 
     </aside>
 
@@ -1174,7 +1189,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/personal_pages.php"><a href="files/src-personal-pages.html"><abbr title="src/personal_pages.php">personal_pages.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">91</span>
+    <span class="phpdocumentor-element-found-in__line">87</span>
 
     </aside>
 
@@ -1203,7 +1218,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/personal_pages.php"><a href="files/src-personal-pages.html"><abbr title="src/personal_pages.php">personal_pages.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">123</span>
+    <span class="phpdocumentor-element-found-in__line">165</span>
 
     </aside>
 
@@ -1228,7 +1243,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/personal_pages.php"><a href="files/src-personal-pages.html"><abbr title="src/personal_pages.php">personal_pages.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">155</span>
+    <span class="phpdocumentor-element-found-in__line">265</span>
 
     </aside>
 
@@ -1253,7 +1268,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/personal_pages.php"><a href="files/src-personal-pages.html"><abbr title="src/personal_pages.php">personal_pages.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">173</span>
+    <span class="phpdocumentor-element-found-in__line">283</span>
 
     </aside>
 
@@ -1282,7 +1297,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/personal_pages.php"><a href="files/src-personal-pages.html"><abbr title="src/personal_pages.php">personal_pages.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">203</span>
+    <span class="phpdocumentor-element-found-in__line">313</span>
 
     </aside>
 
@@ -1468,7 +1483,7 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
 
     </aside>
 
-        <p class="phpdocumentor-summary">Renvoie toutes les information de l&#039;utilisateur qui possède l&#039;id passé en paramètre</p>
+        <p class="phpdocumentor-summary">Renvoie toutes les information de l&#039;utilisateur qui possède l&#039;id wp passé en paramètre</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility"></span>
@@ -2042,6 +2057,124 @@ A noté que si l&#039;utilisateur n&#039;est pas connecté la fonction renvoie f
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            </section>
+
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_is_location_existing_redirect_if_not">
+        is_location_existing_redirect_if_not()
+        <a href="namespaces/default.html#function_is_location_existing_redirect_if_not" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">339</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Vérifie si le campus entrée existe, si il n&#039;éxiste pas alors l&#039;utilisateur est redirigé (vers une page d&#039;erreur)</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">is_location_existing_redirect_if_not</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$campus</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$redirect_url</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$campus</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$redirect_url</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+    
+</article>
+                    <article class="phpdocumentor-element -function - ">
+    <h4 class="phpdocumentor-element__name" id="function_add_profile_picture_or_redirect">
+        add_profile_picture_or_redirect()
+        <a href="namespaces/default.html#function_add_profile_picture_or_redirect" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/utilities.php"><a href="files/src-utilities.html"><abbr title="src/utilities.php">utilities.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">362</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Ajoute ou mets à jour la photo de profile passé dans le formulaire
+Redirige l&#039;utilisateur vers les sous-liens</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility"></span>
+                    <span class="phpdocumentor-signature__name">add_profile_picture_or_redirect</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$file_name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$current_url</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$user_id</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$not_allowed_format_link</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$error_when_uploading_file</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$file_name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>nom du fichier $_FILE[]</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$current_url</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$user_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$not_allowed_format_link</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$error_when_uploading_file</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>ce lien devrait posséder un &amp;error-message= pour afficher l'erreur</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Retourne vrai si l'image a bien été ajouter ou mis à jour</p>
+</section>
+
             </section>
 
 </article>
