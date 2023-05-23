@@ -103,8 +103,7 @@ const updateForm = document.getElementById("update-user-profile-istep");
 const updateFormBtn = document.getElementById("update-user-submit-btn");
 try {
 }catch (e){}
-
-//Btn de génération et affichage de mot de passe
+try {
     document.getElementById("random-pws").addEventListener("click",()=>{
         const password = document.getElementById("password");
         password.value = generatePassword(12);
@@ -120,6 +119,9 @@ try {
             document.getElementById("show-password").text = "Masquer le mot de passe";
         }
     })
+}catch (e){}
+//Btn de génération et affichage de mot de passe
+
     /**
      * Génère un mot de passe aléatoire
      * @param length
