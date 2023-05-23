@@ -1,7 +1,7 @@
 
 //formulaire de création de l'utilisateur
 const submit_button = document.getElementById("create-user-submit-btn");
-const form = document.getElementById("create-user-istep-form");
+const createIstepUserForm = document.getElementById("create-user-istep-form");
 let showPassword = false;
 
 submit_button.addEventListener('click',(event)=>{
@@ -93,7 +93,7 @@ submit_button.addEventListener('click',(event)=>{
         addErrorMessage("Numéro de téléphone incorrect",document.querySelector('#phoneNumber').parentNode);
         return;
     }
-    form.submit(); // Soumet le formulaire si tout est valide
+    createIstepUserForm.submit(); // Soumet le formulaire si tout est valide
 })
 
 //Formulaire de mis à jour de l'utilisateur
