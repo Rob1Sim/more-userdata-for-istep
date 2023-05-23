@@ -105,16 +105,21 @@ function searchInTable(searchString) {
 }
 
 const dropdown = document.querySelector('#dropdown-colonne');
-dropdown.addEventListener('change', function() {
-    tableFilter(dropdown.selectedIndex);
-});
-
-const search = document.querySelector('#search');
-search.addEventListener('input', function() {
-    if (search.value === '') {
-        // Si la barre de recherche est vide, on réinitialise la table
+try{
+    dropdown.addEventListener('change', function() {
         tableFilter(dropdown.selectedIndex);
-    } else {
-        searchInTable(search.value);
-    }
-});
+    });
+}catch (e){}
+
+try {
+    const search = document.querySelector('#search');
+    search.addEventListener('input', function() {
+        if (search.value === '') {
+            // Si la barre de recherche est vide, on réinitialise la table
+            tableFilter(dropdown.selectedIndex);
+        } else {
+            searchInTable(search.value);
+        }
+    });
+}catch (e){}
+

@@ -99,33 +99,8 @@ submit_button.addEventListener('click',(event)=>{
 //Formulaire de mis à jour de l'utilisateur
 const updateForm = document.getElementById("update-user-profile-istep");
 const updateFormBtn = document.getElementById("update-user-submit-btn");
-console.log(updateFormBtn)
-updateFormBtn.addEventListener('click',(event)=>{
-    event.preventDefault();
-    const office = document.getElementById("office");
-    const phone = document.getElementById("phoneNumber");
-    const campus = document.getElementById("campus");
-    const tower = document.getElementsByName("tourBureau");
-
-    if(office.value === "" || office.value === null || office.value.length>4){
-        addErrorMessage("Bureau incorrect",document.querySelector('#office').parentNode);
-        return;
-    }
-    if(campus.value === "" || campus.value === null|| campus.value.length > 255){
-        addErrorMessage("Campus incorrect",document.querySelector('#campus').parentNode);
-        return;
-    }
-    if(!validatePhoneNumber(phone.value)){
-        addErrorMessage("Numéro de téléphone incorrect",document.querySelector('#phoneNumber').parentNode);
-        return;
-    }
-    if (!isOnlyOneRadioButtonSelected(tower)){
-        addErrorMessage("Tour de bureau incorrect",document.querySelector('#tower').parentNode);
-        return;
-    }
-    updateForm.submit();
-
-})
+try {
+}catch (e){}
 
 //Btn de génération et affichage de mot de passe
     document.getElementById("random-pws").addEventListener("click",()=>{
