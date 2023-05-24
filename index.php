@@ -74,12 +74,12 @@ function more_ud_istep_install(): void
         CREATE TABLE $table_personal_page(
             id_page INT NOT NULL AUTO_INCREMENT,
             wp_user_id BIGINT UNSIGNED NOT NULL,
-            bibliographie LONGTEXT,
             enseignement LONGTEXT,
             responsabilite LONGTEXT,
             projets LONGTEXT,
             parcours LONGTEXT,
             activite_technique LONGTEXT,
+            bibliographie LONGTEXT,
             divers LONGTEXT,
             PRIMARY KEY(id_page),
             FOREIGN KEY (wp_user_id) REFERENCES {$wpdb->prefix}users(ID)
