@@ -166,7 +166,9 @@ function more_userdata_istep_users_edit_data():void
 
             if (is_wp_error($result)) {
                 $error_message = $result->get_error_message();
-                wp_redirect($error_url."user-update-error=7?error-message=".$error_message);
+                echo '<div id="message" class="notice notice-error">Erreur lors de la modifcation du nom : '.$error_message.'</div>';
+                edit_user_form();
+                exit();
             }
         }
         //Vérification des équipes
