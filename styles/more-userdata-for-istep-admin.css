@@ -1,0 +1,10 @@
+.update-user{
+    display: flex;
+    flex-direction: column;
+}
+.update-user>form>div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 50%;
+}

@@ -13,9 +13,7 @@ function more_userdata_istep_users_list():void{
     if ( !can_user_access_this(get_option('admin_user_roles')) ) {
         wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
     }
-
-    ?>
-    <div class="wrap">
+?><div class="wrap">
         <h1>Liste des membres de l'ISTeP</h1>
         <label for="dropdown-colonne">Trier par :</label>
         <select id="dropdown-colonne">
@@ -42,7 +40,7 @@ function more_userdata_istep_users_list():void{
                 <th>ID</th>
                 <th>Nom de l'utilisateur</th>
                 <th>Login</th>
-                <th>Equipe</th>
+                <th>Equipes</th>
                 <th>Fonction</th>
                 <th>Email</th>
                 <th>Numéro de téléphone</th>
@@ -52,26 +50,25 @@ function more_userdata_istep_users_list():void{
                 <th>Campus</th>
                 <th>Employeur</th>
                 <th>Case courrier</th>
+                <th>Modifier</th>
                 <th>Supprimer</th>
             </tr>
             </thead>
             <tbody>
-            <?php
-            global $wpdb;
-            $table_name = TABLE_TEAM_NAME;
+<?php
             $users = get_list_of_table(TABLE_MEMBERS_NAME);
             foreach ($users as $user) {
+                $teams = get_user_teams_names_by_user_id($user->id_membre);
                 $wp_user = get_userdata( $user->wp_user_id );
                 echo '<tr>';
                 echo '<td>' . $user->id_membre . '</td>';
                 echo '<td>' . $wp_user->display_name . '</td>';
                 echo '<td>' . $wp_user->user_login . '</td>';
-                echo '<td>
-                        <form method="post" action="' . admin_url( 'admin.php?page=modify_users_teams&id=' . $user->id_membre ) . '">
-                            <input type="hidden" name="id" value="' . $user->id_membre . '">
-                            <button type="submit" class="button">Modifier</button>
-                        </form>
-                      </td>';
+                echo '<td>';
+                foreach ($teams as $team){
+                    echo $team.', ';
+                }
+                echo '</td>';
                 echo '<td>' . $user->fonction . '</td>';
                 echo '<td>' . $wp_user->user_email . '</td>';
                 echo '<td>' . $user->nTelephone . '</td>';
@@ -82,6 +79,12 @@ function more_userdata_istep_users_list():void{
                 echo '<td>' . $user->employeur . '</td>';
                 echo '<td>' . $user->caseCourrier . '</td>';
                 echo '<td>
+                        <form method="post" action="' . admin_url( 'admin.php?page=modify_users_data&id=' . $user->id_membre ) . '">
+                            <input type="hidden" name="id" value="' . $user->id_membre . '">
+                            <button type="submit" class="button">Modifier</button>
+                        </form>
+                      </td>';
+                echo '<td>
                         <form method="post" action="' . admin_url( 'admin.php?page=erase_user&id=' . $user->id_membre ) . '">
                             <input type="hidden" name="user_delete_id" value="' . $user->id_membre . '">
                             <button type="submit" class="button button-primary" style="background: #d0021b; border-color: #d0021b">Supprimer</button>
@@ -89,25 +92,84 @@ function more_userdata_istep_users_list():void{
                       </td>';
                 echo '</tr>';
             }
-            ?>
-            </tbody>
+            ?></tbody>
         </table>
-    </div>
-    <?php
+    </div><?php
 }
 
 /**
  * Formulaire de modification de l'équipe d'un utilisateur
  * @return void
  */
-function more_userdata_istep_users_edit_teams():void
+function more_userdata_istep_users_edit_data():void
 {
     if ( ! current_user_can( ADMIN_CAPACITY ) ) {
         wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
     }
-    if ( isset($_POST['changeTeams']) && isset($_POST['idUser'])) {
+    if ( isset($_POST['changeTeams']) &&( isset($_POST['idUser']))) {
+        $id_user = sanitize_text_field($_POST['idUser']);
+        $last_name = sanitize_text_field($_POST['last_name']);
+        $first_name = sanitize_text_field($_POST['first_name']);
+        $function = sanitize_text_field($_POST['function']);
+        $rank = sanitize_text_field($_POST['rank']);
+        $employer = sanitize_text_field($_POST['employer']);
+        $mailCase = sanitize_text_field($_POST['mailCase']);
+        $campus = sanitize_text_field($_POST['campus']);
+        $office_tower = sanitize_text_field($_POST['tourBureau']);
+        $office = sanitize_text_field($_POST['office']);
+        $phone = sanitize_text_field($_POST['phone']);
+        $wp_id = sanitize_text_field($_POST['idUserWp']);
 
-        $id_user = $_POST['idUser'];
+        if(isset($last_name) && isset($first_name) && isset($function) && isset($rank)
+            && isset($employer) && isset($mailCase) && isset($campus) && isset($office_tower) && isset($office) && isset($phone)){
+
+            //Vérification du campus
+            if(!is_location_existing($campus)){
+                echo '<div id="message" class="notice notice-error">Le campus n\'existe pas !</div>';
+                edit_user_form();
+                exit();
+            }
+
+            //Vérification du téléphone
+            if (strlen($phone)!=10){
+                echo '<div id="message" class="notice notice-error">Le numéro de téléphone est incorrecte !</div>';
+                edit_user_form();
+                exit();
+            }
+            //Vérification de l'employeur
+            if ($employer !== "sorbonne-universite" && $employer != "cnrs" && $employer != "aucun"){
+
+                echo '<div id="message" class="notice notice-error">L\'employeur n\'existe pas !</div>';
+                edit_user_form();
+                exit();
+            }
+            //Mis à jour de l'utilisateur
+            global $wpdb;
+            $wpdb->update(TABLE_MEMBERS_NAME,array(
+                "fonction"=>$function,
+                "caseCourrier"=>$mailCase,
+                "employeur"=>$employer,
+                "rangEquipe"=>$rank,
+                "nTelephone" => $phone,
+                "tourDuBureau" => $office_tower,
+                "bureau"=>$office,
+                "campus_location"=>$campus
+            ),array(
+                "wp_user_id"=>$wp_id
+            ));
+            $display_name = $last_name ." ".$first_name;
+            $user_data = get_userdata($wp_id);
+
+            $user_data->display_name = $display_name;
+
+            $result = wp_update_user($user_data);
+
+            if (is_wp_error($result)) {
+                $error_message = $result->get_error_message();
+                wp_redirect($error_url."user-update-error=7?error-message=".$error_message);
+            }
+        }
+        //Vérification des équipes
         $verified_teams = [];
         $already_exist_data= get_user_teams_id_by_user_id($id_user);
         $teams_already_in = [];
@@ -138,36 +200,7 @@ function more_userdata_istep_users_edit_teams():void
         echo '<div id="message" class="updated notice"><p>Équipe Mis à jour avec succès.</p></div>';
         echo '<a href="'.admin_url("admin.php?page=istep_users_list").'">Retour à la liste</a>';
     }else{
-        if (isset($_POST['id'])){
-            $id_user = sanitize_text_field($_POST['id']);
-            $teams = get_list_of_table(TABLE_TEAM_NAME);
-
-            $users_teams = get_user_teams_id_by_user_id($id_user);
-            echo "<div>";
-            echo "<h1>Modifier l'équipe d'un membre</h1>";
-            echo "<form method='POST' action=''>";
-            echo "<h2>Listes des équipes</h2>";
-            echo "<table class=\"form-table\">";
-            echo '<tr><th>Nom de l\'équipe</th><th>Fait partie de</th></tr>';
-            foreach ($teams as $team){
-
-                $team_name = $team->nom_equipe;
-                $team_id = $team->id_equipe;
-
-                //Coche toute les équipes dont l'utilisateur fait déjà partie
-                $checked = (in_array($team_id,$users_teams))? "checked":"";
-
-                echo '<tr><td>'.$team_name.'</td><td><input type="checkbox" name="teams[]" value="'.$team_id.'"'.$checked.' id="team-'.$team_id.'"></td></tr>';
-            }
-            echo "</table>";
-            echo '<input type="hidden" name="idUser" value="' . $id_user . '">';
-            submit_button('Modifier','primary','changeTeams');
-            echo "</form>";
-            echo "</div>";
-        }else{
-            wp_redirect(admin_url("admin.php?page=istep_users_list"));
-
-        }
+        edit_user_form();
     }
 
 
@@ -190,5 +223,92 @@ function more_userdata_istep_users_delete_user():void{
         }else{
             echo '<div class="notice notice-error"><p>Une erreur est survenue lors de la suppression</p></div>';
         }
+    }
+}
+
+/**
+ * Formulaire de modification d'un utilisateur
+ * @return void
+ */
+function edit_user_form():void{
+    if (isset($_POST['id']) || isset($_GET["id"])){
+        $id_user = sanitize_text_field($_POST['id'] ?? $_GET["id"]);
+
+        $teams = get_list_of_table(TABLE_TEAM_NAME);
+        $users_teams = get_user_teams_id_by_user_id($id_user);
+
+        $user_data = get_istep_user_by_id($id_user,"istep");
+        $user_data_wp = get_user_by('id',$user_data->wp_user_id);
+
+        $display_name = explode(" ",$user_data_wp->display_name);
+        $last_name = $display_name[0] ?? "";
+        $first_name = $display_name[1] ?? "";
+
+        echo "<div class='update-user'>";
+        echo "<h1>Modifier les informations d'un utilisateur</h1>";
+        echo "<form method='POST' action=''>";
+        echo '<div><label for="last_name" >Nom de famille : </label><input type="text" name="last_name" id="last_name" value="'.$last_name.'" required></div>';
+        echo '<div><label for="first_name" >Prénom : </label><input type="text" name="first_name"  id="first_name" value="'.$first_name.'" required></div>';
+
+        echo '<div><label for="phone" >Numéro de téléphone : </label><input type="tel" name="phone" id="phone" value="'.($user_data->nTelephone ?? "").'" required></div>';
+
+        echo '<div><label for="office" >Bureau : </label><input type="text" name="office" id="office" value="'.($user_data->bureau ?? "").'" required></div>';
+        echo '<div><label for="function" >Fonction : </label><input type="text" name="function" id="function" value="'.($user_data->fonction ?? "").'" required></div>';
+
+        echo '<div><label for="tower" id="tower">Tour du bureau : <ul>';
+
+        //Liste des tours
+        $towerList = ["tour-46-00-2e","tour-46-00-3e","tour-46-00-4e","tour-46-45-2e","tour-56-66-5e","tour-56-55-5e"];
+        foreach($towerList as $tower){
+            echo '<li><label></label><input type="radio" name="tourBureau" value="'.$tower.'"'.($tower == $user_data->tourDuBureau ? "checked":""). ' />' .convert_tower_into_readable($tower).'</label> </li>';
+        }
+        echo ' </ul></label></div>';
+
+
+        //Listes des équipes
+        echo "<h2>Listes des équipes</h2>";
+        echo "<table class=\"form-table\">";
+        echo '<tr><th>Nom de l\'équipe</th><th>Fait partie de</th></tr>';
+        foreach ($teams as $team){
+
+            $team_name = $team->nom_equipe;
+            $team_id = $team->id_equipe;
+
+            //Coche toute les équipes dont l'utilisateur fait déjà partie
+            $checked = (in_array($team_id,$users_teams))? "checked":"";
+
+            echo '<tr><td>'.$team_name.'</td><td><input type="checkbox" name="teams[]" value="'.$team_id.'"'.$checked.' id="team-'.$team_id.'"></td></tr>';
+        }
+        echo "</table>";
+
+        echo '<div><label for="rank" >Rang dans l\'équipe : </label><input type="text" id="rank" name="rank" value="'.($user_data->rangEquipe ?? "").'" required></div>';
+
+        //Listes de campus
+        echo '<div><label for="campus" >Campus : <select name="campus" id="campus">';
+        $campus = get_list_of_table(TABLE_LOCATION_NAME);
+        foreach ($campus as $one_campus){
+            echo "<option value=\"".$one_campus->id_localisation."\">".$one_campus->nom_localisation."</option>";
+        }
+        echo '</select></label></div>';
+
+        //Listes des employeur
+        echo '<div><label for="employer" >Employeur : </label>
+                    <select name="employer" id="employer">
+                        <option value="sorbonne-universite">Sorbonne université</option>
+                        <option value="cnrs">CNRS</option>
+                        <option value="autre">Autre</option>
+                    </select></div>';
+
+        echo '<div><label for="mailCase" >Case de courrier : </label><input type="text" name="mailCase" id="mailCase" value="'.($user_data->caseCourrier ?? "").'" required></div>';
+
+
+        echo '<input type="hidden" name="idUser" value="' . $id_user . '">';
+        echo '<input type="hidden" name="idUserWp" value="' . $user_data->wp_user_id . '">';
+        submit_button('Modifier','primary','changeTeams');
+        echo "</form>";
+        echo "</div>";
+    }else{
+        wp_redirect(admin_url("admin.php?page=istep_users_list"));
+
     }
 }

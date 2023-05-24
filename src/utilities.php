@@ -345,15 +345,23 @@ function get_user_personal_pages_categories(int $id):array{
  */
 function is_location_existing_redirect_if_not(string $campus,string $redirect_url): void
 {
-    global $wpdb;
-    $table_name = TABLE_LOCATION_NAME;
-    $is_location_existing = "SELECT * FROM $table_name WHERE id_localisation = $campus";
-    $results = $wpdb->get_results($is_location_existing);
-    if (empty($results)) {
+    if (is_location_existing($campus)) {
         wp_redirect($redirect_url);
         exit();
     }
 
+}
+
+/**
+ * Vérifie si le campus existe
+ * @param string $campus
+ * @return bool
+ */
+function is_location_existing(string $campus) :bool{
+    global $wpdb;
+    $table_name = TABLE_LOCATION_NAME;
+    $is_location_existing = "SELECT * FROM $table_name WHERE id_localisation = $campus";
+    return !empty($wpdb->get_results($is_location_existing));
 }
 
 /**
