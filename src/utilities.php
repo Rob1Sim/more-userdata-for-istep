@@ -84,14 +84,21 @@ function get_team_name_by_id(?int $id){
 }
 
 /**
- * Renvoie toutes les information de l'utilisateur qui possède l'id wp passé en paramètre
+ * Renvoie toutes les information de l'utilisateur qui possède l'id passé en paramètre
  * @param int $id
+ * @param string $type Prend la valeur "wp" ou "istep", désigne si la recherche doit se faire avec l'id wp ou l'id de la table (wp par défaut)
  * @return mixed|stdClass
  */
-function get_istep_user_by_id(int $id):mixed{
+function get_istep_user_by_id(int $id, string $type ="wp"):mixed{
     global $wpdb;
     $tableName = TABLE_MEMBERS_NAME;
-    return $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $id")[0];
+    if ($type == "wp"){
+        return $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $id")[0];
+    }
+    if ($type == "istep"){
+        return $wpdb->get_results("SELECT * FROM $tableName WHERE id_membre = $id")[0];
+    }
+    throw new \WPUM\Carbon\Exceptions\InvalidTypeException("Type incorrecte : le paramètre type ne prend que la valeur wp ou istep");
 }
 
 /**
