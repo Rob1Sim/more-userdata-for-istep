@@ -97,10 +97,12 @@ HTML;
         $html .= <<<HTML
            </select>
         </label>
-        <label for="employer">
-            Employeur :
-            <input type="text" name="employer" id="employer" required>
-        </label>
+        <label for="employer" >Employeur : </label>
+                    <select name="employer" id="employer">
+                        <option value="sorbonne-universite">Sorbonne université</option>
+                        <option value="cnrs">CNRS</option>
+                        <option value="autre">Autre</option>
+                    </select>
         <label for="mailCase">
             Case courrier :
             <input type="text" name="mailCase" id="mailCase">
@@ -171,6 +173,9 @@ function add_new_user() {
                 break;
             case "7":
                 echo "<div class=\"user-create-error\">La localisation entrée n'éxiste pas</div>";
+                break;
+            case "8":
+                echo "<div class=\"user-create-error\">L'employeur n'éxiste pas</div>";
                 break;
         }
 
@@ -248,9 +253,13 @@ function add_new_user() {
             if ( is_wp_error( $user_id ) ) {
                 $error_message = $user_id->get_error_message();
                 wp_redirect($current_url."user-create-error=2&error-message=$error_message");
+                exit();
 
             } else {
-
+                if ($employer !== "sorbonne-universite" && $employer != "cnrs" && $employer != "aucun"){
+                    wp_redirect($current_url."user-create-error=8");
+                    exit();
+                }
                 //Si l'utilisateur wp a bien été créer on continue
                 $user = get_user_by( 'login', $login ); // récupère l'utilisateur par login
                 $user_id = $user->ID;
@@ -281,7 +290,7 @@ function add_new_user() {
                 //Ajout de l'utilisateur dans la bd membre_ISTeP
                 if ($wpdb->insert(TABLE_MEMBERS_NAME, $data, $format ) === false) {
                     wp_redirect($current_url);
-                    exit;
+                    exit();
                 }else{
                     $new_user = get_user_by('id', $user_id);
                     foreach ($verified_roles as $new_role){

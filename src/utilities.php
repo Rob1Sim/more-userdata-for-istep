@@ -84,14 +84,21 @@ function get_team_name_by_id(?int $id){
 }
 
 /**
- * Renvoie toutes les information de l'utilisateur qui possède l'id wp passé en paramètre
+ * Renvoie toutes les information de l'utilisateur qui possède l'id passé en paramètre
  * @param int $id
+ * @param string $type Prend la valeur "wp" ou "istep", désigne si la recherche doit se faire avec l'id wp ou l'id de la table (wp par défaut)
  * @return mixed|stdClass
  */
-function get_istep_user_by_id(int $id):mixed{
+function get_istep_user_by_id(int $id, string $type ="wp"):mixed{
     global $wpdb;
     $tableName = TABLE_MEMBERS_NAME;
-    return $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $id")[0];
+    if ($type == "wp"){
+        return $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $id")[0];
+    }
+    if ($type == "istep"){
+        return $wpdb->get_results("SELECT * FROM $tableName WHERE id_membre = $id")[0];
+    }
+    throw new \WPUM\Carbon\Exceptions\InvalidTypeException("Type incorrecte : le paramètre type ne prend que la valeur wp ou istep");
 }
 
 /**
@@ -338,15 +345,23 @@ function get_user_personal_pages_categories(int $id):array{
  */
 function is_location_existing_redirect_if_not(string $campus,string $redirect_url): void
 {
-    global $wpdb;
-    $table_name = TABLE_LOCATION_NAME;
-    $is_location_existing = "SELECT * FROM $table_name WHERE id_localisation = $campus";
-    $results = $wpdb->get_results($is_location_existing);
-    if (empty($results)) {
+    if (!is_location_existing($campus)) {
         wp_redirect($redirect_url);
         exit();
     }
 
+}
+
+/**
+ * Vérifie si le campus existe
+ * @param string $campus
+ * @return bool
+ */
+function is_location_existing(string $campus) :bool{
+    global $wpdb;
+    $table_name = TABLE_LOCATION_NAME;
+    $is_location_existing = "SELECT * FROM $table_name WHERE id_localisation = $campus";
+    return !empty($wpdb->get_results($is_location_existing));
 }
 
 /**

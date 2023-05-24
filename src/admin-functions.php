@@ -4,6 +4,8 @@
  */
 // ---- Menu Administrateur ----
 wp_enqueue_script('more-userdata-for-istep-admin-js',plugins_url('../scripts/more-userdata-for-istep-admin.js',__FILE__),array(), false, true);
+wp_enqueue_style('more-userdata-for-istep-admin',plugins_url('../styles/more-userdata-for-istep-admin.css',__FILE__));
+
 require_once( plugin_dir_path( __FILE__ ) . 'admin/location.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'admin/users.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'admin/teams.php' );
@@ -89,12 +91,12 @@ function more_userdata_istep_menu(): void{
         'more_userdata_istep_users_list'
     );
     add_submenu_page(
-        'admin.php?page=modify_users_teams&id=',
-        'Modifier équipe',
-        'Modifier équipe',
+        'admin.php?page=modify_users&id=',
+        'Modifier l\'utilisateur',
+        'Modifier l\'utilisateur',
         ADMIN_CAPACITY,
-        'modify_users_teams',
-        'more_userdata_istep_users_edit_teams'
+        'modify_users_data',
+        'more_userdata_istep_users_edit_data'
     );
     add_submenu_page(
         'admin.php?page=erase_user&id=',

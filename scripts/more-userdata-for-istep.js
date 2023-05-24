@@ -98,11 +98,6 @@ try {
 
 }catch (e){}
 
-//Formulaire de mis à jour de l'utilisateur
-const updateForm = document.getElementById("update-user-profile-istep");
-const updateFormBtn = document.getElementById("update-user-submit-btn");
-try {
-}catch (e){}
 try {
     document.getElementById("random-pws").addEventListener("click",()=>{
         const password = document.getElementById("password");
