@@ -246,3 +246,20 @@ function display_button_to_edit_personal_pages(): string
     return "";
 }
 add_shortcode('edit_personal_page_btn', 'display_button_to_edit_personal_pages');
+
+/**
+ * Supprime la page personnel correspondant à l'utilisateur wp passé en paramètre
+ * @param WP_User $wp_user
+ * @return void
+ */
+function delete_personal_page_by_wp_user(WP_User $wp_user): void
+{
+    $page = get_page_by_path('membres-istep/'.$wp_user->user_login);
+
+    if ($page && $page->post_type === 'page') {
+        wp_delete_post($page->ID, true);
+
+    } else {
+        echo '<div class="notice notice-error">La page personalisée n\' pas pu être supprimer.</div>';
+    }
+}

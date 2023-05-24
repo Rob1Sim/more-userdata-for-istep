@@ -170,6 +170,9 @@ function more_userdata_istep_users_edit_data():void
                 edit_user_form();
                 exit();
             }
+            //Supprime la page personel pour la recreer
+            delete_personal_page_by_wp_user($user_data);
+            create_personal_page($display_name,$user_data->user_login);
         }
         //Vérification des équipes
         $verified_teams = [];
@@ -199,7 +202,7 @@ function more_userdata_istep_users_edit_data():void
         add_data_to_team_members($verified_teams,$id_user);
 
 
-        echo '<div id="message" class="updated notice"><p>Équipe Mis à jour avec succès.</p></div>';
+        echo '<div id="message" class="updated notice"><p>Mis à jour réalisé avec succès.</p></div>';
         echo '<a href="'.admin_url("admin.php?page=istep_users_list").'">Retour à la liste</a>';
     }else{
         edit_user_form();
@@ -225,6 +228,7 @@ function more_userdata_istep_users_delete_user():void{
         }else{
             echo '<div class="notice notice-error"><p>Une erreur est survenue lors de la suppression</p></div>';
         }
+        delete_personal_page_by_wp_user($wp_user);
     }
 }
 
@@ -314,3 +318,4 @@ function edit_user_form():void{
 
     }
 }
+
