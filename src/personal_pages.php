@@ -255,6 +255,9 @@ add_shortcode('edit_personal_page_btn', 'display_button_to_edit_personal_pages')
 function delete_personal_page_by_wp_user(WP_User $wp_user): void
 {
     $page = get_page_by_path('membres-istep/'.$wp_user->user_login);
+    if(!$page){
+        $page = get_page_by_path($wp_user->user_login);
+    }
 
     if ($page && $page->post_type === 'page') {
         wp_delete_post($page->ID, true);
