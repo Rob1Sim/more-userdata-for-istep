@@ -345,7 +345,7 @@ function get_user_personal_pages_categories(int $id):array{
  */
 function is_location_existing_redirect_if_not(string $campus,string $redirect_url): void
 {
-    if (is_location_existing($campus)) {
+    if (!is_location_existing($campus)) {
         wp_redirect($redirect_url);
         exit();
     }
