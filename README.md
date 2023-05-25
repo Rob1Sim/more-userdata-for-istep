@@ -32,21 +32,22 @@ Pour afficher les information de l'utilisateur sur une page il suffit d'ajouter 
  ```  
  **Attention ce shortcode récupère les informations de l'auteur de la page, l'utilisateur doit donc être l'auteur de ça page pour que ses informations soit afficher**
 ## Architecture
-Le projets est constituer de 3 fichier php : __index.php__ contient  :
-- La création des tables lors de l'activation du plugin
-- Le shortcode qui gère la création du formulaire de l'utilisateur
-- La création de l'utilisateur dans la base de donnée
-- Le shortcode qui s'occupe d'afficher l'annuaire
-- Le shortcode qui s'occupe d'afficher les informations de l'utilisateur
+Le projets est divisé en plusieurs fichier : 
+Tous d'abord le fichier __index.php__ est le fichier principal du projet tous le code s'éxécute dessus.
+Il contient les scripts éxécuté à la création et à la suppression du plugin (création de tables, ...)
+les autres fichier se trouve dans le dossier __src/__ :
+- Le fichier __add_user_form.php__ contients les shortcode et l'éxécution du formulaire de création d'utilisateur.
+- Le fichier __admin-functions.php__ contients toute les menu de configuration disponible dans le menu d'administration
+    par ailleurs tous les fichier relatif à ces menu se situe eux même dans le dossier __admin/__.
+- Le fichier __personal_pages.php__ contients les shortcodes ainsi que les fonction de création/suppression d'une page personnalisé.
+- Le fichier __tiny_directories.php__ contients le shortcode relatif à l'annuaire.
+- Le fichier __utilities.php__ contients des fonctions réccurente utilisé dans l'ensemble du projet.
 
-__admin-functions.php__ contient :
-- Le formulaire de gestion de qui à accès a l'ajout d'utilisateur
-- Le formulaire de création/Modification/Suppression d'équipe
-- Le formulaire de création/Modification/Suppression de campus
-- La liste des membres de l'ISTeP et la possibilité de modifier leur équipe ou de les supprimés
-- Le formulaire de gestion de qui à l'accès de voir le menu administrateur
+Le dossier __admin/__ contient lui 3 fichier :
+- __location.php__ qui s'occupe de la gestions des différents campus. 
+- __teams.php__ qui s'occupe de la gestions des différents équipes .
+- __users.php__ qui s'occupe de la gestions des utilisateur (modification/suppression) .
 
-__utilities.php__ contients des fonctions utilitaire qui sont utilisé dans les deux fichier au dessus.
 
 Le dossier __scripts__ contients les scripts utilisé par les différents shortcode listés au dessus, il contient notament des vérifications de champs pour les formulaires.
 
