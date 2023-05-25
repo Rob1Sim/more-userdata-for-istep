@@ -56,15 +56,20 @@ Search.appendIndex(
             "summary": "Affiche\u0020toutes\u0020les\u0020informations\u0020des\u0020utilisateurs\u0020de\u0020l\u0027ISTeP",
             "url": "namespaces/default.html#function_more_userdata_istep_users_list"
         },                {
-            "fqsen": "\\more_userdata_istep_users_edit_teams\u0028\u0029",
-            "name": "more_userdata_istep_users_edit_teams",
+            "fqsen": "\\more_userdata_istep_users_edit_data\u0028\u0029",
+            "name": "more_userdata_istep_users_edit_data",
             "summary": "Formulaire\u0020de\u0020modification\u0020de\u0020l\u0027\u00E9quipe\u0020d\u0027un\u0020utilisateur",
-            "url": "namespaces/default.html#function_more_userdata_istep_users_edit_teams"
+            "url": "namespaces/default.html#function_more_userdata_istep_users_edit_data"
         },                {
             "fqsen": "\\more_userdata_istep_users_delete_user\u0028\u0029",
             "name": "more_userdata_istep_users_delete_user",
             "summary": "Supprime\u0020l\u0027utilisateur\u0020pass\u00E9\u0020dans\u0020la\u0020requ\u00EAte",
             "url": "namespaces/default.html#function_more_userdata_istep_users_delete_user"
+        },                {
+            "fqsen": "\\edit_user_form\u0028\u0029",
+            "name": "edit_user_form",
+            "summary": "Formulaire\u0020de\u0020modification\u0020d\u0027un\u0020utilisateur",
+            "url": "namespaces/default.html#function_edit_user_form"
         },                {
             "fqsen": "\\more_userdata_istep_menu\u0028\u0029",
             "name": "more_userdata_istep_menu",
@@ -121,6 +126,11 @@ Search.appendIndex(
             "summary": "Shortcode\u0020qui\u0020v\u00E9rifie\u0020si\u0020le\u0020bouton\u0020d\u0027\u00E9dition\u0020de\u0020page\u0020doit\u0020s\u0027afficher\u0020pour\u0020l\u0027utilisateur\u0020courant\nSi\u0020un\u0020\u0022error\u0022\u0020c\u0027est\u0020que\u0020la\u0020page\u0020\u0022modifier\u002Dvotre\u002Dpage\u002Dpersonnel\u0022\u0020n\u0027\u00E9xiste\u0020plus",
             "url": "namespaces/default.html#function_display_button_to_edit_personal_pages"
         },                {
+            "fqsen": "\\delete_personal_page_by_wp_user\u0028\u0029",
+            "name": "delete_personal_page_by_wp_user",
+            "summary": "Supprime\u0020la\u0020page\u0020personnel\u0020correspondant\u0020\u00E0\u0020l\u0027utilisateur\u0020wp\u0020pass\u00E9\u0020en\u0020param\u00E8tre",
+            "url": "namespaces/default.html#function_delete_personal_page_by_wp_user"
+        },                {
             "fqsen": "\\create_directory_from_DB_users\u0028\u0029",
             "name": "create_directory_from_DB_users",
             "summary": "R\u00E9cup\u00E8re\u0020les\u0020utilisateurs\u0020dans\u0020la\u0020base\u0020de\u0020donn\u00E9e\u0020et\u0020les\u0020affect\u0020\u00E0\u0020un\u0020tableau\u0020HTML",
@@ -173,7 +183,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\get_istep_user_by_id\u0028\u0029",
             "name": "get_istep_user_by_id",
-            "summary": "Renvoie\u0020toutes\u0020les\u0020information\u0020de\u0020l\u0027utilisateur\u0020qui\u0020poss\u00E8de\u0020l\u0027id\u0020wp\u0020pass\u00E9\u0020en\u0020param\u00E8tre",
+            "summary": "Renvoie\u0020toutes\u0020les\u0020information\u0020de\u0020l\u0027utilisateur\u0020qui\u0020poss\u00E8de\u0020l\u0027id\u0020pass\u00E9\u0020en\u0020param\u00E8tre",
             "url": "namespaces/default.html#function_get_istep_user_by_id"
         },                {
             "fqsen": "\\get_list_of_table\u0028\u0029",
@@ -250,6 +260,11 @@ Search.appendIndex(
             "name": "is_location_existing_redirect_if_not",
             "summary": "V\u00E9rifie\u0020si\u0020le\u0020campus\u0020entr\u00E9e\u0020existe,\u0020si\u0020il\u0020n\u0027\u00E9xiste\u0020pas\u0020alors\u0020l\u0027utilisateur\u0020est\u0020redirig\u00E9\u0020\u0028vers\u0020une\u0020page\u0020d\u0027erreur\u0029",
             "url": "namespaces/default.html#function_is_location_existing_redirect_if_not"
+        },                {
+            "fqsen": "\\is_location_existing\u0028\u0029",
+            "name": "is_location_existing",
+            "summary": "V\u00E9rifie\u0020si\u0020le\u0020campus\u0020existe",
+            "url": "namespaces/default.html#function_is_location_existing"
         },                {
             "fqsen": "\\add_profile_picture_or_redirect\u0028\u0029",
             "name": "add_profile_picture_or_redirect",
