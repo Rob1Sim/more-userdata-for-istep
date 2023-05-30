@@ -2,6 +2,8 @@
 /**
  * Gère le formulaire de création d'utilisateur
  */
+namespace MUDF_ISTEP;
+
 add_shortcode('add_istep_user_form', 'add_new_user_form');
 
 /**

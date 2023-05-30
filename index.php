@@ -9,6 +9,10 @@ Author: Robin Simonneau
 Version: 1.0
 Author URI: https://robin-sim.fr/
 */
+
+use function MUDF_ISTEP\create_modify_personal_page;
+use const MUDF_ISTEP\ADMIN_CAPACITY;
+
 wp_enqueue_style('more-userdata-for-istep', plugins_url('styles/more-userdata-for-istep.css', __FILE__));
 wp_enqueue_script('more-userdata-for-istep-js', plugins_url('scripts/more-userdata-for-istep.js', __FILE__), array(), false, true);
 

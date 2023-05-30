@@ -2,6 +2,10 @@
 /**
  * Gestion des pages personnels
  */
+namespace MUDF_ISTEP;
+
+use WP_User;
+
 wp_enqueue_style('more-userdata-for-istep', plugins_url('../styles/more-userdata-for-istep.css', __FILE__));
 wp_enqueue_script('more-userdata-for-istep-js', plugins_url('../scripts/more-userdata-for-istep.js', __FILE__), array(), false, true);
 

@@ -2,6 +2,8 @@
 /**
  * Gestion de l'annuaire
  */
+namespace MUDF_ISTEP;
+
 // -- Tiny Directory --
 add_shortcode('users_directory', 'create_directory_from_DB_users');
 

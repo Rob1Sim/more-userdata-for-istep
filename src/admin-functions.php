@@ -2,6 +2,8 @@
 /**
  * Gestion de la partie More User data for ISTeP dans le panel administrateur
  */
+namespace MUDF_ISTEP;
+
 // ---- Menu Administrateur ----
 wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../scripts/more-userdata-for-istep-admin.js', __FILE__), array(), false, true);
 wp_enqueue_style('more-userdata-for-istep-admin', plugins_url('../styles/more-userdata-for-istep-admin.css', __FILE__));
