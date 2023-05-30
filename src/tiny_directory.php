@@ -5,7 +5,7 @@
 namespace MUDF_ISTEP;
 
 // -- Tiny Directory --
-add_shortcode('users_directory', 'create_directory_from_DB_users');
+add_shortcode('users_directory', 'MUDF_ISTEP\\create_directory_from_DB_users');
 
 /**
  * Récupère les utilisateurs dans la base de donnée et les affect à un tableau HTML

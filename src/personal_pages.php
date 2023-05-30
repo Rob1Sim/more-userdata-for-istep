@@ -9,7 +9,7 @@ use WP_User;
 wp_enqueue_style('more-userdata-for-istep', plugins_url('../styles/more-userdata-for-istep.css', __FILE__));
 wp_enqueue_script('more-userdata-for-istep-js', plugins_url('../scripts/more-userdata-for-istep.js', __FILE__), array(), false, true);
 
-add_shortcode('istep_user_data', 'display_users_data');
+add_shortcode('istep_user_data', 'MUDF_ISTEP\\display_users_data');
 /**
  * Affiche diverses informations de l'utilisateur sur la page de base
  * @return string
@@ -122,7 +122,7 @@ function edit_personal_page_form():string
     return ob_get_clean();
 }
 
-add_shortcode('personal_page_form', 'edit_personal_page_form');
+add_shortcode('personal_page_form', 'MUDF_ISTEP\\edit_personal_page_form');
 
 /**
  * Gère la sauvegarde des données du formulaire de création de page dans la dans la base de donnée.
@@ -183,7 +183,7 @@ function handle_personal_page_form(): void
         }
     }
 }
-add_action('wp', 'handle_personal_page_form');
+add_action('wp', 'MUDF_ISTEP\\handle_personal_page_form');
 
 /**
  * Créer la page de modification de page personel, elle est unique donc disponible pour tous le monde à la même adresse
@@ -230,7 +230,7 @@ HTML;
     $html.="</div>";
     return $html;
 }
-add_shortcode('personal_page_display', 'display_section_personal_pages');
+add_shortcode('personal_page_display', 'MUDF_ISTEP\\display_section_personal_pages');
 
 /**
  * Shortcode qui vérifie si le bouton d'édition de page doit s'afficher pour l'utilisateur courant
@@ -251,7 +251,7 @@ function display_button_to_edit_personal_pages(): string
     }
     return "";
 }
-add_shortcode('edit_personal_page_btn', 'display_button_to_edit_personal_pages');
+add_shortcode('edit_personal_page_btn', 'MUDF_ISTEP\\display_button_to_edit_personal_pages');
 
 /**
  * Supprime la page personnel correspondant à l'utilisateur wp passé en paramètre
