@@ -8,5 +8,8 @@
             "MUDF_ISTEP": "src/",
             "MUDF_ISTEP\\Tests": "tests/"
         }
+    },
+    "require": {
+        "vlucas/phpdotenv": "^5.5"
     }
 }
