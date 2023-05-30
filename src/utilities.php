@@ -8,19 +8,19 @@ define("TABLE_TEAM_NAME", $wpdb->prefix . 'equipe_ISTeP');
 /**
  * Nom de la table membre dans la base de donnée
  */
-define("TABLE_MEMBERS_NAME",$wpdb->prefix . 'membre_ISTeP');
+define("TABLE_MEMBERS_NAME", $wpdb->prefix . 'membre_ISTeP');
 /**
  * Nom de la table qui fait la relation entre MEMBRE et TEAM dans la base de donnée
  */
-define("TABLE_MEMBERS_TEAM_NAME",$wpdb->prefix . 'membre_equipe_ISTeP');
+define("TABLE_MEMBERS_TEAM_NAME", $wpdb->prefix . 'membre_equipe_ISTeP');
 /**
  * Nom de la table qui enregistre les différents campus
  */
-define("TABLE_LOCATION_NAME",$wpdb->prefix . 'localisation_ISTeP');
+define("TABLE_LOCATION_NAME", $wpdb->prefix . 'localisation_ISTeP');
 /**
  * Nom de la table qui enregistre les informations affichées sur la page personnel
  */
-define("TABLE_PERSONAL_PAGE_NAME",$wpdb->prefix . 'personal_page_ISTeP');
+define("TABLE_PERSONAL_PAGE_NAME", $wpdb->prefix . 'personal_page_ISTeP');
 /**
  * Définie la capacité d'un role à accéder au menu admin du plugin
  */
@@ -34,9 +34,10 @@ const ADMIN_CAPACITY = "more_data_users_admin_capacity";
  * Récupère les roles de l'utilisateur connecté
  * @return array
  */
-function get_current_user_roles() {
+function get_current_user_roles()
+{
 
-    if( is_user_logged_in() ) {
+    if(is_user_logged_in()) {
         $user = wp_get_current_user();
         $roles = ( array ) $user->roles;
         return $roles;
@@ -52,12 +53,13 @@ function get_current_user_roles() {
  * @param array $roles
  * @return bool
  */
-function can_user_access_this(array $roles): bool{
+function can_user_access_this(array $roles): bool
+{
     $currentUsersRoles = get_current_user_roles();
     $isGranted = false;
-    if (get_current_user_roles()>0){
-        foreach ($roles as $role){
-            if (in_array($role,$currentUsersRoles)){
+    if (get_current_user_roles()>0) {
+        foreach ($roles as $role) {
+            if (in_array($role, $currentUsersRoles)) {
                 $isGranted = true;
             }
         }
@@ -70,9 +72,10 @@ function can_user_access_this(array $roles): bool{
  * @param int|null $id
  * @return mixed|stdClass
  */
-function get_team_name_by_id(?int $id){
+function get_team_name_by_id(?int $id)
+{
     //Si la class n'éxiste pas on renvoie un objets avec la meme propriété
-    if (!isset($id)){
+    if (!isset($id)) {
         $obj = new stdClass();
         $obj->nom_equipe = "Pas d'équipe";
 
@@ -89,13 +92,14 @@ function get_team_name_by_id(?int $id){
  * @param string $type Prend la valeur "wp" ou "istep", désigne si la recherche doit se faire avec l'id wp ou l'id de la table (wp par défaut)
  * @return mixed|stdClass
  */
-function get_istep_user_by_id(int $id, string $type ="wp"):mixed{
+function get_istep_user_by_id(int $id, string $type ="wp"):mixed
+{
     global $wpdb;
     $tableName = TABLE_MEMBERS_NAME;
-    if ($type == "wp"){
+    if ($type == "wp") {
         return $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $id")[0];
     }
-    if ($type == "istep"){
+    if ($type == "istep") {
         return $wpdb->get_results("SELECT * FROM $tableName WHERE id_membre = $id")[0];
     }
     throw new \WPUM\Carbon\Exceptions\InvalidTypeException("Type incorrecte : le paramètre type ne prend que la valeur wp ou istep");
@@ -106,7 +110,8 @@ function get_istep_user_by_id(int $id, string $type ="wp"):mixed{
  * @param string $table
  * @return array
  */
-function get_list_of_table(string $table):array{
+function get_list_of_table(string $table):array
+{
     global $wpdb;
     $tableName = $table;
     return $wpdb->get_results("SELECT * FROM $tableName");
@@ -118,12 +123,13 @@ function get_list_of_table(string $table):array{
  * @param int $user_id
  * @return string
  */
-function get_user_avatar(int $user_id) {
+function get_user_avatar(int $user_id)
+{
     $avatar_id = get_user_meta($user_id, 'wp_user_avatar', true);
     if ($avatar_id) {
-        if (is_array(wp_get_attachment_image_src($avatar_id, 'thumbnail'))){
+        if (is_array(wp_get_attachment_image_src($avatar_id, 'thumbnail'))) {
             $avatar_url = wp_get_attachment_image_src($avatar_id, 'thumbnail')[0];
-        }else{
+        } else {
             return "Erreur de chargment de l'image";
         }
     } else {
@@ -137,7 +143,8 @@ function get_user_avatar(int $user_id) {
  * @param string $rawName
  * @return string
  */
-function convert_tower_into_readable(string $rawName):string{
+function convert_tower_into_readable(string $rawName):string
+{
 
     $parts = explode('-', $rawName);
 
@@ -146,7 +153,7 @@ function convert_tower_into_readable(string $rawName):string{
     $level = $parts[2];
 
 
-// Afficher le résultat
+    // Afficher le résultat
     return "$tour $floor"."-"." $level"."ème étage";
 
 }
@@ -157,11 +164,12 @@ function convert_tower_into_readable(string $rawName):string{
  * @param array $listOfRoleWithTheCap
  * @return array
  */
-function delete_cap_if_no_need_anymore(string $cap,array $listOfRoleWithTheCap):array {
+function delete_cap_if_no_need_anymore(string $cap, array $listOfRoleWithTheCap):array
+{
     $roles = wp_roles()->roles;
     foreach ($roles as $role_name => $role_details) {
         $role = get_role($role_name);
-        if ($role->has_cap($cap)&& !in_array($role->name,$listOfRoleWithTheCap)) {
+        if ($role->has_cap($cap)&& !in_array($role->name, $listOfRoleWithTheCap)) {
             $role->remove_cap($cap);
             $key = array_search($role->name, $listOfRoleWithTheCap);
             if ($key !== false) {
@@ -177,26 +185,28 @@ function delete_cap_if_no_need_anymore(string $cap,array $listOfRoleWithTheCap):
  * @param int $id
  * @return bool
  */
-function is_team_id_valid(int $id): bool{
+function is_team_id_valid(int $id): bool
+{
     global $wpdb;
     $table_name = TABLE_TEAM_NAME;
     $teams = $wpdb->get_results("SELECT id_equipe FROM $table_name");
     $array_of_id = [];
-    foreach ($teams as $team){
+    foreach ($teams as $team) {
         $array_of_id[] = $team->id_equipe;
     }
 
-    return in_array($id,$array_of_id);
+    return in_array($id, $array_of_id);
 }
 
 /**
  * Retourne une liste de string contenant le nom de chaque équipe
  * @return array
  */
-function get_all_teams_name():array{
+function get_all_teams_name():array
+{
     $list_of_team_table = get_list_of_table(TABLE_TEAM_NAME);
     $list_of_team = [];
-    foreach ($list_of_team_table as $team){
+    foreach ($list_of_team_table as $team) {
         $list_of_team[]= $team->nom_equipe;
     }
     return $list_of_team;
@@ -209,10 +219,11 @@ function get_all_teams_name():array{
  * @param int $id
  * @return array
  */
-function get_user_teams_names_by_user_id(int $id): array{
+function get_user_teams_names_by_user_id(int $id): array
+{
     $teams = get_user_teams_by_user_id($id);
     $array_of_name = [];
-    foreach ($teams as $team){
+    foreach ($teams as $team) {
         $array_of_name[] = get_team_name_by_id($team->id_equipe)->nom_equipe;
     }
     return $array_of_name;
@@ -223,7 +234,8 @@ function get_user_teams_names_by_user_id(int $id): array{
  * @param int $id
  * @return array
  */
-function get_user_teams_by_user_id(int $id): array{
+function get_user_teams_by_user_id(int $id): array
+{
     global $wpdb;
     $table_name = TABLE_MEMBERS_TEAM_NAME;
 
@@ -236,10 +248,11 @@ function get_user_teams_by_user_id(int $id): array{
  * @param int $id
  * @return array
  */
-function get_user_teams_id_by_user_id(int $id): array{
+function get_user_teams_id_by_user_id(int $id): array
+{
     $teams = get_user_teams_by_user_id($id);
     $array_of_id = [];
-    foreach ($teams as $team){
+    foreach ($teams as $team) {
         $array_of_id[] = $team->id_equipe;
     }
     return $array_of_id;
@@ -295,12 +308,13 @@ function delete_data_from_team_members(int $team_id, int $member_id): void
  * @param int $id
  * @return string
  */
-function get_name_of_location_by_id(int $id):string{
+function get_name_of_location_by_id(int $id):string
+{
     global $wpdb;
     $table_name = TABLE_LOCATION_NAME;
 
     $name = $wpdb->get_results("SELECT nom_localisation FROM $table_name WHERE id_localisation = $id");
-    if(count($name)>0){
+    if(count($name)>0) {
         return $name[0]->nom_localisation;
     }
     return "Pas de campus";
@@ -311,14 +325,15 @@ function get_name_of_location_by_id(int $id):string{
  * @param int $id
  * @return WP_User|false
  */
-function get_wp_user_from_istep_user(int $id): WP_User|false{
+function get_wp_user_from_istep_user(int $id): WP_User|false
+{
     global $wpdb;
     $member_table = TABLE_MEMBERS_NAME;
     $query = $wpdb->get_results("SELECT wp_user_id FROM $member_table WHERE id_membre = $id ");
-    if (empty($query)){
+    if (empty($query)) {
         return false;
     }
-    return get_user_by('id',$query[0]->wp_user_id);
+    return get_user_by('id', $query[0]->wp_user_id);
 }
 
 /**
@@ -326,7 +341,8 @@ function get_wp_user_from_istep_user(int $id): WP_User|false{
  * @param int $id l'id de l'utilisateur
  * @return array
  */
-function get_user_personal_pages_categories(int $id):array{
+function get_user_personal_pages_categories(int $id):array
+{
     global $wpdb;
     $table = TABLE_PERSONAL_PAGE_NAME;
     $results = $wpdb->get_results("SELECT * FROM $table where wp_user_id = $id");
@@ -343,7 +359,7 @@ function get_user_personal_pages_categories(int $id):array{
  * @param string $current_url
  * @return void
  */
-function is_location_existing_redirect_if_not(string $campus,string $redirect_url): void
+function is_location_existing_redirect_if_not(string $campus, string $redirect_url): void
 {
     if (!is_location_existing($campus)) {
         wp_redirect($redirect_url);
@@ -357,7 +373,8 @@ function is_location_existing_redirect_if_not(string $campus,string $redirect_ur
  * @param string $campus
  * @return bool
  */
-function is_location_existing(string $campus) :bool{
+function is_location_existing(string $campus) :bool
+{
     global $wpdb;
     $table_name = TABLE_LOCATION_NAME;
     $is_location_existing = "SELECT * FROM $table_name WHERE id_localisation = $campus";
@@ -374,10 +391,14 @@ function is_location_existing(string $campus) :bool{
  * @param string $error_when_uploading_file ce lien devrait posséder un &error-message= pour afficher l'erreur
  * @return bool Retourne vrai si l'image a bien été ajouter ou mis à jour
  */
-function add_profile_picture_or_redirect(string $file_name,string $current_url,int $user_id,
-                                         string $not_allowed_format_link,
-                                         string $error_when_uploading_file,):bool{
-    if (isset($_FILES[$file_name]["name"]) && $_FILES[$file_name]["name"]!== ""){
+function add_profile_picture_or_redirect(
+    string $file_name,
+    string $current_url,
+    int $user_id,
+    string $not_allowed_format_link,
+    string $error_when_uploading_file,
+):bool {
+    if (isset($_FILES[$file_name]["name"]) && $_FILES[$file_name]["name"]!== "") {
 
         // Vérifie si le fichier est au format JPG, PNG ou GIF
         $allowed_formats = array('jpg', 'jpeg', 'png', 'gif');
@@ -397,11 +418,11 @@ function add_profile_picture_or_redirect(string $file_name,string $current_url,i
                 exit();
             } else {
                 // Mettez à jour le champ de méta de l'utilisateur avec l'ID de l'attachement
-                $user_pp = get_user_meta($user_id,"wp_user_avatar");
-                if(empty($user_pp) || $user_pp == "" ){
-                    add_user_meta($user_id,"wp_user_avatar",$attachment_id);
-                }else{
-                    update_user_meta($user_id,"wp_user_avatar",$attachment_id);
+                $user_pp = get_user_meta($user_id, "wp_user_avatar");
+                if(empty($user_pp) || $user_pp == "") {
+                    add_user_meta($user_id, "wp_user_avatar", $attachment_id);
+                } else {
+                    update_user_meta($user_id, "wp_user_avatar", $attachment_id);
                 }
 
             }
@@ -409,7 +430,7 @@ function add_profile_picture_or_redirect(string $file_name,string $current_url,i
         }
         return true;
 
-    }else{
+    } else {
         return true;
     }
 }

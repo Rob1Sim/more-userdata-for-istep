@@ -9,14 +9,14 @@ Author: Robin Simonneau
 Version: 1.0
 Author URI: https://robin-sim.fr/
 */
-wp_enqueue_style('more-userdata-for-istep',plugins_url('styles/more-userdata-for-istep.css',__FILE__));
-wp_enqueue_script('more-userdata-for-istep-js',plugins_url('scripts/more-userdata-for-istep.js',__FILE__),array(), false, true);
+wp_enqueue_style('more-userdata-for-istep', plugins_url('styles/more-userdata-for-istep.css', __FILE__));
+wp_enqueue_script('more-userdata-for-istep-js', plugins_url('scripts/more-userdata-for-istep.js', __FILE__), array(), false, true);
 
 require_once(plugin_dir_path(__FILE__).'src/utilities.php');
-require_once( plugin_dir_path( __FILE__ ) . 'src/admin-functions.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'src/tiny_directory.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'src/personal_pages.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'src/add_user_form.php' );
+require_once(plugin_dir_path(__FILE__) . 'src/admin-functions.php');
+require_once(plugin_dir_path(__FILE__) . 'src/tiny_directory.php');
+require_once(plugin_dir_path(__FILE__) . 'src/personal_pages.php');
+require_once(plugin_dir_path(__FILE__) . 'src/add_user_form.php');
 
 /**
  * Créer la base de donnée lors de l'activation du plugin
@@ -32,7 +32,7 @@ function more_ud_istep_install(): void
     $table_personal_page = TABLE_PERSONAL_PAGE_NAME;
     $charset_collate = $wpdb->get_charset_collate();
 
-        $sql = "
+    $sql = "
         CREATE TABLE $table_name_user_team(
             id_equipe INT NOT NULL AUTO_INCREMENT,
             nom_equipe VARCHAR(255) NOT NULL,
@@ -88,8 +88,8 @@ function more_ud_istep_install(): void
 
 ";
 
-    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-    dbDelta( $sql );
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
 
     $page_data = array(
         'post_title' => "Membres de l'ISTeP",
@@ -100,7 +100,7 @@ function more_ud_istep_install(): void
 
     );
 
-// Insère la page dans la base de données de WordPress
+    // Insère la page dans la base de données de WordPress
     wp_insert_post($page_data);
 
     //On ajoute les roles de bases pour éditer le plugin
@@ -130,14 +130,15 @@ function more_ud_istep_install(): void
 
     create_modify_personal_page();
 }
-register_activation_hook( __FILE__, 'more_ud_istep_install' ); //Appelé lors de l'activation du plugin
+register_activation_hook(__FILE__, 'more_ud_istep_install'); //Appelé lors de l'activation du plugin
 
 
 /**
  * Est lancé lorsque le plugin est désactivé
  * @return void
  */
-function on_deactivating(){
+function on_deactivating(): void
+{
     $page_personal = get_page_by_path('modifier-votre-page-personnel');
     $page_personal_id = $page_personal->ID;
     wp_delete_post($page_personal_id, true); // Déplace la page vers la corbeille
