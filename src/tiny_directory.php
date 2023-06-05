@@ -95,6 +95,8 @@ HTML;
             $tower = convert_tower_into_readable($istep_users->tourDuBureau);
             $campus = get_name_of_location_by_id(intval($istep_users->campus));
             $html.= <<<HTML
+            <a class="no-display-fields" href="$linkToProfilePage"></a>
+
         <tr class="user-$userID tiny-directory-tr" tabindex="0">
             
             <td class="no-display-fields" id="pp-$userID" data-id="$userID">$userAvatar
