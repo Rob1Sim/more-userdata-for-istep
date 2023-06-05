@@ -2,21 +2,28 @@
 /**
  * Gestion du menu de sélections des équipes
  */
-wp_enqueue_script('more-userdata-for-istep-admin-js',plugins_url('../../scripts/more-userdata-for-istep-admin.js',__FILE__),array(), false, true);
+namespace MUDF_ISTEP\Admin;
+
+use function MUDF_ISTEP\can_user_access_this;
+use function MUDF_ISTEP\get_list_of_table;
+use const MUDF_ISTEP\ADMIN_CAPACITY;
+
+wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../../scripts/more-userdata-for-istep-admin.js', __FILE__), array(), false, true);
 
 /**
  * Sous menu qui gère l'ajout des différentes équipes
  * @return void
  */
-function more_userdata_istep_menu_team_page() {
-    if ( !can_user_access_this(get_option('admin_user_roles')) ) {
-        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+function more_userdata_istep_menu_team_page(): void
+{
+    if (!can_user_access_this(get_option('admin_user_roles'))) {
+        wp_die(__('You do not have sufficient permissions to access this page.'));
     }
     // Vérifie si le formulaire a été soumis
     if (isset($_POST['submit'])) {
         // Ajoute une nouvelle équipe à la base de données
         $nom_equipe = sanitize_text_field($_POST['nom_equipe']);
-        if (isset($nom_equipe) && $nom_equipe !== ""){
+        if (isset($nom_equipe) && $nom_equipe !== "") {
             global $wpdb;
             $wpdb->insert(
                 TABLE_TEAM_NAME,
@@ -32,10 +39,10 @@ function more_userdata_istep_menu_team_page() {
         <h1></h1>
         <h2>Ajouter une nouvelle équipe</h2>
         <form method="post" action="">
-            <?php wp_nonce_field( 'ajouter_equipe_nonce', 'ajouter_equipe_nonce' ); ?>
+            <?php wp_nonce_field('ajouter_equipe_nonce', 'ajouter_equipe_nonce'); ?>
             <table class="form-table">
                 <tr>
-                    <th scope="row"><label for="nom_equipe"><?php _e( 'Nom de l\'équipe:', 'istep_users' ); ?></label></th>
+                    <th scope="row"><label for="nom_equipe"><?php _e('Nom de l\'équipe:', 'istep_users'); ?></label></th>
                     <td>
                         <input type="text" name="nom_equipe" id="nom_equipe" value="" required>
                     </td>
@@ -55,25 +62,25 @@ function more_userdata_istep_menu_team_page() {
             <tbody>
             <?php
             $teams = get_list_of_table(TABLE_TEAM_NAME);
-            foreach ($teams as $team) {
-                echo '<tr>';
-                echo '<td>' . $team->id_equipe . '</td>';
-                echo '<td>' . $team->nom_equipe . '</td>';
-                echo '<td>
-                        <form method="post" action="' . admin_url( 'admin.php?page=edit_teams&id=' . $team->id_equipe ) . '">
+    foreach ($teams as $team) {
+        echo '<tr>';
+        echo '<td>' . $team->id_equipe . '</td>';
+        echo '<td>' . $team->nom_equipe . '</td>';
+        echo '<td>
+                        <form method="post" action="' . admin_url('admin.php?page=edit_teams&id=' . $team->id_equipe) . '">
                             <input type="hidden" name="id" value="' . $team->id_equipe . '">
                             <button type="submit" class="button">Modifier</button>
                         </form>
                       </td>';
-                echo '<td>
-                        <form method="post" action="' . admin_url( 'admin.php?page=delete_teams&id=' . $team->id_equipe ) . '">
+        echo '<td>
+                        <form method="post" action="' . admin_url('admin.php?page=delete_teams&id=' . $team->id_equipe) . '">
                             <input type="hidden" name="equipe_id_delete" value="' . $team->id_equipe . '">
                             <button type="submit" class="button">Supprimer</button>
                         </form>
                       </td>';
-                echo '</tr>';
-            }
-            ?>
+        echo '</tr>';
+    }
+    ?>
             </tbody>
         </table>
     </div>
@@ -84,19 +91,20 @@ function more_userdata_istep_menu_team_page() {
  * Modifie les informations d'une équipe
  * @return void
  */
-function more_userdata_istep_edit_equipe_page() {
-    if ( !can_user_access_this(get_option('admin_user_roles')) ) {
-        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+function more_userdata_istep_edit_equipe_page(): void
+{
+    if (!can_user_access_this(get_option('admin_user_roles'))) {
+        wp_die(__('You do not have sufficient permissions to access this page.'));
     }
     // Récupère l'ID de l'équipe à éditer depuis l'URL
     $id_equipe = $_GET['id'];
 
     // Vérifie si le formulaire a été soumis
     if (isset($_POST['submit']) && isset($id_equipe)) {
-        if ( current_user_can( ADMIN_CAPACITY ) ) {
+        if (current_user_can(ADMIN_CAPACITY)) {
             // Met à jour les informations de l'équipe dans la base de données
             $nom_equipe = sanitize_text_field($_POST['nom_equipe']);
-            if (isset($nom_equipe)){
+            if (isset($nom_equipe)) {
                 global $wpdb;
                 $wpdb->update(
                     TABLE_TEAM_NAME,
@@ -123,10 +131,10 @@ function more_userdata_istep_edit_equipe_page() {
     <div class="wrap">
         <h1>Modifier l'équipe <?php echo $equipe->nom_equipe; ?></h1>
         <form method="post" action="">
-            <?php wp_nonce_field( 'modifier_equipe_nonce', 'modifier_equipe_nonce' ); ?>
+            <?php wp_nonce_field('modifier_equipe_nonce', 'modifier_equipe_nonce'); ?>
             <table class="form-table">
                 <tr>
-                    <th scope="row"><label for="nom_equipe"><?php _e( 'Nom de l\'équipe:', 'istep_users' ); ?></label></th>
+                    <th scope="row"><label for="nom_equipe"><?php _e('Nom de l\'équipe:', 'istep_users'); ?></label></th>
                     <td>
                         <input type="text" name="nom_equipe" id="nom_equipe" value="<?php echo $equipe->nom_equipe; ?>">
                     </td>
@@ -142,11 +150,12 @@ function more_userdata_istep_edit_equipe_page() {
  * Supprime de la bd l'équipe avec l'id correspondant
  * @return void
  */
-function more_userdata_istep_delete_equipe_page() {
-    if ( !can_user_access_this(get_option('admin_user_roles')) ) {
-        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+function more_userdata_istep_delete_equipe_page()
+{
+    if (!can_user_access_this(get_option('admin_user_roles'))) {
+        wp_die(__('You do not have sufficient permissions to access this page.'));
     }
-    if ( current_user_can( ADMIN_CAPACITY ) && isset($_POST['equipe_id_delete']) ) {
+    if (current_user_can(ADMIN_CAPACITY) && isset($_POST['equipe_id_delete'])) {
         // Récupère l'ID de l'équipe à supprimer depuis l'URL
         $id_equipe = sanitize_text_field($_POST['equipe_id_delete']);
         // Supprime l'équipe de la base de données
@@ -178,4 +187,3 @@ function more_userdata_istep_delete_equipe_page() {
     }
 
 }
-

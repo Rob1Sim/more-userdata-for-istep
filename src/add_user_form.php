@@ -2,17 +2,19 @@
 /**
  * Gère le formulaire de création d'utilisateur
  */
-add_shortcode('add_istep_user_form','add_new_user_form');
+namespace MUDF_ISTEP;
+
+add_shortcode('add_istep_user_form', 'MUDF_ISTEP\\add_new_user_form');
 
 /**
  * Affiche le formulaire de création d'utilisateur
  * @return string
  */
-function add_new_user_form():string {
+function add_new_user_form():string
+{
     $html = "<p>Vous n'êtes pas connecté</p>";
-    if (can_user_access_this(get_option('istep_user_roles')))
-    {
-        if(isset($_GET['error'])){
+    if (can_user_access_this(get_option('istep_user_roles'))) {
+        if(isset($_GET['error'])) {
             $html.= "<div class=\"error\">".sanitize_text_field($_GET['error'])."</div>";
         }
         $html =<<<HTML
@@ -74,7 +76,7 @@ HTML;
         //Récupères les équipes existantes
         $teams = get_list_of_table(TABLE_TEAM_NAME);
 
-        foreach ($teams as $team){
+        foreach ($teams as $team) {
             $team_name = $team->nom_equipe;
             $team_id = $team->id_equipe;
             $html.= '<label><p></p><input type="checkbox" name="teams[]" value="'.$team_id.'"><p>'.$team_name.'</p></label><br/>';
@@ -91,7 +93,7 @@ HTML;
             <select name="campus" id="campus">
 HTML;
         $campus = get_list_of_table(TABLE_LOCATION_NAME);
-        foreach ($campus as $one_campus){
+        foreach ($campus as $one_campus) {
             $html.= "<option value=\"".$one_campus->id_localisation."\">".$one_campus->nom_localisation."</option>";
         }
         $html .= <<<HTML
@@ -113,7 +115,7 @@ HTML;
         </label>
         <div class="role-box">
 HTML;
-        if ( ! function_exists( 'get_editable_roles' ) ) {
+        if (! function_exists('get_editable_roles')) {
             require_once ABSPATH . 'wp-admin/includes/user.php';
         }
         $roles = get_editable_roles();
@@ -124,7 +126,7 @@ HTML;
         // Affiche une checkbox pour chaque rôle
         foreach ($roles as $key => $value) {
             $checked ="";
-            if ($key == get_option("default_role")){
+            if ($key == get_option("default_role")) {
                 $checked ="checked";
             }
             $html.= '<label><p></p><input type="checkbox" name="roles[]" value="'.$key.'"'.$checked.'><p>'.$value['name'].'</p></label><br/>';
@@ -142,15 +144,16 @@ HTML;
 
 }
 
-add_action('wp','add_new_user');
+add_action('wp', 'MUDF_ISTEP\\add_new_user');
 /**
  * Fonction qui vérifie les données entré dans le formulaire et les enregistre dans la base de donnée
  * @return void
  */
-function add_new_user() {
-    $current_url = home_url( get_option('default_redirect_link')."/?" );
+function add_new_user()
+{
+    $current_url = home_url(get_option('default_redirect_link')."/?");
     //Affiche une erreur si des informations entréer sont incorrecte
-    if (isset($_GET['user-create-error'])){
+    if (isset($_GET['user-create-error'])) {
         $error = sanitize_text_field($_GET['user-create-error']);
         switch ($error) {
             case "1":
@@ -181,7 +184,7 @@ function add_new_user() {
 
     }
     //affiche un succès si l'utilisateur est bien ajouté
-    if (isset($_GET['user-create-success'])){
+    if (isset($_GET['user-create-success'])) {
         echo "<div class=\"user-create-success\">L'utilisateur à été ajouté avec succès</div>";
     }
     if (isset($_POST['submit_create_istep_user'])) {
@@ -202,22 +205,22 @@ function add_new_user() {
         $mailCase = sanitize_text_field($_POST['mailCase']);
         $pp = $_FILES['async-upload'];
 
-        if (isset($_POST['roles'])){
+        if (isset($_POST['roles'])) {
             //Nettoyage des roles
             $roles = $_POST['roles'];
             $verified_roles = [];
-            foreach ($roles as $role){
+            foreach ($roles as $role) {
                 $verified_roles[] = sanitize_text_field($role);
             }
         } else {
             $verified_roles = [get_option('default_role')];
         }
 
-        if (isset($_POST['teams'])){
+        if (isset($_POST['teams'])) {
             //Nettoyage des équipes
             $teams = $_POST['teams'];
             $verified_teams = [];
-            foreach ($teams as $team){
+            foreach ($teams as $team) {
                 $verified_teams[] = sanitize_text_field($team);
             }
 
@@ -228,14 +231,14 @@ function add_new_user() {
             && isset($password) && isset($office) && isset($job) && isset($tourBureau) && isset($team)
             && isset($teamRank) && isset($campus) && isset($employer)) {
 
-            if (strlen($phone)!=10){
+            if (strlen($phone)!=10) {
 
                 wp_redirect($current_url."user-create-error=1");
                 exit();
             }
 
             //Vérification de l'éxistance du campus
-            is_location_existing_redirect_if_not($campus,$current_url."user-create-error=7");
+            is_location_existing_redirect_if_not($campus, $current_url."user-create-error=7");
 
             // Créer un tableau avec les informations de l'utilisateur
             $user_data = array(
@@ -247,21 +250,21 @@ function add_new_user() {
             );
 
             //Ajout de l'utilisateur
-            $user_id = wp_insert_user( $user_data );
+            $user_id = wp_insert_user($user_data);
 
             // Vérifier si l'utilisateur a été ajouté avec succès
-            if ( is_wp_error( $user_id ) ) {
+            if (is_wp_error($user_id)) {
                 $error_message = $user_id->get_error_message();
                 wp_redirect($current_url."user-create-error=2&error-message=$error_message");
                 exit();
 
             } else {
-                if ($employer !== "sorbonne-universite" && $employer != "cnrs" && $employer != "aucun"){
+                if ($employer !== "sorbonne-universite" && $employer != "cnrs" && $employer != "aucun") {
                     wp_redirect($current_url."user-create-error=8");
                     exit();
                 }
                 //Si l'utilisateur wp a bien été créer on continue
-                $user = get_user_by( 'login', $login ); // récupère l'utilisateur par login
+                $user = get_user_by('login', $login); // récupère l'utilisateur par login
                 $user_id = $user->ID;
 
 
@@ -288,12 +291,12 @@ function add_new_user() {
                     '%s',
                 );
                 //Ajout de l'utilisateur dans la bd membre_ISTeP
-                if ($wpdb->insert(TABLE_MEMBERS_NAME, $data, $format ) === false) {
+                if ($wpdb->insert(TABLE_MEMBERS_NAME, $data, $format) === false) {
                     wp_redirect($current_url);
                     exit();
-                }else{
+                } else {
                     $new_user = get_user_by('id', $user_id);
-                    foreach ($verified_roles as $new_role){
+                    foreach ($verified_roles as $new_role) {
                         $new_user->add_role($new_role);
                     }
                     $last_member = get_istep_user_by_id($user_id);
@@ -301,22 +304,22 @@ function add_new_user() {
                     add_data_to_team_members($verified_teams, $last_member->id_membre);
 
                     //Création de la page perso
-                    $wpdb->insert(TABLE_PERSONAL_PAGE_NAME,array(
+                    $wpdb->insert(TABLE_PERSONAL_PAGE_NAME, array(
                         "wp_user_id"=>$user_id,
                     ));
 
                     //Ajout de l'image de profile
-                    create_personal_page($name." ".$last_name,$login);
+                    create_personal_page($name." ".$last_name, $login);
 
                     if(add_profile_picture_or_redirect(
                         'async-upload',
                         $current_url,
                         $user_id,
                         "user-create-error=6",
-                        "user-create-error=4&error-message="))
-                    {
+                        "user-create-error=4&error-message="
+                    )) {
 
-                        wp_redirect($current_url."user-create-success=0",302);
+                        wp_redirect($current_url."user-create-success=0", 302);
                     }
                 }
 
@@ -324,4 +327,3 @@ function add_new_user() {
         }
     }
 }
-

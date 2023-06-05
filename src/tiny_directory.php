@@ -2,48 +2,51 @@
 /**
  * Gestion de l'annuaire
  */
+namespace MUDF_ISTEP;
+
 // -- Tiny Directory --
-add_shortcode('users_directory', 'create_directory_from_DB_users');
+add_shortcode('users_directory', 'MUDF_ISTEP\\create_directory_from_DB_users');
 
 /**
  * Récupère les utilisateurs dans la base de donnée et les affect à un tableau HTML
  * @return string Le tableau HTML
  */
-function create_directory_from_DB_users( $atts ): string{
+function create_directory_from_DB_users($atts): string
+{
 
-    if ( ! function_exists( 'get_editable_roles' ) ) {
+    if (! function_exists('get_editable_roles')) {
         require_once ABSPATH . 'wp-admin/includes/user.php';
     }
     $roles = get_editable_roles();
 
     //Gestions des paramètres
-    $list_parameters = shortcode_atts( array(
+    $list_parameters = shortcode_atts(array(
         'role' => '',
         'team' => ''
-    ), $atts );
+    ), $atts);
 
     //Paramètre Role
     $role_parameter = $list_parameters['role'];
     $role_parameter = strtolower(sanitize_text_field($role_parameter));
     //Si le role n'éxiste pas alors on ne trie pas
-    if (!isset($role_parameter) ||$role_parameter == "" ||$roles[$role_parameter] == null){
+    if (!isset($role_parameter) ||$role_parameter == "" ||$roles[$role_parameter] == null) {
         $role_parameter = "";
     }
 
     //Paramètre équipe
     $team = $list_parameters['team'];
     $team = sanitize_text_field($team);
-    if (!isset($team) ||$team == "" ||!in_array($team,get_all_teams_name())){
+    if (!isset($team) ||$team == "" ||!in_array($team, get_all_teams_name())) {
         $team = "";
     }
 
 
     //Ajout de la feuille de style et du javascript
-    wp_enqueue_style('tiny-directory-css',plugins_url('../styles/tiny-directory.css',__FILE__));
-    wp_enqueue_script('tiny-directory-js',plugins_url('../scripts/tiny-directory.js',__FILE__),array(), false, true);
+    wp_enqueue_style('tiny-directory-css', plugins_url('../styles/tiny-directory.css', __FILE__));
+    wp_enqueue_script('tiny-directory-js', plugins_url('../scripts/tiny-directory.js', __FILE__), array(), false, true);
     $users = get_list_of_table(TABLE_MEMBERS_NAME);
     // Vérifier s'il y a des utilisateurs
-    if ( !empty( $users ) ) {
+    if (!empty($users)) {
         //Génère le tableau
         $html =
             <<<HTML
@@ -57,7 +60,7 @@ HTML;
 
 
 
-        foreach ($roles as $key => $value){
+        foreach ($roles as $key => $value) {
             $html.= "<option value=\"".$key."\">".$value['name']."</option>";
         }
         $html .= <<<HTML
@@ -74,24 +77,26 @@ HTML;
     </thead>
     <tbody> 
     HTML;
-        foreach ( $users as $user ) {
+        foreach ($users as $user) {
             $userID = $user->wp_user_id;
             $userAvatar = get_user_avatar($userID);
             $istep_users = get_istep_user_by_id($userID);
-            $wp_user = get_user_by("id",$userID);
+            $wp_user = get_user_by("id", $userID);
             $linkToProfilePage = home_url()."/membres-istep/$wp_user->user_login";
 
             //Listes des roles
             $users_roles = $wp_user->roles;
-            $users_roles_str = implode("-",$users_roles);
+            $users_roles_str = implode("-", $users_roles);
 
             //Listes des équipes
             $users_teams = get_user_teams_names_by_user_id($user->id_membre);
-            $users_teams_str = implode("-",$users_teams);
+            $users_teams_str = implode("-", $users_teams);
 
             $tower = convert_tower_into_readable($istep_users->tourDuBureau);
             $campus = get_name_of_location_by_id(intval($istep_users->campus));
             $html.= <<<HTML
+            <a class="no-display-fields" href="$linkToProfilePage"></a>
+
         <tr class="user-$userID tiny-directory-tr" tabindex="0">
             
             <td class="no-display-fields" id="pp-$userID" data-id="$userID">$userAvatar
