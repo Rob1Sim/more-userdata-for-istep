@@ -106,7 +106,7 @@ function get_istep_user_by_id(int $id, string $type ="wp"):mixed
     if ($type == "istep") {
         return $wpdb->get_results("SELECT * FROM $tableName WHERE id_membre = $id")[0];
     }
-    throw new \WPUM\Carbon\Exceptions\InvalidTypeException("Type incorrecte : le paramètre type ne prend que la valeur wp ou istep");
+    throw new InvalidTypeException("Type incorrecte : le paramètre type ne prend que la valeur wp ou istep");
 }
 
 /**
@@ -184,23 +184,6 @@ function delete_cap_if_no_need_anymore(string $cap, array $listOfRoleWithTheCap)
     return $listOfRoleWithTheCap;
 }
 
-/**
- * Vérifie que l'id passé en paramètre correspond à l'id d'une équipe
- * @param int $id
- * @return bool
- */
-function is_team_id_valid(int $id): bool
-{
-    global $wpdb;
-    $table_name = TABLE_TEAM_NAME;
-    $teams = $wpdb->get_results("SELECT id_equipe FROM $table_name");
-    $array_of_id = [];
-    foreach ($teams as $team) {
-        $array_of_id[] = $team->id_equipe;
-    }
-
-    return in_array($id, $array_of_id);
-}
 
 /**
  * Retourne une liste de string contenant le nom de chaque équipe
@@ -247,20 +230,7 @@ function get_user_teams_by_user_id(int $id): array
     return $teams;
 }
 
-/**
- * Récupère tous les id des équipes de l'utilisateur passé en paramètre
- * @param int $id
- * @return array
- */
-function get_user_teams_id_by_user_id(int $id): array
-{
-    $teams = get_user_teams_by_user_id($id);
-    $array_of_id = [];
-    foreach ($teams as $team) {
-        $array_of_id[] = $team->id_equipe;
-    }
-    return $array_of_id;
-}
+
 
 /**
  * AJoute une entrée à la table
@@ -287,25 +257,6 @@ function add_data_to_team_members(array $teams_id_list, int $member_id): void
     }
 }
 
-/**
- * Supprime une entrée de la table members teams, avec les données passé en paramètres
- * @param int $team_id
- * @param int $member_id
- * @return void
- */
-function delete_data_from_team_members(int $team_id, int $member_id): void
-{
-    //Si pour une raison quelconque il n'y a pas d'équipe alors on l'attribut à l'équipe "Pas d'équipe"
-    global $wpdb;
-
-    $wpdb->delete(
-        TABLE_MEMBERS_TEAM_NAME,
-        array(
-            "id_equipe" => $team_id,
-            "id_membre" => $member_id
-        )
-    );
-}
 
 /**
  * Retourne le nom d'un campus grâce à son id
@@ -324,21 +275,6 @@ function get_name_of_location_by_id(int $id):string
     return "Pas de campus";
 }
 
-/**
- * Retourne l'utilisateur WP depuis l'id d'un utilisateur de l'ISTeP
- * @param int $id
- * @return WP_User|false
- */
-function get_wp_user_from_istep_user(int $id): WP_User|false
-{
-    global $wpdb;
-    $member_table = TABLE_MEMBERS_NAME;
-    $query = $wpdb->get_results("SELECT wp_user_id FROM $member_table WHERE id_membre = $id ");
-    if (empty($query)) {
-        return false;
-    }
-    return get_user_by('id', $query[0]->wp_user_id);
-}
 
 /**
  * Récupère toutes les infos présente sur la page de l'utilisateur et les renvoie sous la forme d'un tableau
