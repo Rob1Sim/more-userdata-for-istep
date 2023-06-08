@@ -160,6 +160,7 @@ class Member implements IWpEntity
 
     public static function getAll(): array
     {
+
         $instance_list = [];
         foreach (get_list_of_table(self::getTableName()) as $wp_objet){
             $instance_list[] = self::createEntityFromWPDB($wp_objet);
@@ -169,10 +170,11 @@ class Member implements IWpEntity
 
     public static function createEntityFromWPDB($entity): Member
     {
+
         return new Member($entity->id_membre,$entity->wp_user_id,
             $entity->campus_location,($entity->fonction ?? ""),($entity->nTelephone ?? ""),
-            ($entity->bureau ?? ""),($entity->rangEquipe ?? ""),($entity->tourDuBureau ?? ""),
-            ($entity->employeur ?? ""),($entity->rangEquipe ?? ""));
+            ($entity->bureau ?? ""),($entity->tourDuBureau ?? ""),($entity->employeur ?? ""),
+            ($entity->caseCourrier ?? ""),($entity->rangEquipe ?? ""));
     }
 
     /**
@@ -290,7 +292,7 @@ class Member implements IWpEntity
     static function getTableName(): string
     {
         global $wpdb;
-        return $wpdb->prefix . 'equipe_ISTeP';
+        return $wpdb->prefix . 'membre_ISTeP';
     }
     public function update():void{
         global $wpdb;
