@@ -81,6 +81,19 @@ class Location implements \MUDF_ISTEP\Interface\IWpEntity
         $wp_obj = $wpdb->get_results("SELECT * FROM $table_name WHERE id_localisation = $id")[0];
         return !empty($wpdb->get_results($wp_obj));
     }
+
+    /**
+     * Vérifie si le campus existe, sinon renvoie vers l'url fournis
+     * @param int $id
+     * @param string $redirect_url
+     * @return void
+     */
+    public static function redirect_if_location_does_not_exist(int $id, string $redirect_url):void{
+        if (!self::is_location($id)) {
+            wp_redirect($redirect_url);
+            exit();
+        }
+    }
     /**
      * @inheritDoc
      */
