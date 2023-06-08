@@ -99,11 +99,12 @@ class Member implements IWpEntity
     }
 
     /**
-     * @return int
+     * @return IWpEntity|Location
+     * @throws EntityNotFound
      */
-    public function getLocation(): int
+    public function getLocation(): Location|IWpEntity
     {
-        return $this->location;
+        return Location::findById($this->location);
     }
 
     /**
