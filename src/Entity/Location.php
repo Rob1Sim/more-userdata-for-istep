@@ -2,6 +2,7 @@
 
 namespace MUDF_ISTEP\Entity;
 
+use MUDF_ISTEP\Exception\LocationNotFound;
 use MUDF_ISTEP\Interface\IWpEntity;
 
 class Location implements \MUDF_ISTEP\Interface\IWpEntity
@@ -38,9 +39,15 @@ class Location implements \MUDF_ISTEP\Interface\IWpEntity
     /**
      * @inheritDoc
      */
-    public static function findById(int $id): \MUDF_ISTEP\Interface\IWpEntity
+    public static function findById(int $id): self
     {
-        // TODO: Implement findById() method.
+        global $wpdb;
+        $tableName = self::getTableName();
+        $wp_obj = $wpdb->get_results("SELECT * FROM $tableName WHERE id_localisation = $id")[0];
+        if (isset($wp_obj)){
+            return self::createEntityFromWPDB($wp_obj);
+        }
+        throw new LocationNotFound("L'id ne correspond à aucun campus");
     }
 
     /**
@@ -48,15 +55,19 @@ class Location implements \MUDF_ISTEP\Interface\IWpEntity
      */
     public static function getAll(): array
     {
-        // TODO: Implement getAll() method.
+        $instance_list = [];
+        foreach (get_list_of_table(self::getTableName()) as $wp_objet){
+            $instance_list[] = self::createEntityFromWPDB($wp_objet);
+        }
+        return $instance_list;
     }
 
     /**
      * @inheritDoc
      */
-    public static function createEntityFromWPDB($entity): \MUDF_ISTEP\Interface\IWpEntity
+    public static function createEntityFromWPDB($entity): self
     {
-        // TODO: Implement createEntityFromWPDB() method.
+        return new Location($entity->id_localisation,$entity->nom_localisation);
     }
 
     /**
@@ -64,6 +75,7 @@ class Location implements \MUDF_ISTEP\Interface\IWpEntity
      */
     static function getTableName(): string
     {
-        // TODO: Implement getTableName() method.
+        global $wpdb;
+        return $wpdb->prefix . 'localisation_ISTeP';
     }
 }

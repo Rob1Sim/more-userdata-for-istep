@@ -16,7 +16,7 @@ interface IWpEntity
 
     /**
      * Récupère toutes les entrée de l'entité dans la base de donnée
-     * @return array
+     * @return array<self>
      */
     public static function getAll():array;
 
