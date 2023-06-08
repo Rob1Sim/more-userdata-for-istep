@@ -67,6 +67,10 @@ class Team implements IWpEntity
         return $instance_list;
     }
 
+    /**
+     * Renvoie le nom de chaque équipe
+     * @return array<string>
+     */
     public static function getAllNames(): array{
         $teams = self::getAll();
         $teams_names = [];
