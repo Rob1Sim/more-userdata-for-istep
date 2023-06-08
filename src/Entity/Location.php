@@ -71,6 +71,17 @@ class Location implements \MUDF_ISTEP\Interface\IWpEntity
     }
 
     /**
+     * Vérifie si un campus existe
+     * @param int $id
+     * @return bool
+     */
+    public static function is_location(int $id):bool{
+        global $wpdb;
+        $table_name = self::getTableName();
+        $wp_obj = $wpdb->get_results("SELECT * FROM $table_name WHERE id_localisation = $id")[0];
+        return !empty($wpdb->get_results($wp_obj));
+    }
+    /**
      * @inheritDoc
      */
     static function getTableName(): string
