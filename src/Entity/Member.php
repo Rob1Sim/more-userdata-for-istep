@@ -168,4 +168,16 @@ class Member implements IWpEntity
             ($entity->bureau ?? ""),($entity->rangEquipe ?? ""),($entity->tourDuBureau ?? ""),
             ($entity->employeur ?? ""),($entity->rangEquipe ?? ""));
     }
+
+    /**
+     * Renvoie une liste contenant les instances des éuqipes de l'utilisateur
+     * @return array
+     */
+    public function getTeams():array{
+        global $wpdb;
+        $table_name = TABLE_MEMBERS_TEAM_NAME;
+
+        $teams = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE id_membre = $id");
+        return $teams;
+    }
 }
