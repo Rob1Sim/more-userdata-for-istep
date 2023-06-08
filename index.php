@@ -10,17 +10,16 @@ Version: 1.0
 Author URI: https://robin-sim.fr/
 */
 
-use function MUDF_ISTEP\create_modify_personal_page;
-use const MUDF_ISTEP\ADMIN_CAPACITY;
 
-wp_enqueue_style('more-userdata-for-istep', plugins_url('styles/more-userdata-for-istep.css', __FILE__));
-wp_enqueue_script('more-userdata-for-istep-js', plugins_url('scripts/more-userdata-for-istep.js', __FILE__), array(), false, true);
 
-require_once(plugin_dir_path(__FILE__).'src/utilities.php');
-require_once(plugin_dir_path(__FILE__) . 'src/admin-functions.php');
-require_once(plugin_dir_path(__FILE__) . 'src/tiny_directory.php');
-require_once(plugin_dir_path(__FILE__) . 'src/personal_pages.php');
-require_once(plugin_dir_path(__FILE__) . 'src/add_user_form.php');
+wp_enqueue_style('more-userdata-for-istep', plugins_url('public/styles/more-userdata-for-istep.css', __FILE__));
+wp_enqueue_script('more-userdata-for-istep-js', plugins_url('public/scripts/more-userdata-for-istep.js', __FILE__), array(), false, true);
+
+require_once(plugin_dir_path(__FILE__) . 'scripts/utilities.php');
+require_once(plugin_dir_path(__FILE__) . 'scripts/admin-functions.php');
+require_once(plugin_dir_path(__FILE__) . 'scripts/tiny_directory.php');
+require_once(plugin_dir_path(__FILE__) . 'scripts/personal_pages.php');
+require_once(plugin_dir_path(__FILE__) . 'scripts/add_user_form.php');
 
 /**
  * Créer la base de donnée lors de l'activation du plugin

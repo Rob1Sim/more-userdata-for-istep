@@ -1,11 +1,9 @@
 <?php
-namespace MUDF_ISTEP;
 
 // ------------Fonction diverses utilisé dans le plugin-----------
 global $wpdb;
 
-use stdClass;
-use WP_User;
+
 
 /**
  * Nom de la table équipe dans la base de donnée

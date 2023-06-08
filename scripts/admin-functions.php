@@ -2,12 +2,13 @@
 /**
  * Gestion de la partie More User data for ISTeP dans le panel administrateur
  */
-namespace MUDF_ISTEP;
+
 
 
 // ---- Menu Administrateur ----
-wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../scripts/more-userdata-for-istep-admin.js', __FILE__), array(), false, true);
-wp_enqueue_style('more-userdata-for-istep-admin', plugins_url('../styles/more-userdata-for-istep-admin.css', __FILE__));
+
+wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../public/scripts/more-userdata-for-istep-admin.js', __FILE__), array(), false, true);
+wp_enqueue_style('more-userdata-for-istep-admin', plugins_url('../public/styles/more-userdata-for-istep-admin.css', __FILE__));
 
 require_once(plugin_dir_path(__FILE__) . 'admin/location.php');
 require_once(plugin_dir_path(__FILE__) . 'admin/users.php');
@@ -25,7 +26,7 @@ function more_userdata_istep_menu(): void
         "Membres de l'ISTeP paramètres",
         ADMIN_CAPACITY,
         "istep_users_options",
-        "MUDF_ISTEP\\more_userdata_istep_menu_content"
+        "more_userdata_istep_menu_content"
     );
     add_submenu_page(
         'istep_users_options', // slug du parent
@@ -33,7 +34,7 @@ function more_userdata_istep_menu(): void
         'Gérer les permissions', // titre du menu
         'administrator', // capacité requise
         'admin_users_options', // slug de la page
-        'MUDF_ISTEP\\more_userdata_istep_menu_give_access' // fonction de rappel
+        'more_userdata_istep_menu_give_access' // fonction de rappel
     );
     // --- Les équipes ---
     add_submenu_page(
@@ -42,7 +43,7 @@ function more_userdata_istep_menu(): void
         'Gérer les équipes', // titre du menu
         ADMIN_CAPACITY, // capacité requise
         'istep_manage_teams', // slug de la page
-        'MUDF_ISTEP\\Admin\\more_userdata_istep_menu_team_page' // fonction de rappel
+        'more_userdata_istep_menu_team_page' // fonction de rappel
     );
     add_submenu_page(
         'admin.php?page=edit_teams&id=',
@@ -50,7 +51,7 @@ function more_userdata_istep_menu(): void
         'Modifier équipe',
         ADMIN_CAPACITY,
         'edit_teams',
-        'MUDF_ISTEP\\Admin\\more_userdata_istep_edit_equipe_page'
+        'more_userdata_istep_edit_equipe_page'
     );
     add_submenu_page(
         'admin.php?page=delete_teams&id=',
@@ -58,7 +59,7 @@ function more_userdata_istep_menu(): void
         'Supprimer équipe',
         ADMIN_CAPACITY,
         'delete_teams',
-        'MUDF_ISTEP\\Admin\\more_userdata_istep_delete_equipe_page'
+        'more_userdata_istep_delete_equipe_page'
     );
     // --- Les campus ---
     add_submenu_page(
@@ -67,7 +68,7 @@ function more_userdata_istep_menu(): void
         'Gérer les campus', // titre du menu
         ADMIN_CAPACITY, // capacité requise
         'istep_manage_location', // slug de la page
-        'MUDF_ISTEP\\Admin\\more_userdata_istep_menu_location_page' // fonction de rappel
+        'more_userdata_istep_menu_location_page' // fonction de rappel
     );
     add_submenu_page(
         'admin.php?page=edit_location&id=',
@@ -75,7 +76,7 @@ function more_userdata_istep_menu(): void
         'Modifier le campus',
         ADMIN_CAPACITY,
         'edit_location',
-        'MUDF_ISTEP\\Admin\\more_userdata_istep_edit_location_page'
+        'more_userdata_istep_edit_location_page'
     );
     add_submenu_page(
         'admin.php?page=suppress_location&id=',
@@ -83,7 +84,7 @@ function more_userdata_istep_menu(): void
         'Supprimer campus',
         ADMIN_CAPACITY,
         'suppress_location',
-        'MUDF_ISTEP\\Admin\\more_userdata_istep_delete_location_page'
+        'more_userdata_istep_delete_location_page'
     );
     // --- Les utilisateurs ---
     add_submenu_page(
@@ -92,7 +93,7 @@ function more_userdata_istep_menu(): void
         'Membres de l\'ISTeP',
         ADMIN_CAPACITY,
         'istep_users_list',
-        'MUDF_ISTEP\\Admin\\more_userdata_istep_users_list'
+        'more_userdata_istep_users_list'
     );
     add_submenu_page(
         'admin.php?page=modify_users&id=',
@@ -100,7 +101,7 @@ function more_userdata_istep_menu(): void
         'Modifier l\'utilisateur',
         ADMIN_CAPACITY,
         'modify_users_data',
-        'MUDF_ISTEP\\Admin\\more_userdata_istep_users_edit_data'
+        'more_userdata_istep_users_edit_data'
     );
     add_submenu_page(
         'admin.php?page=erase_user&id=',
@@ -108,11 +109,11 @@ function more_userdata_istep_menu(): void
         'Supprimer un utilisateur',
         ADMIN_CAPACITY,
         'erase_user',
-        'MUDF_ISTEP\\Admin\\more_userdata_istep_users_delete_user'
+        'more_userdata_istep_users_delete_user'
     );
 }
 
-add_action('admin_menu', 'MUDF_ISTEP\\more_userdata_istep_menu');
+add_action('admin_menu', 'more_userdata_istep_menu');
 
 /**
  * Gère le contenue de la page administrateur

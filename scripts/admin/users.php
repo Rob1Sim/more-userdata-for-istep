@@ -2,24 +2,11 @@
 /**
  * Gestion de la listes des utilisateur
  */
-namespace MUDF_ISTEP\Admin;
 
-use function MUDF_ISTEP\add_data_to_team_members;
-use function MUDF_ISTEP\can_user_access_this;
-use function MUDF_ISTEP\convert_tower_into_readable;
-use function MUDF_ISTEP\create_personal_page;
-use function MUDF_ISTEP\delete_data_from_team_members;
-use function MUDF_ISTEP\delete_personal_page_by_wp_user;
-use function MUDF_ISTEP\get_istep_user_by_id;
-use function MUDF_ISTEP\get_list_of_table;
-use function MUDF_ISTEP\get_name_of_location_by_id;
-use function MUDF_ISTEP\get_user_teams_id_by_user_id;
-use function MUDF_ISTEP\get_user_teams_names_by_user_id;
-use function MUDF_ISTEP\get_wp_user_from_istep_user;
-use function MUDF_ISTEP\is_location_existing;
-use const MUDF_ISTEP\ADMIN_CAPACITY;
 
-wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../../scripts/more-userdata-for-istep-admin.js', __FILE__), array(), false, true);
+
+
+wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../../public/scripts/more-userdata-for-istep-admin.js', __FILE__), array(), false, true);
 
 
 /**

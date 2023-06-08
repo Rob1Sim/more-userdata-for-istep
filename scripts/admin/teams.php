@@ -2,13 +2,10 @@
 /**
  * Gestion du menu de sélections des équipes
  */
-namespace MUDF_ISTEP\Admin;
 
-use function MUDF_ISTEP\can_user_access_this;
-use function MUDF_ISTEP\get_list_of_table;
-use const MUDF_ISTEP\ADMIN_CAPACITY;
 
-wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../../scripts/more-userdata-for-istep-admin.js', __FILE__), array(), false, true);
+
+wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../../public/scripts/more-userdata-for-istep-admin.js', __FILE__), array(), false, true);
 
 /**
  * Sous menu qui gère l'ajout des différentes équipes

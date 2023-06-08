@@ -2,9 +2,8 @@
 /**
  * Gère le formulaire de création d'utilisateur
  */
-namespace MUDF_ISTEP;
 
-add_shortcode('add_istep_user_form', 'MUDF_ISTEP\\add_new_user_form');
+add_shortcode('add_istep_user_form', 'add_new_user_form');
 
 /**
  * Affiche le formulaire de création d'utilisateur
@@ -144,7 +143,7 @@ HTML;
 
 }
 
-add_action('wp', 'MUDF_ISTEP\\add_new_user');
+add_action('wp', 'add_new_user');
 /**
  * Fonction qui vérifie les données entré dans le formulaire et les enregistre dans la base de donnée
  * @return void

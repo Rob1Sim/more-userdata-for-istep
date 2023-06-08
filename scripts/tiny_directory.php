@@ -2,10 +2,9 @@
 /**
  * Gestion de l'annuaire
  */
-namespace MUDF_ISTEP;
 
 // -- Tiny Directory --
-add_shortcode('users_directory', 'MUDF_ISTEP\\create_directory_from_DB_users');
+add_shortcode('users_directory', 'create_directory_from_DB_users');
 
 /**
  * Récupère les utilisateurs dans la base de donnée et les affect à un tableau HTML
@@ -42,8 +41,8 @@ function create_directory_from_DB_users($atts): string
 
 
     //Ajout de la feuille de style et du javascript
-    wp_enqueue_style('tiny-directory-css', plugins_url('../styles/tiny-directory.css', __FILE__));
-    wp_enqueue_script('tiny-directory-js', plugins_url('../scripts/tiny-directory.js', __FILE__), array(), false, true);
+    wp_enqueue_style('tiny-directory-css', plugins_url('../public/styles/tiny-directory.css', __FILE__));
+    wp_enqueue_script('tiny-directory-js', plugins_url('../public/scripts/tiny-directory.js', __FILE__), array(), false, true);
     $users = get_list_of_table(TABLE_MEMBERS_NAME);
     // Vérifier s'il y a des utilisateurs
     if (!empty($users)) {
