@@ -179,7 +179,7 @@ class Member implements IWpEntity
      */
     public function getTeams():array{
         global $wpdb;
-        $table_name = $wpdb->prefix . 'membre_equipe_ISTeP';
+        $table_name = self::getTeamMemberRelationTableName();
 
         $teams = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE id_membre = $this->id");
         $teams_object = [];
@@ -232,6 +232,51 @@ class Member implements IWpEntity
 
         return "$tour $floor"."-"." $level"."ème étage";
     }
+
+    /**
+     * Ajoute le membre aux équipes
+     * @param array $teams_id_list
+     * @return void
+     */
+    public function addTeam(array $teams_id_list):void{
+        //Si pour une raison quelconque il n'y a pas d'équipe alors on l'attribut à l'équipe "Pas d'équipe"
+        global $wpdb;
+        if (count($this->getTeams()) == 0) {
+            $teams_id_list[] = 1;
+        }
+        //Création d'entités entre les équipes et l'utilisateur
+        foreach ($teams_id_list as $team) {
+            $wpdb->insert(
+                self::getTeamMemberRelationTableName(),
+                array(
+                    'id_equipe' => intval($team),
+                    'id_membre' => $this->id
+                )
+            );
+        }
+    }
+
+    /**
+     * Supprime l'équipe avec l'id passé en paramètre
+     * @param int $id
+     * @return void
+     */
+    public function deleteTeam(int $id):void{
+        global $wpdb;
+
+        $wpdb->delete(
+            TABLE_MEMBERS_TEAM_NAME,
+            array(
+                "id_equipe" => $this->id,
+                "id_membre" => $id
+            )
+        );
+    }
+    static function getTeamMemberRelationTableName():string{
+        global $wpdb;
+        return $wpdb->prefix . 'membre_equipe_ISTeP';
+    }
+
     static function getTableName(): string
     {
         global $wpdb;
