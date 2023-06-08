@@ -32,4 +32,10 @@ interface IWpEntity
      * @return string
      */
     static function getTableName():string;
+
+    /**
+     * Enregistre ou ajoute l'instance dans la base de donnée
+     * @return void
+     */
+    public function save():void;
 }

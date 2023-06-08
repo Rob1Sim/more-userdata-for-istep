@@ -102,10 +102,32 @@ class Team implements IWpEntity
 
         return in_array($id, $array_of_id);
     }
-
+    public function save():void{
+        global $wpdb;
+        $table_name = self::getTableName();
+        $rq = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE nom_equipe = $this->id");
+        if (isset($rq) && count($rq)>0){
+            $wpdb->update($table_name, array(
+                "nom_equipe"=>$this->name,
+            ), array(
+                "id_equipe"=>$this->id
+            ));
+        }else {
+            $wpdb->insert($table_name, array(
+                "nom_equipe" => $this->name,
+            ));
+        }
+    }
     static function getTableName(): string
     {
         global $wpdb;
         return $wpdb->prefix . 'equipe_ISTeP';
+    }
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 }

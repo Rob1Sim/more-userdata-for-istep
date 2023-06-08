@@ -94,6 +94,23 @@ class Location implements \MUDF_ISTEP\Interface\IWpEntity
             exit();
         }
     }
+    public function save():void{
+        global $wpdb;
+        $table_name = self::getTableName();
+        $rq = $wpdb->get_results("SELECT id_localisation FROM $table_name WHERE id_localisation = $this->id");
+        if (isset($rq) && count($rq)>0){
+            $wpdb->update($table_name, array(
+                "nom_localisation"=>$this->name,
+            ), array(
+                "id_localisation"=>$this->id
+            ));
+        }else {
+            $wpdb->insert($table_name, array(
+                "nom_localisation" => $this->name,
+            ));
+        }
+    }
+
     /**
      * @inheritDoc
      */
@@ -102,4 +119,13 @@ class Location implements \MUDF_ISTEP\Interface\IWpEntity
         global $wpdb;
         return $wpdb->prefix . 'localisation_ISTeP';
     }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
 }

@@ -294,20 +294,38 @@ class Member implements IWpEntity
         global $wpdb;
         return $wpdb->prefix . 'membre_ISTeP';
     }
-    public function update():void{
+    public function save():void{
         global $wpdb;
-        $wpdb->update(TABLE_MEMBERS_NAME, array(
-            "fonction"=>$this->function,
-            "caseCourrier"=>$this->mailCase,
-            "employeur"=>$this->employer,
-            "rangEquipe"=>$this->teamRank,
-            "nTelephone" => $this->phone,
-            "tourDuBureau" => $this->officeTower,
-            "bureau"=>$this->office,
-            "campus_location"=>$this->location
-        ), array(
-            "wp_user_id"=>$this->wp_id
-        ));
+        $table_name = self::getTableName();
+        $rq = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE id_membre = $this->id");
+        if (isset($rq) && count($rq)>0){
+            $wpdb->update($table_name, array(
+                "fonction"=>$this->function,
+                "caseCourrier"=>$this->mailCase,
+                "employeur"=>$this->employer,
+                "rangEquipe"=>$this->teamRank,
+                "nTelephone" => $this->phone,
+                "tourDuBureau" => $this->officeTower,
+                "bureau"=>$this->office,
+                "campus_location"=>$this->location
+            ), array(
+                "wp_user_id"=>$this->wp_id
+            ));
+        }else{
+            $wpdb->insert($table_name,array(
+                "wp_user_id"=>$this->wp_id,
+                "fonction"=>$this->function,
+                "caseCourrier"=>$this->mailCase,
+                "employeur"=>$this->employer,
+                "rangEquipe"=>$this->teamRank,
+                "nTelephone" => $this->phone,
+                "tourDuBureau" => $this->officeTower,
+                "bureau"=>$this->office,
+                "campus_location"=>$this->location
+            ));
+        }
+
+
     }
 
     /**
