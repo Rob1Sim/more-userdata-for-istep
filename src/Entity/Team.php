@@ -40,10 +40,17 @@ class Team implements IWpEntity
 
     /**
      * @inheritDoc
+     * @throws TeamNotFound
      */
-    public static function findById(int $id): \MUDF_ISTEP\Interface\IWpEntity
+    public static function findById(int $id): self
     {
-        // TODO: Implement findById() method.
+        global $wpdb;
+        $tableName =self::getTableName();
+        $wp_obj = $wpdb->get_results("SELECT * FROM $tableName WHERE id_equipe = $id")[0];
+        if (isset($wp_obj)){
+            return self::createEntityFromWPDB($wp_obj);
+        }
+        throw new TeamNotFound("L'id ne correspond à aucune équipe");
     }
 
     /**
@@ -51,14 +58,24 @@ class Team implements IWpEntity
      */
     public static function getAll(): array
     {
-        // TODO: Implement getAll() method.
+        $instance_list = [];
+        foreach (get_list_of_table(self::getTableName()) as $wp_objet){
+            $instance_list[] = self::createEntityFromWPDB($wp_objet);
+        }
+        return $instance_list;
     }
 
     /**
      * @inheritDoc
      */
-    public static function createEntityFromWPDB($entity): \MUDF_ISTEP\Interface\IWpEntity
+    public static function createEntityFromWPDB($entity): self
     {
-        // TODO: Implement createEntityFromWPDB() method.
+        return new Team($entity->id_equipe,$entity->nom_equipe);
+    }
+
+    static function getTableName(): string
+    {
+        global $wpdb;
+        return $wpdb->prefix . 'equipe_ISTeP';
     }
 }

@@ -26,4 +26,10 @@ interface IWpEntity
      * @return self
      */
     public static function createEntityFromWPDB($entity):self;
+
+    /**
+     * Retourne le nom de la table de la classe dans la base de donnée
+     * @return string
+     */
+    static function getTableName():string;
 }
