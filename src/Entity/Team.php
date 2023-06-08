@@ -67,6 +67,15 @@ class Team implements IWpEntity
         return $instance_list;
     }
 
+    public static function getAllNames(): array{
+        $teams = self::getAll();
+        $teams_names = [];
+        foreach ($teams as $team){
+            $teams_names[] = $team->getName();
+        }
+        return $teams_names;
+    }
+
     /**
      * @inheritDoc
      */
