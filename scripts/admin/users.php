@@ -16,6 +16,7 @@ wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../../public/
  */
 function more_userdata_istep_users_list():void
 {
+
     if (!can_user_access_this(get_option('admin_user_roles'))) {
         wp_die(__('You do not have sufficient permissions to access this page.'));
     }
@@ -62,10 +63,10 @@ function more_userdata_istep_users_list():void
             </thead>
             <tbody>
 <?php
-                $users = Member::getAll();
+    $users = Member::getAll();
     foreach ($users as $user) {
         try {
-            $member = Member::findById($user->id_membre);
+            $member = Member::findById($user->getId());
             $teams = $member->getTeamsNames();
             $wp_user = $member->getWPUser();
             echo '<tr>';
@@ -182,18 +183,21 @@ function more_userdata_istep_users_edit_data():void
         //Vérification des équipes
         $verified_teams = [];
         try {
-            $already_exist_data = Member::findById($id_user)->getTeams();
+            $member = Member::findById($id_user);
+            $already_exist_data = $member->getTeamsId();
             $teams_already_in = [];
             if (!isset($_POST['teams'])) {
                 $verified_teams[] = 1;
             } else {
                 $teams = $_POST['teams'];
+
                 foreach ($teams as $team) {
+                    $team_object = Team::findById(sanitize_text_field($team))->getId();
                     //Si l'équipe n'éxiste pas on l'ajoute
                     if (!in_array($team, $already_exist_data)) {
-                        $verified_teams[] = sanitize_text_field($team);
+                        $verified_teams[] = $team_object;
                     } else {
-                        $teams_already_in[] = sanitize_text_field($team);
+                        $teams_already_in[] = $team_object;
                     }
                 }
             }
@@ -202,10 +206,10 @@ function more_userdata_istep_users_edit_data():void
             $teams_to_delete = array_diff($already_exist_data, $teams_already_in);
             foreach ($teams_to_delete as $team) {
                 //on les supprime
-                delete_data_from_team_members($team, sanitize_text_field($id_user));
+                $member->deleteTeam($team);
             }
             //on ajoute les nouvelle
-            add_data_to_team_members($verified_teams, $id_user);
+            $member->addTeam($verified_teams);
 
 
             echo '<div id="message" class="updated notice"><p>Mis à jour réalisé avec succès.</p></div>';

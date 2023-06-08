@@ -79,7 +79,7 @@ class Location implements \MUDF_ISTEP\Interface\IWpEntity
         global $wpdb;
         $table_name = self::getTableName();
         $wp_obj = $wpdb->get_results("SELECT * FROM $table_name WHERE id_localisation = $id")[0];
-        return !empty($wpdb->get_results($wp_obj));
+        return !empty($wp_obj);
     }
 
     /**
