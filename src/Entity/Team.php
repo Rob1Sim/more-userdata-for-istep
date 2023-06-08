@@ -88,6 +88,21 @@ class Team implements IWpEntity
         return new Team($entity->id_equipe,$entity->nom_equipe);
     }
 
+    /**
+     * Vérifie que l'id de l'équipe entrée existe
+     * @param int $id
+     * @return bool
+     */
+    public static function isTeamValid(int $id){
+        $teams = self::getAll();
+        $array_of_id = [];
+        foreach ($teams as $team) {
+            $array_of_id[] = $team->getId();
+        }
+
+        return in_array($id, $array_of_id);
+    }
+
     static function getTableName(): string
     {
         global $wpdb;
