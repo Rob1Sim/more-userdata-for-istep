@@ -105,8 +105,8 @@ class Team implements IWpEntity
     public function save():void{
         global $wpdb;
         $table_name = self::getTableName();
-        $rq = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE id_equipe = $this->id");
-        if (isset($rq) && count($rq)>0){
+        $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_equipe = $this->id");
+        if (isset($rq) && $rq>0){
             $wpdb->update($table_name, array(
                 "nom_equipe"=>$this->name,
             ), array(
@@ -121,8 +121,8 @@ class Team implements IWpEntity
     public function delete():bool{
         global $wpdb;
         $table_name = self::getTableName();
-        $rq = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE id_equipe = $this->id");
-        if (isset($rq) && count($rq)>0){
+        $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_equipe = $this->id");
+        if (isset($rq) && $rq>0){
             $wpdb->delete(
                 $table_name,
                 array(

@@ -297,8 +297,8 @@ class Member implements IWpEntity
     public function save():void{
         global $wpdb;
         $table_name = self::getTableName();
-        $rq = $wpdb->get_results("SELECT id_membre FROM $table_name WHERE id_membre = $this->id");
-        if (isset($rq) && count($rq)>0){
+        $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_membre = $this->id");
+        if (isset($rq) && $rq>0){
             $wpdb->update($table_name, array(
                 "fonction"=>$this->function,
                 "caseCourrier"=>$this->mailCase,
@@ -328,8 +328,8 @@ class Member implements IWpEntity
     public function delete():bool{
         global $wpdb;
         $table_name = self::getTableName();
-        $rq = $wpdb->get_results("SELECT id_membre FROM $table_name WHERE id_membre = $this->id");
-        if (isset($rq) && count($rq)>0){
+        $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_membre = $this->id");
+        if (isset($rq) && $rq>0){
             $wpdb->delete(
                 $table_name,
                 array(
