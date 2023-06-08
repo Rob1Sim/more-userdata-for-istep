@@ -1,5 +1,6 @@
 <?php
 namespace MUDF_ISTEP\Entity;
+use MUDF_ISTEP\Exception\EntityNotFound;
 use MUDF_ISTEP\Exception\InvalidParameter;
 use MUDF_ISTEP\Exception\MemberNotFound;
 use MUDF_ISTEP\Interface\IWpEntity;
@@ -137,7 +138,7 @@ class Member implements IWpEntity
     public static function findById(int $id, string $type="istep"): Member
     {
         global $wpdb;
-        $tableName = TABLE_MEMBERS_NAME;
+        $tableName = self::getTableName();
         if ($type == "wp") {
             $wp_objet = $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $id")[0];
             if (isset($wp_objet)){
@@ -158,7 +159,7 @@ class Member implements IWpEntity
     public static function getAll(): array
     {
         $instance_list = [];
-        foreach (get_list_of_table(TABLE_MEMBERS_NAME) as $wp_objet){
+        foreach (get_list_of_table(self::getTableName()) as $wp_objet){
             $instance_list[] = self::createEntityFromWPDB($wp_objet);
         }
         return $instance_list;
@@ -174,13 +175,66 @@ class Member implements IWpEntity
 
     /**
      * Renvoie une liste contenant les instances des éuqipes de l'utilisateur
-     * @return array
+     * @return array<Team>
      */
     public function getTeams():array{
         global $wpdb;
-        $table_name = TABLE_MEMBERS_TEAM_NAME;
+        $table_name = $wpdb->prefix . 'membre_equipe_ISTeP';
 
-        $teams = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE id_membre = $id");
-        return $teams;
+        $teams = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE id_membre = $this->id");
+        $teams_object = [];
+        foreach ($teams as $team){
+            try {
+                $teams_object[] = Team::findById($team->id_equipe);
+            } catch (TeamNotFound|EntityNotFound $e) {
+                $teams_object[] = new Team(0,"Pas d'équipe");
+            }
+        }
+        return $teams_object;
+    }
+
+    /**
+     * Renvoie la listes des nom des équipes des utilisateurs
+     * @return array<string>
+     */
+    public function getTeamsNames():array{
+        $teams = $this->getTeams();
+        $teams_names = [];
+        foreach ($teams as $team){
+            $teams_names[] = $team->getName();
+        }
+        return $teams_names;
+    }
+
+    /**
+     * Renvoie la listes des id des équipes des utilisateurs
+     * @return array<int>
+     */
+    public function getTeamsId():array{
+        $teams = $this->getTeams();
+        $teams_id = [];
+        foreach ($teams as $team){
+            $teams_id[] = $team->getId();
+        }
+        return $teams_id;
+    }
+
+    /**
+     * Renvoie le nom de la tour de façon lisible
+     * @return string
+     */
+    public function getReadableOfficeTower():string{
+        $parts = explode('-', $this->officeTower);
+
+        $tour = ucfirst($parts[0]);
+        $floor = str_replace('-', ' ', $parts[1]);
+        $level = $parts[2];
+
+        return "$tour $floor"."-"." $level"."ème étage";
+    }
+    static function getTableName(): string
+    {
+        global $wpdb;
+        return $wpdb->prefix . 'equipe_ISTeP';
     }
 }
