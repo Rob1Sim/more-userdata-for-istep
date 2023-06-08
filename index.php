@@ -10,6 +10,7 @@ Version: 1.0
 Author URI: https://robin-sim.fr/
 */
 
+require plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
 
 wp_enqueue_style('more-userdata-for-istep', plugins_url('public/styles/more-userdata-for-istep.css', __FILE__));
