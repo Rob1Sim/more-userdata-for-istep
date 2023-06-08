@@ -292,4 +292,83 @@ class Member implements IWpEntity
         global $wpdb;
         return $wpdb->prefix . 'equipe_ISTeP';
     }
+    public function update():void{
+        global $wpdb;
+        $wpdb->update(TABLE_MEMBERS_NAME, array(
+            "fonction"=>$this->function,
+            "caseCourrier"=>$this->mailCase,
+            "employeur"=>$this->employer,
+            "rangEquipe"=>$this->teamRank,
+            "nTelephone" => $this->phone,
+            "tourDuBureau" => $this->officeTower,
+            "bureau"=>$this->office,
+            "campus_location"=>$this->location
+        ), array(
+            "wp_user_id"=>$this->wp_id
+        ));
+    }
+
+    /**
+     * @param string $function
+     */
+    public function setFunction(string $function): void
+    {
+        $this->function = $function;
+    }
+
+    /**
+     * @param string $phone
+     */
+    public function setPhone(string $phone): void
+    {
+        $this->phone = $phone;
+    }
+
+    /**
+     * @param string $office
+     */
+    public function setOffice(string $office): void
+    {
+        $this->office = $office;
+    }
+
+    /**
+     * @param string $officeTower
+     */
+    public function setOfficeTower(string $officeTower): void
+    {
+        $this->officeTower = $officeTower;
+    }
+
+    /**
+     * @param int $location
+     */
+    public function setLocation(int $location): void
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * @param string $employer
+     */
+    public function setEmployer(string $employer): void
+    {
+        $this->employer = $employer;
+    }
+
+    /**
+     * @param string $mailCase
+     */
+    public function setMailCase(string $mailCase): void
+    {
+        $this->mailCase = $mailCase;
+    }
+
+    /**
+     * @param string $teamRank
+     */
+    public function setTeamRank(string $teamRank): void
+    {
+        $this->teamRank = $teamRank;
+    }
 }
