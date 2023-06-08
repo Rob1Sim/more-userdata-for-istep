@@ -105,7 +105,7 @@ class Team implements IWpEntity
     public function save():void{
         global $wpdb;
         $table_name = self::getTableName();
-        $rq = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE nom_equipe = $this->id");
+        $rq = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE id_equipe = $this->id");
         if (isset($rq) && count($rq)>0){
             $wpdb->update($table_name, array(
                 "nom_equipe"=>$this->name,
@@ -117,6 +117,21 @@ class Team implements IWpEntity
                 "nom_equipe" => $this->name,
             ));
         }
+    }
+    public function delete():bool{
+        global $wpdb;
+        $table_name = self::getTableName();
+        $rq = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE id_equipe = $this->id");
+        if (isset($rq) && count($rq)>0){
+            $wpdb->delete(
+                $table_name,
+                array(
+                    'id_equipe' => $this->id
+                )
+            );
+            return true;
+        }
+        return false;
     }
     static function getTableName(): string
     {

@@ -297,7 +297,7 @@ class Member implements IWpEntity
     public function save():void{
         global $wpdb;
         $table_name = self::getTableName();
-        $rq = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE id_membre = $this->id");
+        $rq = $wpdb->get_results("SELECT id_membre FROM $table_name WHERE id_membre = $this->id");
         if (isset($rq) && count($rq)>0){
             $wpdb->update($table_name, array(
                 "fonction"=>$this->function,
@@ -324,8 +324,21 @@ class Member implements IWpEntity
                 "campus_location"=>$this->location
             ));
         }
-
-
+    }
+    public function delete():bool{
+        global $wpdb;
+        $table_name = self::getTableName();
+        $rq = $wpdb->get_results("SELECT id_membre FROM $table_name WHERE id_membre = $this->id");
+        if (isset($rq) && count($rq)>0){
+            $wpdb->delete(
+                $table_name,
+                array(
+                    'id_membre' => $this->id
+                )
+            );
+            return true;
+        }
+        return false;
     }
 
     /**

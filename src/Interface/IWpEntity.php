@@ -38,4 +38,10 @@ interface IWpEntity
      * @return void
      */
     public function save():void;
+
+    /**
+     * Supprime l'instance de la base de donnée
+     * @return bool Retourne true si la suppression à bien eu lieu, false sinon
+     */
+    public function delete():bool;
 }

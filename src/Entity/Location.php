@@ -111,6 +111,21 @@ class Location implements \MUDF_ISTEP\Interface\IWpEntity
         }
     }
 
+    public function delete():bool{
+        global $wpdb;
+        $table_name = self::getTableName();
+        $rq = $wpdb->get_results("SELECT id_localisation FROM $table_name WHERE id_localisation = $this->id");
+        if (isset($rq) && count($rq)>0){
+            $wpdb->delete(
+                $table_name,
+                array(
+                    'id_localisation' => $this->id
+                )
+            );
+            return true;
+        }
+        return false;
+    }
     /**
      * @inheritDoc
      */
