@@ -274,6 +274,14 @@ class Member implements IWpEntity
             )
         );
     }
+
+    /**
+     * Retourne l'utilisateur WP associé à ce membre
+     * @return false|\WP_User
+     */
+    public function getWPUser():false|\WP_User{
+        return get_user_by('id', $this->getWpId());
+    }
     static function getTeamMemberRelationTableName():string{
         global $wpdb;
         return $wpdb->prefix . 'membre_equipe_ISTeP';
