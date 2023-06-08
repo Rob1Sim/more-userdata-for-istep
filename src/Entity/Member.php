@@ -3,6 +3,7 @@ namespace MUDF_ISTEP\Entity;
 use MUDF_ISTEP\Exception\EntityNotFound;
 use MUDF_ISTEP\Exception\InvalidParameter;
 use MUDF_ISTEP\Exception\MemberNotFound;
+use MUDF_ISTEP\Exception\TeamNotFound;
 use MUDF_ISTEP\Interface\IWpEntity;
 
 /**

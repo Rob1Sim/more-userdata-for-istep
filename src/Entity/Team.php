@@ -2,7 +2,9 @@
 
 namespace MUDF_ISTEP\Entity;
 
+use MUDF_ISTEP\Exception\TeamNotFound;
 use MUDF_ISTEP\Interface\IWpEntity;
+
 /**
  * Représente l'entité equipe_ISTeP de la base de données
  */
