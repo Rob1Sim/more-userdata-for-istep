@@ -4,6 +4,9 @@ use MUDF_ISTEP\Exception\InvalidParameter;
 use MUDF_ISTEP\Exception\MemberNotFound;
 use MUDF_ISTEP\Interface\IWpEntity;
 
+/**
+ * Représente l'entité membre_ISTeP de la base de données
+ */
 class Member implements IWpEntity
 {
     private int $id;
