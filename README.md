@@ -63,7 +63,7 @@ Les fichier qui s'éxécute sur le naviagteur se trouve dans le dossier __public
 Le dossier __scripts__ contients les scripts utilisé par les différents shortcode listés au dessus, il contient notament des vérifications de champs pour les formulaires.
 
 Le dossier __styles__ contients les fichier de style utilisé par les différents shortcode listés au dessus. 
-
+ 
 ## Liens utiles 
 Le projets utiliser simplement [l'API de wordpress]("https://developer.wordpress.org/") 
 
