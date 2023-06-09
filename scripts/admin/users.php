@@ -161,8 +161,12 @@ function more_userdata_istep_users_edit_data():void
                 exit();
             }
             //Mis à jour de l'utilisateur
-            $new_member = new Member($id_user,$wp_id,$campus,$function,$phone,$office,$office_tower,$employer,$mailCase,$rank);
-            $new_member->save();
+            $new_member = new Member($wp_id,$campus,$function,$phone,$office,$office_tower,$employer,$mailCase,$rank);
+            try {
+                $new_member->save();
+            } catch (\MUDF_ISTEP\Exception\InsertError|\MUDF_ISTEP\Exception\UpdateError $e) {
+                echo '<div id="message" class="notice notice-error">'.$e->getMessage().'</div>';
+            }
 
             $display_name = $last_name ." ".$first_name;
             $user_data = $new_member->getWPUser();

@@ -22,7 +22,7 @@ function more_userdata_istep_menu_location_page(): void
         // Ajoute une nouvelle équipe à la base de données
         $location_name = sanitize_text_field($_POST['nom_localisation']);
         if (isset($location_name) && $location_name !== "") {
-            $new_location = new Location(-1,$location_name);
+            $new_location = new Location($location_name);
             $new_location->save();
             echo '<div id="message" class="updated notice"><p>Campus ajoutée avec succès.</p></div>';
         }
@@ -153,7 +153,7 @@ function more_userdata_istep_delete_location_page(): void
         // Vérifie s'il reste des équipes dans la table
 
         if (count(Location::getAll()) == 0) {
-            $new_location = new Location(1,"Sorbonne Université - Campus Pierre et Marie Curie");
+            $new_location = new Location("Sorbonne Université - Campus Pierre et Marie Curie");
             $new_location->save();
         }
 

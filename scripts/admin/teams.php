@@ -22,7 +22,7 @@ function more_userdata_istep_menu_team_page(): void
         // Ajoute une nouvelle équipe à la base de données
         $nom_equipe = sanitize_text_field($_POST['nom_equipe']);
         if (isset($nom_equipe) && $nom_equipe !== "") {
-            $team = new Team(1,$nom_equipe);
+            $team = new Team($nom_equipe);
             $team->save();
             echo '<div id="message" class="updated notice"><p>Équipe ajoutée avec succès.</p></div>';
         }
@@ -156,7 +156,7 @@ function more_userdata_istep_delete_equipe_page(): void
             // Vérifie s'il reste des équipes dans la table
             if (count(Team::getAll()) == 0) {
                 // Crée l'équipe "Pas d'équipe"
-                $new_team = new Team(1,"Pas d'équipe");
+                $new_team = new Team("Pas d'équipe");
                 $new_team->save();
             }
 
