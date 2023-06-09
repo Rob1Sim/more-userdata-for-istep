@@ -1,8 +1,8 @@
 
 # More User data for ISTeP
 
-Plugin wordpress conçue pour le laboratoire ISTeP, il offre la possibilité de stocker diverses informations sur les membre via un formulaire de création d'utilisateur personnalisé, ainsi que de gérer les différentes équipes, de plus il créer à chaque utilisateur une page personnelle affichant ses informations, il lui donne aussi accès pour la modifier, enfin il fournit un annuaire pour avoir des informations sur ses membres.
-
+Plugin wordpress conçue pour le laboratoire ISTeP, il offre la possibilité de stocker diverses informations sur les membre via un formulaire de création d'utilisateur personnalisé, ainsi que de gérer les différentes équipes, de plus il créer à chaque utilisateur une page personnelle affichant ses informations, il lui donne aussi accès pour la modifier, enfin il fournit un annuaire pour avoir des informations sur ses membres.  
+La documentaion du projet est [ici](https://rob1sim.github.io/more-userdata-for-istep/).
 ## Auteurs
 
 - [@Rob1Sim](https://github.com/Rob1Sim)
@@ -65,5 +65,6 @@ Le dossier __scripts__ contients les scripts utilisé par les différents shortc
 Le dossier __styles__ contients les fichier de style utilisé par les différents shortcode listés au dessus. 
  
 ## Liens utiles 
-Le projets utiliser simplement [l'API de wordpress]("https://developer.wordpress.org/") 
+Le projets utiliser simplement [l'API de wordpress]("https://developer.wordpress.org/")   
+[La documentation du projet](https://rob1sim.github.io/more-userdata-for-istep/).
 
