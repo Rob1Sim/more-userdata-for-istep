@@ -44,4 +44,10 @@ interface IWpEntity
      * @return bool Retourne true si la suppression à bien eu lieu, false sinon
      */
     public function delete():bool;
+    /**
+     * Récupère le dernier id de la table et y ajoute un si aucun id n'est fournis.
+     * @param int $id
+     * @return int
+     */
+    function getLastId(int $id):int;
 }

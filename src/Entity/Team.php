@@ -3,11 +3,12 @@
 namespace MUDF_ISTEP\Entity;
 
 use MUDF_ISTEP\Exception\TeamNotFound;
+use MUDF_ISTEP\Interface\IWpEntity;
 
 /**
  * Représente l'entité equipe_ISTeP de la base de données
  */
-class Team extends Entity
+class Team implements IWpEntity
 {
     private int $id;
     private string $name;
@@ -18,7 +19,7 @@ class Team extends Entity
      */
     public function __construct(string $name,int $id = -1)
     {
-        $this->id = parent::getLastId($id,"id_equipe");
+        $this->id = $this->getLastId($id);
         $this->name = $name;
     }
 
@@ -144,4 +145,15 @@ class Team extends Entity
     {
         $this->name = $name;
     }
+
+    function getLastId(int $id):int{
+        if ($id == -1){
+            global $wpdb;
+            $table_name = self::getTableName();
+            $id = $wpdb->get_var("SELECT MAX(id_equipe) FROM $table_name");
+            $id = intval($id) + 1?? 0;
+        }
+        return $id;
+    }
+
 }

@@ -11,7 +11,7 @@ use MUDF_ISTEP\Interface\IWpEntity;
 /**
  * Représente l'entité membre_ISTeP de la base de données
  */
-class Member extends Entity
+class Member implements IWpEntity
 {
     private int $id;
     private int $wp_id;
@@ -40,7 +40,7 @@ class Member extends Entity
                                 string $office = "", string $officeTower ="",
                                 string $employer ="", string $mailCase ="", string $teamRank = "", int $id = -1)
     {
-        $this->id = parent::getLastId($id,"id_membre");
+        $this->id = $this->getLastId($id);
         $this->wp_id = $wp_id;
         $this->function = $function;
         $this->phone = $phone;
@@ -305,8 +305,6 @@ class Member extends Entity
         global $wpdb;
         $table_name = self::getTableName();
         $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_membre = $this->id");
-        var_dump($rq);
-        die();
         if (isset($rq) && $rq>0){
             $update = $wpdb->update($table_name, array(
                 "fonction"=>$this->function,
@@ -420,4 +418,15 @@ class Member extends Entity
     {
         $this->teamRank = $teamRank;
     }
+
+    function getLastId(int $id):int{
+        if ($id == -1){
+            global $wpdb;
+            $table_name = self::getTableName();
+            $id = $wpdb->get_var("SELECT MAX(id_membre) FROM $table_name");
+            $id = intval($id) + 1?? 0;
+        }
+        return $id;
+    }
+
 }
