@@ -429,4 +429,23 @@ class Member implements IWpEntity
         return $id;
     }
 
+    /**
+     * Récupère l'avatar de l'utilisateur passé en paramètre
+     * @param int $user_id
+     * @return string
+     */
+    public function getAvatar():string{
+        $avatar_id = get_user_meta($this->wp_id, 'wp_user_avatar', true);
+        if ($avatar_id) {
+            if (is_array(wp_get_attachment_image_src($avatar_id, 'thumbnail'))) {
+                $avatar_url = wp_get_attachment_image_src($avatar_id, 'thumbnail')[0];
+            } else {
+                return "Erreur de chargment de l'image";
+            }
+        } else {
+            $avatar_url = get_avatar_url($this->wp_id);
+        }
+        return '<img src="' . $avatar_url . '" alt="Avatar">';
+    }
+
 }
