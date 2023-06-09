@@ -448,4 +448,88 @@ class Member implements IWpEntity
         return '<img src="' . $avatar_url . '" alt="Avatar">';
     }
 
+    function deletePersonalPage(): void
+    {
+        $wp_user = $this->getWPUser();
+        $page = get_page_by_path('membres-istep/'.$wp_user->user_login);
+        if(!$page) {
+            $page = get_page_by_path($wp_user->user_login);
+        }
+
+        if ($page && $page->post_type === 'page') {
+            wp_delete_post($page->ID, true);
+
+        } else {
+            echo '<div class="notice notice-error">La page personalisée n\' pas pu être supprimer.</div>';
+        }
+    }
+    /**
+     * Récupère toutes les infos présente sur la page de l'utilisateur et les renvoie sous la forme d'un tableau
+     * @return array
+     */
+    function get_personal_page_categories():array
+    {
+        global $wpdb;
+        $id = $this->wp_id;
+        $table = PersonalPage::getTableName();
+        $results = $wpdb->get_results("SELECT * FROM $table where wp_user_id = $id");
+        $data = array(); // Tableau pour stocker les résultats
+        if (!empty($results)) {
+            $data = get_object_vars($results[0]);
+        }
+        return $data;
+    }
+
+    /**
+     * Ajoute ou mets à jour la photo de profile passé dans le formulaire
+     * Redirige l'utilisateur vers les sous-liens
+     * @param string $file_name nom du fichier $_FILE[]
+     * @param string $current_url
+     * @param int $user_id
+     * @param string $not_allowed_format_link
+     * @param string $error_when_uploading_file ce lien devrait posséder un &error-message= pour afficher l'erreur
+     * @return bool Retourne vrai si l'image a bien été ajouter ou mis à jour
+     */
+    public function add_profile_picture_or_redirect(
+        string $file_name,
+        string $current_url,
+        string $not_allowed_format_link,
+        string $error_when_uploading_file,
+    ):bool {
+        if (isset($_FILES[$file_name]["name"]) && $_FILES[$file_name]["name"]!== "") {
+
+            // Vérifie si le fichier est au format JPG, PNG ou GIF
+            $allowed_formats = array('jpg', 'jpeg', 'png', 'gif');
+            $extension = strtolower(pathinfo($_FILES['async-upload']['name'], PATHINFO_EXTENSION));
+
+            if(!in_array($extension, $allowed_formats)) {
+                wp_redirect($current_url.$not_allowed_format_link);
+                exit();
+
+            } else {
+                require_once(ABSPATH . 'wp-admin/includes/media.php');
+                require_once(ABSPATH . 'wp-admin/includes/file.php');
+                require_once(ABSPATH . 'wp-admin/includes/image.php');
+                $attachment_id = media_handle_upload('async-upload', 0);
+                if(is_wp_error($attachment_id)) {
+                    wp_redirect($current_url.$error_when_uploading_file. $attachment_id->get_error_message());
+                    exit();
+                } else {
+                    // Mettez à jour le champ de méta de l'utilisateur avec l'ID de l'attachement
+                    $user_pp = get_user_meta($this->wp_id, "wp_user_avatar");
+                    if(empty($user_pp) || $user_pp == "") {
+                        add_user_meta($this->wp_id, "wp_user_avatar", $attachment_id);
+                    } else {
+                        update_user_meta($this->wp_id, "wp_user_avatar", $attachment_id);
+                    }
+
+                }
+
+            }
+            return true;
+
+        } else {
+            return true;
+        }
+    }
 }

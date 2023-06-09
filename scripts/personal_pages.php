@@ -5,6 +5,7 @@
 
 
 use MUDF_ISTEP\Entity\Member;
+use MUDF_ISTEP\Entity\PersonalPage;
 
 wp_enqueue_style('more-userdata-for-istep', plugins_url('../public/styles/more-userdata-for-istep.css', __FILE__));
 wp_enqueue_script('more-userdata-for-istep-js', plugins_url('../public/scripts/more-userdata-for-istep.js', __FILE__), array(), false, true);
@@ -62,36 +63,7 @@ HTML;
     return '<div id="message" class="notice notice-error"><p>Une erreur est survenue.</p></div>';
 }
 
-/**
- * Créer une page personnel lors de l'ajout d'un utilisateur via le formulaire
- * @param int $userId
- * @param string $userDisplayName
- * @param string $login
- * @return void
- */
-function create_personal_page(string $userDisplayName, string $login): void
-{
 
-    $parent = get_page_by_path('membres-istep');
-
-    $content = "[istep_user_data]
-                [personal_page_display]
-                [edit_personal_page_btn]";
-
-    $page_data = array(
-        'post_title' => $userDisplayName,
-        'post_content' => $content,
-        'post_status' => 'publish',
-        'post_type' => 'page',
-        'post_author'=>1,
-        'post_name' => $login,
-        'post_parent' => $parent->ID,
-    );
-
-    // Insère la page dans la base de données de WordPress
-    wp_insert_post($page_data);
-
-}
 
 
 /**
@@ -103,9 +75,9 @@ function edit_personal_page_form():string
 
     //Récupération des données de l'utilisateur
     $current_user_id = get_current_user_id();
+    $member = Member::findById($current_user_id,"wp");
     //Récupération des champs déjà existant
-    $wp_page = get_user_personal_pages_categories($current_user_id);
-    $istep_user = Member::findById($current_user_id,"wp");
+    $wp_page = $member->get_personal_page_categories();
 
     //Création du formulaire
     ob_start();
@@ -176,40 +148,18 @@ function handle_personal_page_form(): void
         }
 
         //Sauvegarde des données
-        global $wpdb;
-        if (!$wpdb->update(
-            TABLE_PERSONAL_PAGE_NAME,
-            $data,
-            array(
-                "wp_user_id"=>get_current_user_id()
-            )
-        )) {
+        try {
+            PersonalPage::save($data);
+        } catch (\MUDF_ISTEP\Exception\UpdateError $e) {
             wp_redirect($error_url."user-update-error=5", 302);
-        } else {
-            wp_redirect($success_url."user-update-success=0", 302);
-
+            exit();
         }
+        wp_redirect($success_url."user-update-success=0", 302);
     }
 }
 add_action('wp', 'handle_personal_page_form');
 
-/**
- * Créer la page de modification de page personel, elle est unique donc disponible pour tous le monde à la même adresse
- * @return void
- */
-function create_modify_personal_page(): void
-{
 
-    $page_data = array(
-        'post_title' => "Modifier votre page personnel",
-        'post_content' => '[personal_page_form]',
-        'post_status' => 'publish',
-        'post_type' => 'page',
-        'post_name' => "modifier-votre-page-personnel",
-    );
-
-    wp_insert_post($page_data);
-}
 
 /**
  * Affiche les données enregistré dans l'entité page_personel
@@ -219,7 +169,8 @@ function display_section_personal_pages(): string
 {
     $current_page_slug = get_post_field('post_name', get_queried_object_id());
     $user = get_user_by('login', $current_page_slug);
-    $sections = get_user_personal_pages_categories($user->ID);
+    $member = Member::findById($user->ID,"wp");
+    $sections = $member->get_personal_page_categories();
     $html = "<div>";
     foreach ($sections as $key => $section) {
         if(strtolower($key) !== "id_page" && strtolower($key) !== "wp_user_id") {
@@ -262,22 +213,3 @@ function display_button_to_edit_personal_pages(): string
 add_shortcode('edit_personal_page_btn', 'display_button_to_edit_personal_pages');
 add_shortcode('edit_personal_page_btn', 'display_button_to_edit_personal_pages');
 
-/**
- * Supprime la page personnel correspondant à l'utilisateur wp passé en paramètre
- * @param WP_User $wp_user
- * @return void
- */
-function delete_personal_page_by_wp_user(WP_User $wp_user): void
-{
-    $page = get_page_by_path('membres-istep/'.$wp_user->user_login);
-    if(!$page) {
-        $page = get_page_by_path($wp_user->user_login);
-    }
-
-    if ($page && $page->post_type === 'page') {
-        wp_delete_post($page->ID, true);
-
-    } else {
-        echo '<div class="notice notice-error">La page personalisée n\' pas pu être supprimer.</div>';
-    }
-}

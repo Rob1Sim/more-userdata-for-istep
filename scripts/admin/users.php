@@ -5,6 +5,7 @@
 
 use MUDF_ISTEP\Entity\Member;
 use MUDF_ISTEP\Entity\Location;
+use MUDF_ISTEP\Entity\PersonalPage;
 use MUDF_ISTEP\Entity\Team;
 
 wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../../public/scripts/more-userdata-for-istep-admin.js', __FILE__), array(), false, true);
@@ -173,25 +174,25 @@ function more_userdata_istep_users_edit_data():void
                 $new_member->setMailCase($mailCase);
                 $new_member->setTeamRank($rank);
                 $new_member->save();
+
+                $display_name = $last_name ." ".$first_name;
+                $user_data = $new_member->getWPUser();
+                $user_data->display_name = $display_name;
+
+                $result = wp_update_user($user_data);
+
+                if (is_wp_error($result)) {
+                    $error_message = $result->get_error_message();
+                    echo '<div id="message" class="notice notice-error">Erreur lors de la modifcation du nom : '.$error_message.'</div>';
+                    edit_user_form();
+                    exit();
+                }
+                //Supprime la page personel pour la recreer
+                $new_member->deletePersonalPage();
+                PersonalPage::create_personal_page($display_name, $user_data->user_login,$new_member->getWpId());
             } catch (\MUDF_ISTEP\Exception\InsertError|\MUDF_ISTEP\Exception\UpdateError |\MUDF_ISTEP\Exception\InvalidParameter|\MUDF_ISTEP\Exception\MemberNotFound $e) {
                 echo '<div id="message" class="notice notice-error">'.$e->getMessage().'</div>';
             }
-
-            $display_name = $last_name ." ".$first_name;
-            $user_data = $new_member->getWPUser();
-            $user_data->display_name = $display_name;
-
-            $result = wp_update_user($user_data);
-
-            if (is_wp_error($result)) {
-                $error_message = $result->get_error_message();
-                echo '<div id="message" class="notice notice-error">Erreur lors de la modifcation du nom : '.$error_message.'</div>';
-                edit_user_form();
-                exit();
-            }
-            //Supprime la page personel pour la recreer
-            delete_personal_page_by_wp_user($user_data);
-            create_personal_page($display_name, $user_data->user_login);
         }
         //Vérification des équipes
         $verified_teams = [];
@@ -249,14 +250,15 @@ function more_userdata_istep_users_delete_user():void
     if (current_user_can(ADMIN_CAPACITY) && isset($_POST['user_delete_id'])) {
         $id = sanitize_text_field($_POST['user_delete_id']);
         try {
-            $wp_user = Member::findById($id)->getWPUser();
+            $member = Member::findById($id);
+            $wp_user = $member->getWPUser();
             if($wp_user !== false) {
                 wp_delete_user($wp_user->ID);
                 echo '<div id="message" class="updated notice"><p>L\'utilisateur à été supprimé avec succès.</p></div>';
             } else {
                 echo '<div class="notice notice-error"><p>Une erreur est survenue lors de la suppression</p></div>';
             }
-            delete_personal_page_by_wp_user($wp_user);
+            $member->deletePersonalPage();
         } catch (\MUDF_ISTEP\Exception\InvalidParameter|\MUDF_ISTEP\Exception\MemberNotFound $e) {
             echo '<div class="notice notice-error"><p>Une erreur est survenue</p></div>';
         }

@@ -20,7 +20,7 @@ const ADMIN_CAPACITY = "more_data_users_admin_capacity";
  * Récupère les roles de l'utilisateur connecté
  * @return array
  */
-function get_current_user_roles()
+function get_current_user_roles(): array
 {
 
     if(is_user_logged_in()) {
@@ -89,24 +89,6 @@ function delete_cap_if_no_need_anymore(string $cap, array $listOfRoleWithTheCap)
 
 
 /** Récupérations des données de la table user-teams */
-
-
-/**
- * Récupère toutes les infos présente sur la page de l'utilisateur et les renvoie sous la forme d'un tableau
- * @param int $id l'id de l'utilisateur
- * @return array
- */
-function get_user_personal_pages_categories(int $id):array
-{
-    global $wpdb;
-    $table = TABLE_PERSONAL_PAGE_NAME;
-    $results = $wpdb->get_results("SELECT * FROM $table where wp_user_id = $id");
-    $data = array(); // Tableau pour stocker les résultats
-    if (!empty($results)) {
-        $data = get_object_vars($results[0]);
-    }
-    return $data;
-}
 
 
 

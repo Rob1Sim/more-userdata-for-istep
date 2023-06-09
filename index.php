@@ -12,6 +12,7 @@ Author URI: https://robin-sim.fr/
 
 use MUDF_ISTEP\Entity\Location;
 use MUDF_ISTEP\Entity\Member;
+use MUDF_ISTEP\Entity\PersonalPage;
 use MUDF_ISTEP\Entity\Team;
 
 require plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
@@ -136,7 +137,7 @@ function more_ud_istep_install(): void
     //Lien de redirection par défaut
     update_option('default_redirect_link', "sample-page");
 
-    create_modify_personal_page();
+    PersonalPage::create_modify_personal_page();
 }
 register_activation_hook(__FILE__, 'more_ud_istep_install'); //Appelé lors de l'activation du plugin
 

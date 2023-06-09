@@ -5,6 +5,7 @@
 
 use MUDF_ISTEP\Entity\Location;
 use MUDF_ISTEP\Entity\Member;
+use MUDF_ISTEP\Entity\PersonalPage;
 use MUDF_ISTEP\Entity\Team;
 
 add_shortcode('add_istep_user_form', 'add_new_user_form');
@@ -285,17 +286,14 @@ function add_new_user(): void
                     $new_member->addTeam($verified_teams);
 
                     //Création de la page perso
-                    $wpdb->insert(TABLE_PERSONAL_PAGE_NAME, array(
-                        "wp_user_id"=>$user_id,
-                    ));
+
 
                     //Ajout de l'image de profile
-                    create_personal_page($name." ".$last_name, $login);
+                    PersonalPage::create_personal_page($name." ".$last_name, $login,$user_id);
 
-                    if(add_profile_picture_or_redirect(
+                    if($new_member->add_profile_picture_or_redirect(
                         'async-upload',
                         $current_url,
-                        $user_id,
                         "user-create-error=6",
                         "user-create-error=4&error-message="
                     )) {
