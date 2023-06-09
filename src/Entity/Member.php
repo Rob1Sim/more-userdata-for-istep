@@ -271,7 +271,7 @@ class Member implements IWpEntity
         global $wpdb;
 
         $wpdb->delete(
-            TABLE_MEMBERS_TEAM_NAME,
+            $this->getTeamMemberRelationTableName(),
             array(
                 "id_equipe" => $this->id,
                 "id_membre" => $id
