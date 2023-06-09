@@ -161,10 +161,19 @@ function more_userdata_istep_users_edit_data():void
                 exit();
             }
             //Mis à jour de l'utilisateur
-            $new_member = new Member($wp_id,$campus,$function,$phone,$office,$office_tower,$employer,$mailCase,$rank);
+
             try {
+                $new_member = Member::findById($id_user);
+                $new_member->setFunction($function);
+                $new_member->setEmployer($employer);
+                $new_member->setLocation($campus);
+                $new_member->setOffice($office);
+                $new_member->setOfficeTower($office_tower);
+                $new_member->setPhone($phone);
+                $new_member->setMailCase($mailCase);
+                $new_member->setTeamRank($rank);
                 $new_member->save();
-            } catch (\MUDF_ISTEP\Exception\InsertError|\MUDF_ISTEP\Exception\UpdateError $e) {
+            } catch (\MUDF_ISTEP\Exception\InsertError|\MUDF_ISTEP\Exception\UpdateError |\MUDF_ISTEP\Exception\InvalidParameter|\MUDF_ISTEP\Exception\MemberNotFound $e) {
                 echo '<div id="message" class="notice notice-error">'.$e->getMessage().'</div>';
             }
 
