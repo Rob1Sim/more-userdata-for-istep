@@ -150,7 +150,7 @@ function more_userdata_istep_delete_location_page(): void
         $location = Location::findById($id_location);
         $location->delete();
 
-        // Vérifie s'il reste des équipes dans la table
+        // Vérifie s'il reste des équTABLE_MEMBERS_NAMEipes dans la table
 
         if (count(Location::getAll()) == 0) {
             $new_location = new Location("Sorbonne Université - Campus Pierre et Marie Curie");

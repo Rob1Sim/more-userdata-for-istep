@@ -3,24 +3,6 @@
 // ------------Fonction diverses utilisé dans le plugin-----------
 global $wpdb;
 
-
-
-/**
- * Nom de la table équipe dans la base de donnée
- */
-define("TABLE_TEAM_NAME", $wpdb->prefix . 'equipe_ISTeP');
-/**
- * Nom de la table membre dans la base de donnée
- */
-define("TABLE_MEMBERS_NAME", $wpdb->prefix . 'membre_ISTeP');
-/**
- * Nom de la table qui fait la relation entre MEMBRE et TEAM dans la base de donnée
- */
-define("TABLE_MEMBERS_TEAM_NAME", $wpdb->prefix . 'membre_equipe_ISTeP');
-/**
- * Nom de la table qui enregistre les différents campus
- */
-define("TABLE_LOCATION_NAME", $wpdb->prefix . 'localisation_ISTeP');
 /**
  * Nom de la table qui enregistre les informations affichées sur la page personnel
  */
@@ -72,44 +54,6 @@ function can_user_access_this(array $roles): bool
 }
 
 /**
- * Renvoie le nom de l'équipe correspondant à l'id passé en paramètre
- * @param int|null $id
- * @return mixed|stdClass
- */
-function get_team_name_by_id(?int $id)
-{
-    //Si la class n'éxiste pas on renvoie un objets avec la meme propriété
-    if (!isset($id)) {
-        $obj = new stdClass();
-        $obj->nom_equipe = "Pas d'équipe";
-
-        return $obj;
-    }
-    global $wpdb;
-    $tableName = TABLE_TEAM_NAME;
-    return $wpdb->get_results("SELECT nom_equipe FROM $tableName WHERE id_equipe = $id")[0];
-}
-
-/**
- * Renvoie toutes les information de l'utilisateur qui possède l'id passé en paramètre
- * @param int $id
- * @param string $type Prend la valeur "wp" ou "istep", désigne si la recherche doit se faire avec l'id wp ou l'id de la table (wp par défaut)
- * @return mixed|stdClass
- */
-function get_istep_user_by_id(int $id, string $type ="wp"):mixed
-{
-    global $wpdb;
-    $tableName = TABLE_MEMBERS_NAME;
-    if ($type == "wp") {
-        return $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $id")[0];
-    }
-    if ($type == "istep") {
-        return $wpdb->get_results("SELECT * FROM $tableName WHERE id_membre = $id")[0];
-    }
-    throw new InvalidTypeException("Type incorrecte : le paramètre type ne prend que la valeur wp ou istep");
-}
-
-/**
  * Récupère tous les élément d'une table donnée
  * @param string $table
  * @return array
@@ -120,48 +64,6 @@ function get_list_of_table(string $table):array
     $tableName = $table;
     return $wpdb->get_results("SELECT * FROM $tableName");
 }
-
-
-/**
- * Récupère l'avatar de l'utilisateur passé en paramètre
- * @param int $user_id
- * @return string
- */
-function get_user_avatar(int $user_id)
-{
-    $avatar_id = get_user_meta($user_id, 'wp_user_avatar', true);
-    if ($avatar_id) {
-        if (is_array(wp_get_attachment_image_src($avatar_id, 'thumbnail'))) {
-            $avatar_url = wp_get_attachment_image_src($avatar_id, 'thumbnail')[0];
-        } else {
-            return "Erreur de chargment de l'image";
-        }
-    } else {
-        $avatar_url = get_avatar_url($user_id);
-    }
-    return '<img src="' . $avatar_url . '" alt="Avatar">';
-}
-
-/**
- * Transforme le nom de la tour enregistré dans la bd
- * @param string $rawName
- * @return string
- */
-function convert_tower_into_readable(string $rawName):string
-{
-
-    $parts = explode('-', $rawName);
-
-    $tour = ucfirst($parts[0]);
-    $floor = str_replace('-', ' ', $parts[1]);
-    $level = $parts[2];
-
-
-    // Afficher le résultat
-    return "$tour $floor"."-"." $level"."ème étage";
-
-}
-
 /**
  * Supprime la capacitée d'un role si celui-ci ne fait pas partie de la liste des personne qui devrait l'avoir, retourne la liste mis à jour
  * @param string $cap
@@ -185,95 +87,8 @@ function delete_cap_if_no_need_anymore(string $cap, array $listOfRoleWithTheCap)
 }
 
 
-/**
- * Retourne une liste de string contenant le nom de chaque équipe
- * @return array
- */
-function get_all_teams_name():array
-{
-    $list_of_team_table = get_list_of_table(TABLE_TEAM_NAME);
-    $list_of_team = [];
-    foreach ($list_of_team_table as $team) {
-        $list_of_team[]= $team->nom_equipe;
-    }
-    return $list_of_team;
-}
 
 /** Récupérations des données de la table user-teams */
-
-/**
- * Récupère tous les nom de l'utilisateur passé en paramètre
- * @param int $id
- * @return array
- */
-function get_user_teams_names_by_user_id(int $id): array
-{
-    $teams = get_user_teams_by_user_id($id);
-    $array_of_name = [];
-    foreach ($teams as $team) {
-        $array_of_name[] = get_team_name_by_id($team->id_equipe)->nom_equipe;
-    }
-    return $array_of_name;
-}
-
-/**
- * Récupère les équipes d'un utilisateurs
- * @param int $id
- * @return array
- */
-function get_user_teams_by_user_id(int $id): array
-{
-    global $wpdb;
-    $table_name = TABLE_MEMBERS_TEAM_NAME;
-
-    $teams = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE id_membre = $id");
-    return $teams;
-}
-
-
-
-/**
- * AJoute une entrée à la table
- * @param array $teams_id_list
- * @param mixed $member_id
- * @return void
- */
-function add_data_to_team_members(array $teams_id_list, int $member_id): void
-{
-    //Si pour une raison quelconque il n'y a pas d'équipe alors on l'attribut à l'équipe "Pas d'équipe"
-    global $wpdb;
-    if (count($teams_id_list) == 0) {
-        $teams_id_list[] = 1;
-    }
-    //Création d'entités entre les équipes et l'utilisateur
-    foreach ($teams_id_list as $team) {
-        $wpdb->insert(
-            TABLE_MEMBERS_TEAM_NAME,
-            array(
-                'id_equipe' => intval($team),
-                'id_membre' => intval($member_id)
-            )
-        );
-    }
-}
-
-
-/**
- * Retourne le nom d'un campus grâce à son id
- * @param int $id
- * @return string
- */
-function get_name_of_location_by_id(int $id):string
-{
-    global $wpdb;
-    $table_name = TABLE_LOCATION_NAME;
-
-    $name = $wpdb->get_results("SELECT nom_localisation FROM $table_name WHERE id_localisation = $id");
-    if(count($name)>0) {
-        return $name[0]->nom_localisation;
-    }
-    return "Pas de campus";
-}
 
 
 /**
@@ -293,33 +108,7 @@ function get_user_personal_pages_categories(int $id):array
     return $data;
 }
 
-/**
- * Vérifie si le campus entrée existe, si il n'éxiste pas alors l'utilisateur est redirigé (vers une page d'erreur)
- * @param string $campus
- * @param string $current_url
- * @return void
- */
-function is_location_existing_redirect_if_not(string $campus, string $redirect_url): void
-{
-    if (!is_location_existing($campus)) {
-        wp_redirect($redirect_url);
-        exit();
-    }
 
-}
-
-/**
- * Vérifie si le campus existe
- * @param string $campus
- * @return bool
- */
-function is_location_existing(string $campus) :bool
-{
-    global $wpdb;
-    $table_name = TABLE_LOCATION_NAME;
-    $is_location_existing = "SELECT * FROM $table_name WHERE id_localisation = $campus";
-    return !empty($wpdb->get_results($is_location_existing));
-}
 
 /**
  * Ajoute ou mets à jour la photo de profile passé dans le formulaire

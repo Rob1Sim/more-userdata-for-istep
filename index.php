@@ -10,6 +10,10 @@ Version: 1.0
 Author URI: https://robin-sim.fr/
 */
 
+use MUDF_ISTEP\Entity\Location;
+use MUDF_ISTEP\Entity\Member;
+use MUDF_ISTEP\Entity\Team;
+
 require plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
 
@@ -29,10 +33,10 @@ require_once(plugin_dir_path(__FILE__) . 'scripts/add_user_form.php');
 function more_ud_istep_install(): void
 {
     global $wpdb;
-    $table_name_user_data = TABLE_MEMBERS_NAME;
-    $table_name_user_team = TABLE_TEAM_NAME;
-    $table_members_team = TABLE_MEMBERS_TEAM_NAME;
-    $table_name_user_location = TABLE_LOCATION_NAME;
+    $table_name_user_data = Member::getTableName();
+    $table_name_user_team = Team::getTableName();
+    $table_members_team = Member::getTeamMemberRelationTableName();
+    $table_name_user_location = Location::getTableName();
     $table_personal_page = TABLE_PERSONAL_PAGE_NAME;
     $charset_collate = $wpdb->get_charset_collate();
 
@@ -113,14 +117,14 @@ function more_ud_istep_install(): void
     $role_obj = get_role("administrator");
     $role_obj->add_cap(ADMIN_CAPACITY);
     $wpdb->insert(
-        TABLE_TEAM_NAME,
+        $table_name_user_team,
         array(
             'id_equipe' => 1,
             'nom_equipe' => "Pas d'équipe"
         )
     );
     $wpdb->insert(
-        TABLE_LOCATION_NAME,
+        $table_name_user_location,
         array(
             'id_localisation' => 1,
             'nom_localisation' => "Sorbonne Université - Campus Pierre et Marie Curie"

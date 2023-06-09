@@ -4,6 +4,7 @@
  */
 
 
+use MUDF_ISTEP\Entity\Member;
 
 wp_enqueue_style('more-userdata-for-istep', plugins_url('../public/styles/more-userdata-for-istep.css', __FILE__));
 wp_enqueue_script('more-userdata-for-istep-js', plugins_url('../public/scripts/more-userdata-for-istep.js', __FILE__), array(), false, true);
@@ -18,12 +19,17 @@ function display_users_data(): string
     $current_page_slug = get_post_field('post_name', get_queried_object_id());
     $page_author_info = get_user_by('login', $current_page_slug);
 
-    $userData = get_istep_user_by_id($page_author_info->ID);
-    $userAvatar = get_user_avatar($page_author_info->ID);
-    $userTower = convert_tower_into_readable($userData->tourDuBureau);
-    $userTeams = get_user_teams_names_by_user_id($userData->id_membre);
+    try {
+        $userData = Member::findById($page_author_info->ID, "wp");
+        $userAvatar = $userData->getAvatar();
+        $userTower = $userData->getReadableOfficeTower();
+        $userTeams = $userData->getTeamsNames();
+        $userFunctions = $userData->getFunction();
+        $userPhone = $userData->getPhone();
+        $userLocation = $userData->getLocation();
+        $userOffice = $userData->getOffice();
 
-    $html = <<<HTML
+        $html = <<<HTML
     <div class="user-info-container">
         <div>
             $userAvatar
@@ -31,27 +37,29 @@ function display_users_data(): string
         <div class="user-info-text-container">
             <div>
                 <h5>Fonction</h5>
-                <p>$userData->fonction</p>
+                <p>$userFunctions</p>
                 
                 <h5>Equipes</h5>
 HTML;
-    foreach ($userTeams as $userTeam) {
-        $html.="<p>$userTeam</p>";
-    }
-    $html.= <<<HTML
+        foreach ($userTeams as $userTeam) {
+            $html.="<p>$userTeam</p>";
+        }
+        $html.= <<<HTML
             </div>
             <div>
                 <h5>Coordonées :</h5>
-                <p><strong>Téléphone : </strong><a href="tel:$userData->nTelephone">$userData->nTelephone</a></p>
+                <p><strong>Téléphone : </strong><a href="tel:$userPhone">$userPhone</a></p>
                 <p><strong>Email : </strong><a href="mailto:$page_author_info->user_email">$page_author_info->user_email</a> </p>
-                <p><strong>Campus : </strong>$userData->campus</p>
+                <p><strong>Campus : </strong>$userLocation</p>
                 <p><strong>Tour :</strong>$userTower</p>
-                <p><strong>Bureau :</strong>$userData->bureau</p>
+                <p><strong>Bureau :</strong>$userOffice</p>
             </div>
         </div>
 </div>
 HTML;
-    return $html;
+        return $html;
+    } catch (\MUDF_ISTEP\Exception\InvalidParameter|\MUDF_ISTEP\Exception\MemberNotFound|\MUDF_ISTEP\Exception\EntityNotFound $e) {
+    return '<div id="message" class="notice notice-error"><p>Une erreur est survenue.</p></div>';
 }
 
 /**
@@ -97,7 +105,7 @@ function edit_personal_page_form():string
     $current_user_id = get_current_user_id();
     //Récupération des champs déjà existant
     $wp_page = get_user_personal_pages_categories($current_user_id);
-    $istep_user = get_istep_user_by_id($current_user_id);
+    $istep_user = Member::findById($current_user_id,"wp");
 
     //Création du formulaire
     ob_start();
@@ -119,6 +127,7 @@ function edit_personal_page_form():string
     <?php
 
     return ob_get_clean();
+    }
 }
 
 add_shortcode('personal_page_form', 'edit_personal_page_form');
