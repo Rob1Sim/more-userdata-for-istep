@@ -142,16 +142,16 @@ class Member implements IWpEntity
         global $wpdb;
         $tableName = self::getTableName();
         if ($type == "wp") {
-            $wp_objet = $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $id")[0];
-            if (isset($wp_objet)){
-                return Member::createEntityFromWPDB($wp_objet);
+            $wp_objet = $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $id");
+            if (isset($wp_objet)&& count($wp_objet)>0){
+                return Member::createEntityFromWPDB($wp_objet[0]);
             }
             throw new MemberNotFound("L'id entrée est incorrecte");
         }
         if ($type == "istep") {
-            $wp_objet = $wpdb->get_results("SELECT * FROM $tableName WHERE id_membre = $id")[0];
-            if (isset($wp_objet)){
-                return self::createEntityFromWPDB($wp_objet);
+            $wp_objet = $wpdb->get_results("SELECT * FROM $tableName WHERE id_membre = $id");
+            if (isset($wp_objet)&& count($wp_objet)>0){
+                return self::createEntityFromWPDB($wp_objet[0]);
             }
             throw new MemberNotFound("L'id entrée est incorrecte");
         }

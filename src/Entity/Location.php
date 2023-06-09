@@ -43,9 +43,9 @@ class Location implements \MUDF_ISTEP\Interface\IWpEntity
     {
         global $wpdb;
         $tableName = self::getTableName();
-        $wp_obj = $wpdb->get_results("SELECT * FROM $tableName WHERE id_localisation = $id")[0];
-        if (isset($wp_obj)){
-            return self::createEntityFromWPDB($wp_obj);
+        $wp_obj = $wpdb->get_results("SELECT * FROM $tableName WHERE id_localisation = $id");
+        if (isset($wp_obj)&& count($wp_obj)>0){
+            return self::createEntityFromWPDB($wp_obj[0]);
         }
         throw new LocationNotFound("L'id ne correspond à aucun campus");
     }

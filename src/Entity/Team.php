@@ -48,9 +48,9 @@ class Team implements IWpEntity
     {
         global $wpdb;
         $tableName =self::getTableName();
-        $wp_obj = $wpdb->get_results("SELECT * FROM $tableName WHERE id_equipe = $id")[0];
-        if (isset($wp_obj)){
-            return self::createEntityFromWPDB($wp_obj);
+        $wp_obj = $wpdb->get_results("SELECT * FROM $tableName WHERE id_equipe = $id");
+        if (isset($wp_obj) && count($wp_obj)>0){
+            return self::createEntityFromWPDB($wp_obj[0]);
         }
         throw new TeamNotFound("L'id ne correspond à aucune équipe");
     }
