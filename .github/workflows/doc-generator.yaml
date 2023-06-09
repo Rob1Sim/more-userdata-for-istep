@@ -1,0 +1,43 @@
+name: Deploy doc
+
+# build the documentation whenever there are new commits on main
+on:
+  push:
+    branches:
+      - master
+
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+
+      - name: Install dependencies
+        run: composer install --no-dev --prefer-dist --no-scripts
+
+      - name: Generate Documentation
+        run: docker run --rm -v "$(pwd):/data" "phpdoc/phpdoc:3"
+
+      - uses: actions/upload-pages-artifact@v1
+        with:
+          path: .phpdoc/build/
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v2

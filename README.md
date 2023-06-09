@@ -31,11 +31,21 @@ Pour afficher les information de l'utilisateur sur une page il suffit d'ajouter 
 [istep_user_data]
  ```  
  **Attention ce shortcode récupère les informations de l'auteur de la page, l'utilisateur doit donc être l'auteur de ça page pour que ses informations soit afficher**
+## Modification du code
+Le projet utilise composer : 
+```bash
+composer install
+ ```
+Si les class ne sont pas trouvé : 
+```bash
+ composer dumpautoload -o
+ ```
 ## Architecture
 Le projets est divisé en plusieurs fichier : 
 Tous d'abord le fichier __index.php__ est le fichier principal du projet tous le code s'éxécute dessus.
-Il contient les scripts éxécuté à la création et à la suppression du plugin (création de tables, ...)
-les autres fichier se trouve dans le dossier __src/__ :
+Il contient les scripts éxécuté à la création et à la suppression du plugin (création de tables, ...)  
+Les classes se situe dans le dossier __src/__ .  
+Les fichiers contenant les shortcodes et la gestion des formulaires se trouve dans __script/__ :  
 - Le fichier __add_user_form.php__ contients les shortcode et l'éxécution du formulaire de création d'utilisateur.
 - Le fichier __admin-functions.php__ contients toute les menu de configuration disponible dans le menu d'administration
     par ailleurs tous les fichier relatif à ces menu se situe eux même dans le dossier __admin/__.
@@ -49,11 +59,10 @@ Le dossier __admin/__ contient lui 3 fichier :
 - __users.php__ qui s'occupe de la gestions des utilisateur (modification/suppression) .
 
 
+Les fichier qui s'éxécute sur le naviagteur se trouve dans le dossier __public/__ :  
 Le dossier __scripts__ contients les scripts utilisé par les différents shortcode listés au dessus, il contient notament des vérifications de champs pour les formulaires.
 
 Le dossier __styles__ contients les fichier de style utilisé par les différents shortcode listés au dessus. 
-
-Le fichier __doc__ contient la documentation du projet, elle utilise l'outils [phpDocumentor]("https://www.phpdoc.org/")
 
 ## Liens utiles 
 Le projets utiliser simplement [l'API de wordpress]("https://developer.wordpress.org/") 
