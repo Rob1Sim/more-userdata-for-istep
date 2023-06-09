@@ -4,6 +4,9 @@
  */
 
 // -- Tiny Directory --
+use MUDF_ISTEP\Entity\Member;
+use MUDF_ISTEP\Entity\Team;
+
 add_shortcode('users_directory', 'create_directory_from_DB_users');
 
 /**
@@ -35,7 +38,7 @@ function create_directory_from_DB_users($atts): string
     //Paramètre équipe
     $team = $list_parameters['team'];
     $team = sanitize_text_field($team);
-    if (!isset($team) ||$team == "" ||!in_array($team, get_all_teams_name())) {
+    if (!isset($team) ||$team == "" ||!in_array($team, Team::getAllNames())) {
         $team = "";
     }
 
@@ -43,7 +46,7 @@ function create_directory_from_DB_users($atts): string
     //Ajout de la feuille de style et du javascript
     wp_enqueue_style('tiny-directory-css', plugins_url('../public/styles/tiny-directory.css', __FILE__));
     wp_enqueue_script('tiny-directory-js', plugins_url('../public/scripts/tiny-directory.js', __FILE__), array(), false, true);
-    $users = get_list_of_table(TABLE_MEMBERS_NAME);
+    $users = Member::getAll();
     // Vérifier s'il y a des utilisateurs
     if (!empty($users)) {
         //Génère le tableau
@@ -77,9 +80,8 @@ HTML;
     <tbody> 
     HTML;
         foreach ($users as $user) {
-            $userID = $user->wp_user_id;
-            $userAvatar = get_user_avatar($userID);
-            $istep_users = get_istep_user_by_id($userID);
+            $userID = $user->getWpId();
+            $userAvatar = $user->getAvatar();
             $wp_user = get_user_by("id", $userID);
             $linkToProfilePage = home_url()."/membres-istep/$wp_user->user_login";
 
@@ -88,11 +90,14 @@ HTML;
             $users_roles_str = implode("-", $users_roles);
 
             //Listes des équipes
-            $users_teams = get_user_teams_names_by_user_id($user->id_membre);
+            $users_teams = $user->getTeamsNames();
             $users_teams_str = implode("-", $users_teams);
 
-            $tower = convert_tower_into_readable($istep_users->tourDuBureau);
-            $campus = get_name_of_location_by_id(intval($istep_users->campus));
+            $tower = $user->getReadableOfficeTower();
+            $campus = $user->getLocation()->getName();
+            $phone = $user->getPhone();
+            $function = $user->getFunction();
+            $office = $user->getOffice();
             $html.= <<<HTML
             <a class="no-display-fields" href="$linkToProfilePage"></a>
 
@@ -105,9 +110,9 @@ HTML;
             <td class="no-display-fields" id="login-$userID">$linkToProfilePage</td>
             <td class="tiny-directory-td name-$userID">$wp_user->display_name</td>
             <td class="tiny-directory-td email-$userID"><a href="mailto:$wp_user->user_email">$wp_user->user_email</td>
-            <td class="tiny-directory-td phone-$userID">$istep_users->nTelephone</td>
+            <td class="tiny-directory-td phone-$userID">$phone</td>
             <td class="tiny-directory-td"$userID">
-            $istep_users->fonction
+            $function
             </td>
             <td class="no-display-fields campus-$userID">
                 $campus
@@ -116,7 +121,7 @@ HTML;
                 $tower
             </td>
             <td class="no-display-fields office-$userID">
-                $istep_users->bureau
+                $office
             </td>
         </tr>
 HTML;
