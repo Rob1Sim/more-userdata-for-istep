@@ -3,6 +3,7 @@
 namespace MUDF_ISTEP\Entity;
 
 use MUDF_ISTEP\Interface\IWpEntity;
+
 /**
  * Class mère des class Location, Member et Team
  */
@@ -11,7 +12,7 @@ abstract class DataEntity implements IWpEntity
     /**
      * Récupère tous les élément d'une table donnée
      * @param string $table
-     * @return array
+     * @return array<object>
      */
     protected static function get_list_of_table(string $table):array
     {
@@ -23,42 +24,42 @@ abstract class DataEntity implements IWpEntity
     /**
      * @inheritDoc
      */
-    public abstract static function findById(int $id): self;
+    abstract public static function findById(int $id): self;
 
 
     /**
      * @inheritDoc
      */
-    public abstract static function getAll(): array;
+    abstract public static function getAll(): array;
 
 
     /**
      * @inheritDoc
      */
-    public abstract static function createEntityFromWPDB($entity): self;
+    abstract public static function createEntityFromWPDB($entity): self;
 
 
     /**
      * @inheritDoc
      */
-    static abstract function getTableName(): string;
+    abstract public static function getTableName(): string;
 
 
     /**
      * @inheritDoc
      */
-    public abstract function save(): void;
+    abstract public function save(): void;
 
 
     /**
      * @inheritDoc
      */
-    public abstract function delete(): bool;
+    abstract public function delete(): bool;
 
 
     /**
      * @inheritDoc
      */
-    public abstract function getLastId(int $id): int;
+    abstract public function getLastId(int $id): int;
 
 }

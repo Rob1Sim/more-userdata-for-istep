@@ -4,6 +4,7 @@ namespace MUDF_ISTEP\Entity;
 
 use MUDF_ISTEP\Exception\LocationNotFound;
 use MUDF_ISTEP\Interface\IWpEntity;
+
 /**
  * Représente l'entité localisation_ISTeP de la base de données
  */
@@ -46,7 +47,7 @@ class Location extends DataEntity
         global $wpdb;
         $tableName = self::getTableName();
         $wp_obj = $wpdb->get_results("SELECT * FROM $tableName WHERE id_localisation = $id");
-        if (isset($wp_obj)&& count($wp_obj)>0){
+        if (isset($wp_obj)&& count($wp_obj)>0) {
             return self::createEntityFromWPDB($wp_obj[0]);
         }
         throw new LocationNotFound("L'id ne correspond à aucun campus");
@@ -58,7 +59,7 @@ class Location extends DataEntity
     public static function getAll(): array
     {
         $instance_list = [];
-        foreach (parent::get_list_of_table(self::getTableName()) as $wp_objet){
+        foreach (parent::get_list_of_table(self::getTableName()) as $wp_objet) {
             $instance_list[] = self::createEntityFromWPDB($wp_objet);
         }
         return $instance_list;
@@ -69,7 +70,7 @@ class Location extends DataEntity
      */
     public static function createEntityFromWPDB($entity): self
     {
-        return new Location($entity->nom_localisation,$entity->id_localisation,);
+        return new Location($entity->nom_localisation, $entity->id_localisation, );
     }
 
     /**
@@ -77,7 +78,8 @@ class Location extends DataEntity
      * @param int $id
      * @return bool
      */
-    public static function is_location(int $id):bool{
+    public static function is_location(int $id):bool
+    {
         global $wpdb;
         $table_name = self::getTableName();
         $wp_obj = $wpdb->get_results("SELECT * FROM $table_name WHERE id_localisation = $id")[0];
@@ -90,34 +92,37 @@ class Location extends DataEntity
      * @param string $redirect_url
      * @return void
      */
-    public static function redirect_if_location_does_not_exist(int $id, string $redirect_url):void{
+    public static function redirect_if_location_does_not_exist(int $id, string $redirect_url):void
+    {
         if (!self::is_location($id)) {
             wp_redirect($redirect_url);
             exit();
         }
     }
-    public function save():void{
+    public function save():void
+    {
         global $wpdb;
         $table_name = self::getTableName();
         $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_localisation = $this->id");
-        if (isset($rq) && $rq>0){
+        if (isset($rq) && $rq>0) {
             $wpdb->update($table_name, array(
                 "nom_localisation"=>$this->name,
             ), array(
                 "id_localisation"=>$this->id
             ));
-        }else {
+        } else {
             $wpdb->insert($table_name, array(
                 "nom_localisation" => $this->name,
             ));
         }
     }
 
-    public function delete():bool{
+    public function delete():bool
+    {
         global $wpdb;
         $table_name = self::getTableName();
         $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_localisation = $this->id");
-        if (isset($rq) && $rq>0){
+        if (isset($rq) && $rq>0) {
             $wpdb->delete(
                 $table_name,
                 array(
@@ -131,7 +136,7 @@ class Location extends DataEntity
     /**
      * @inheritDoc
      */
-    static function getTableName(): string
+    public static function getTableName(): string
     {
         global $wpdb;
         return $wpdb->prefix . 'localisation_ISTeP';
@@ -145,8 +150,9 @@ class Location extends DataEntity
         $this->name = $name;
     }
 
-    function getLastId(int $id):int{
-        if ($id == -1){
+    public function getLastId(int $id):int
+    {
+        if ($id == -1) {
             global $wpdb;
             $table_name = self::getTableName();
             $id = $wpdb->get_var("SELECT MAX(id_localisation) FROM $table_name");

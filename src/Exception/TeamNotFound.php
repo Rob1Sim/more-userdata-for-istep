@@ -2,7 +2,9 @@
 
 namespace MUDF_ISTEP\Exception;
 
-class TeamNotFound extends \Exception
+use Exception;
+
+class TeamNotFound extends Exception
 {
 
 }

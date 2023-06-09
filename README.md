@@ -68,3 +68,5 @@ Le dossier __styles__ contients les fichier de style utilisé par les différent
 Le projets utiliser simplement [l'API de wordpress]("https://developer.wordpress.org/")   
 [La documentation du projet](https://rob1sim.github.io/more-userdata-for-istep/).
 
+## Diagramme de class
+![Diagramme UML](./uml.png)

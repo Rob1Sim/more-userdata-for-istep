@@ -5,6 +5,7 @@
 
 
 use MUDF_ISTEP\Entity\Location;
+use MUDF_ISTEP\Exception\EntityNotFound;
 
 wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../../public/scripts/more-userdata-for-istep-admin.js', __FILE__), array(), false, true);
 
@@ -83,7 +84,7 @@ function more_userdata_istep_menu_location_page(): void
 /**
  * Modifie les informations d'un campus
  * @return void
- * @throws \MUDF_ISTEP\Exception\EntityNotFound
+ * @throws EntityNotFound
  */
 function more_userdata_istep_edit_location_page(): void
 {
@@ -137,7 +138,7 @@ function more_userdata_istep_edit_location_page(): void
 /**
  * Supprime de la bd le campus avec l'id correspondant
  * @return void
- * @throws \MUDF_ISTEP\Exception\EntityNotFound
+ * @throws EntityNotFound
  */
 function more_userdata_istep_delete_location_page(): void
 {

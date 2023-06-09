@@ -31,7 +31,7 @@ interface IWpEntity
      * Retourne le nom de la table de la classe dans la base de donnée
      * @return string
      */
-    static function getTableName():string;
+    public static function getTableName():string;
 
     /**
      * Enregistre ou ajoute l'instance dans la base de donnée
@@ -49,5 +49,5 @@ interface IWpEntity
      * @param int $id
      * @return int
      */
-    function getLastId(int $id):int;
+    public function getLastId(int $id):int;
 }

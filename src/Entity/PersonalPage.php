@@ -4,6 +4,7 @@ namespace MUDF_ISTEP\Entity;
 
 use MUDF_ISTEP\Exception\UpdateError;
 use MUDF_ISTEP\Interface\IWpEntity;
+
 /**
  * Représente l'entité personal_page_ISTeP de la base de données
  */
@@ -13,7 +14,7 @@ class PersonalPage
     /**
      * @inheritDoc
      */
-    static function getTableName(): string
+    public static function getTableName(): string
     {
         global $wpdb;
         return $wpdb->prefix . 'personal_page_ISTeP';
@@ -21,6 +22,7 @@ class PersonalPage
 
     /**
      * @inheritDoc
+     * @throws UpdateError
      */
     public static function save(array $data): void
     {
@@ -32,7 +34,7 @@ class PersonalPage
                 "wp_user_id"=>get_current_user_id()
             )
         );
-        if (gettype($update) =="boolean" && !$update){
+        if (gettype($update) =="boolean" && !$update) {
             throw new UpdateError("Echec de l'enregistrement de la page personnel");
         }
     }
@@ -44,7 +46,7 @@ class PersonalPage
      * @param int $id l'id de l'utilisateur
      * @return array
      */
-    function get_user_personal_pages_categories(int $id):array
+    public function get_user_personal_pages_categories(int $id):array
     {
         global $wpdb;
         $table = self::getTableName();
@@ -70,7 +72,7 @@ class PersonalPage
         global $wpdb;
         $table_name = self::getTableName();
         $qr = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE wp_user_id = $userId");
-        if (isset($qr) && intval($qr) == 0){
+        if (isset($qr) && intval($qr) == 0) {
             $wpdb->insert($table_name, array(
                 "wp_user_id"=>$userId,
             ));

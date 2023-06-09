@@ -2,7 +2,9 @@
 
 namespace MUDF_ISTEP\Exception;
 
-class UpdateError extends \Exception
+use Exception;
+
+class UpdateError extends Exception
 {
 
 }

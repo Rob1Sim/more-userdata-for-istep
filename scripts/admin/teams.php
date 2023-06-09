@@ -5,6 +5,8 @@
 
 
 use MUDF_ISTEP\Entity\Team;
+use MUDF_ISTEP\Exception\EntityNotFound;
+use MUDF_ISTEP\Exception\TeamNotFound;
 
 wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../../public/scripts/more-userdata-for-istep-admin.js', __FILE__), array(), false, true);
 
@@ -128,7 +130,7 @@ function more_userdata_istep_edit_equipe_page(): void
                 </form>
             </div>
             <?php
-        } catch (\MUDF_ISTEP\Exception\EntityNotFound|\MUDF_ISTEP\Exception\TeamNotFound $e) {
+        } catch (EntityNotFound|TeamNotFound $e) {
             echo '<div id="message" class="notice notice-error"><p>Une erreur est survenue.</p></div>';
         }
     }else{
@@ -161,7 +163,7 @@ function more_userdata_istep_delete_equipe_page(): void
             }
 
             echo '<div id="message" class="updated notice"><p>Équipe supprimée avec succès.</p></div>';
-        } catch (\MUDF_ISTEP\Exception\EntityNotFound|\MUDF_ISTEP\Exception\TeamNotFound $e) {
+        } catch (EntityNotFound|TeamNotFound $e) {
             echo '<div id="message" class="notice notice-error"><p>Une erreur est survenue lors de la suppression.</p></div>';
         }
     } else {

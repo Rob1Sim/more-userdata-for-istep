@@ -7,6 +7,11 @@ use MUDF_ISTEP\Entity\Member;
 use MUDF_ISTEP\Entity\Location;
 use MUDF_ISTEP\Entity\PersonalPage;
 use MUDF_ISTEP\Entity\Team;
+use MUDF_ISTEP\Exception\EntityNotFound;
+use MUDF_ISTEP\Exception\InsertError;
+use MUDF_ISTEP\Exception\InvalidParameter;
+use MUDF_ISTEP\Exception\MemberNotFound;
+use MUDF_ISTEP\Exception\UpdateError;
 
 wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../../public/scripts/more-userdata-for-istep-admin.js', __FILE__), array(), false, true);
 
@@ -87,7 +92,7 @@ function more_userdata_istep_users_list():void
             echo '<td>' . $member->getOffice() . '</td>';
             try{
                 echo '<td>' . $member->getLocation()->getName() . '</td>';
-            }catch (\MUDF_ISTEP\Exception\EntityNotFound $e) {
+            }catch (EntityNotFound $e) {
                 echo '<td>Pas de campus </td>';
             }
             echo '<td>' . $member->getEmployer() . '</td>';
@@ -105,7 +110,7 @@ function more_userdata_istep_users_list():void
                         </form>
                       </td>';
             echo '</tr>';
-        } catch (\MUDF_ISTEP\Exception\InvalidParameter|\MUDF_ISTEP\Exception\MemberNotFound $e) {
+        } catch (InvalidParameter|MemberNotFound $e) {
             echo '<div class="notice notice-error"><p>Une erreur est survenue</p></div>';
         }
 
@@ -190,7 +195,7 @@ function more_userdata_istep_users_edit_data():void
                 //Supprime la page personel pour la recreer
                 $new_member->deletePersonalPage();
                 PersonalPage::create_personal_page($display_name, $user_data->user_login,$new_member->getWpId());
-            } catch (\MUDF_ISTEP\Exception\InsertError|\MUDF_ISTEP\Exception\UpdateError |\MUDF_ISTEP\Exception\InvalidParameter|\MUDF_ISTEP\Exception\MemberNotFound $e) {
+            } catch (InsertError|UpdateError |InvalidParameter|MemberNotFound $e) {
                 echo '<div id="message" class="notice notice-error">'.$e->getMessage().'</div>';
             }
         }
@@ -228,7 +233,7 @@ function more_userdata_istep_users_edit_data():void
 
             echo '<div id="message" class="updated notice"><p>Mis à jour réalisé avec succès.</p></div>';
             echo '<a href="'.admin_url("admin.php?page=istep_users_list").'">Retour à la liste</a>';
-        } catch (\MUDF_ISTEP\Exception\InvalidParameter|\MUDF_ISTEP\Exception\MemberNotFound $e) {
+        } catch (InvalidParameter|MemberNotFound $e) {
             echo '<div class="notice notice-error"><p>Une erreur est survenue</p></div>';
         }
     } else {
@@ -259,7 +264,7 @@ function more_userdata_istep_users_delete_user():void
                 echo '<div class="notice notice-error"><p>Une erreur est survenue lors de la suppression</p></div>';
             }
             $member->deletePersonalPage();
-        } catch (\MUDF_ISTEP\Exception\InvalidParameter|\MUDF_ISTEP\Exception\MemberNotFound $e) {
+        } catch (InvalidParameter|MemberNotFound $e) {
             echo '<div class="notice notice-error"><p>Une erreur est survenue</p></div>';
         }
     }
@@ -347,7 +352,7 @@ function edit_user_form():void
             submit_button('Modifier', 'primary', 'changeTeams');
             echo "</form>";
             echo "</div>";
-        } catch (\MUDF_ISTEP\Exception\InvalidParameter|\MUDF_ISTEP\Exception\MemberNotFound $e) {
+        } catch (InvalidParameter|MemberNotFound $e) {
             echo '<div class="notice notice-error"><p>Une erreur est survenue</p></div>';
         }
 

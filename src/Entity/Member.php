@@ -1,5 +1,6 @@
 <?php
 namespace MUDF_ISTEP\Entity;
+
 use MUDF_ISTEP\Exception\EntityNotFound;
 use MUDF_ISTEP\Exception\InsertError;
 use MUDF_ISTEP\Exception\InvalidParameter;
@@ -7,6 +8,7 @@ use MUDF_ISTEP\Exception\MemberNotFound;
 use MUDF_ISTEP\Exception\TeamNotFound;
 use MUDF_ISTEP\Exception\UpdateError;
 use MUDF_ISTEP\Interface\IWpEntity;
+use WP_User;
 
 /**
  * Représente l'entité membre_ISTeP de la base de données
@@ -35,11 +37,18 @@ class Member extends DataEntity
      * @param string $employer
      * @param string $mailCase
      */
-    public function __construct(int $wp_id, int $location,
-                                string $function = "", string $phone ="",
-                                string $office = "", string $officeTower ="",
-                                string $employer ="", string $mailCase ="", string $teamRank = "", int $id = -1)
-    {
+    public function __construct(
+        int $wp_id,
+        int $location,
+        string $function = "",
+        string $phone ="",
+        string $office = "",
+        string $officeTower ="",
+        string $employer ="",
+        string $mailCase ="",
+        string $teamRank = "",
+        int $id = -1
+    ) {
         $this->id = $this->getLastId($id);
         $this->wp_id = $wp_id;
         $this->function = $function;
@@ -145,14 +154,14 @@ class Member extends DataEntity
         $tableName = self::getTableName();
         if ($type == "wp") {
             $wp_objet = $wpdb->get_results("SELECT * FROM $tableName WHERE wp_user_id = $id");
-            if (isset($wp_objet)&& count($wp_objet)>0){
+            if (isset($wp_objet)&& count($wp_objet)>0) {
                 return Member::createEntityFromWPDB($wp_objet[0]);
             }
             throw new MemberNotFound("L'id entrée est incorrecte");
         }
         if ($type == "istep") {
             $wp_objet = $wpdb->get_results("SELECT * FROM $tableName WHERE id_membre = $id");
-            if (isset($wp_objet)&& count($wp_objet)>0){
+            if (isset($wp_objet)&& count($wp_objet)>0) {
                 return self::createEntityFromWPDB($wp_objet[0]);
             }
             throw new MemberNotFound("L'id entrée est incorrecte");
@@ -164,7 +173,7 @@ class Member extends DataEntity
     {
 
         $instance_list = [];
-        foreach (parent::get_list_of_table(self::getTableName()) as $wp_objet){
+        foreach (parent::get_list_of_table(self::getTableName()) as $wp_objet) {
             $instance_list[] = self::createEntityFromWPDB($wp_objet);
         }
         return $instance_list;
@@ -173,27 +182,36 @@ class Member extends DataEntity
     public static function createEntityFromWPDB($entity): Member
     {
 
-        return new Member($entity->wp_user_id,
-            $entity->campus_location,($entity->fonction ?? ""),($entity->nTelephone ?? ""),
-            ($entity->bureau ?? ""),($entity->tourDuBureau ?? ""),($entity->employeur ?? ""),
-            ($entity->caseCourrier ?? ""),($entity->rangEquipe ?? ""),($entity->id_membre ?? -1));
+        return new Member(
+            $entity->wp_user_id,
+            $entity->campus_location,
+            ($entity->fonction ?? ""),
+            ($entity->nTelephone ?? ""),
+            ($entity->bureau ?? ""),
+            ($entity->tourDuBureau ?? ""),
+            ($entity->employeur ?? ""),
+            ($entity->caseCourrier ?? ""),
+            ($entity->rangEquipe ?? ""),
+            ($entity->id_membre ?? -1)
+        );
     }
 
     /**
      * Renvoie une liste contenant les instances des éuqipes de l'utilisateur
      * @return array<Team>
      */
-    public function getTeams():array{
+    public function getTeams():array
+    {
         global $wpdb;
         $table_name = self::getTeamMemberRelationTableName();
 
         $teams = $wpdb->get_results("SELECT id_equipe FROM $table_name WHERE id_membre = $this->id");
         $teams_object = [];
-        foreach ($teams as $team){
+        foreach ($teams as $team) {
             try {
                 $teams_object[] = Team::findById($team->id_equipe);
             } catch (TeamNotFound|EntityNotFound $e) {
-                $teams_object[] = new Team(0,"Pas d'équipe");
+                $teams_object[] = new Team(0, "Pas d'équipe");
             }
         }
         return $teams_object;
@@ -203,10 +221,11 @@ class Member extends DataEntity
      * Renvoie la listes des nom des équipes des utilisateurs
      * @return array<string>
      */
-    public function getTeamsNames():array{
+    public function getTeamsNames():array
+    {
         $teams = $this->getTeams();
         $teams_names = [];
-        foreach ($teams as $team){
+        foreach ($teams as $team) {
             $teams_names[] = $team->getName();
         }
         return $teams_names;
@@ -216,10 +235,11 @@ class Member extends DataEntity
      * Renvoie la listes des id des équipes des utilisateurs
      * @return array<int>
      */
-    public function getTeamsId():array{
+    public function getTeamsId():array
+    {
         $teams = $this->getTeams();
         $teams_id = [];
-        foreach ($teams as $team){
+        foreach ($teams as $team) {
             $teams_id[] = $team->getId();
         }
         return $teams_id;
@@ -229,7 +249,8 @@ class Member extends DataEntity
      * Renvoie le nom de la tour de façon lisible
      * @return string
      */
-    public function getReadableOfficeTower():string{
+    public function getReadableOfficeTower():string
+    {
         $parts = explode('-', $this->officeTower);
 
         $tour = ucfirst($parts[0]);
@@ -244,7 +265,8 @@ class Member extends DataEntity
      * @param array $teams_id_list
      * @return void
      */
-    public function addTeam(array $teams_id_list):void{
+    public function addTeam(array $teams_id_list):void
+    {
         //Si pour une raison quelconque il n'y a pas d'équipe alors on l'attribut à l'équipe "Pas d'équipe"
         global $wpdb;
         if (count($this->getTeams()) == 0) {
@@ -267,7 +289,8 @@ class Member extends DataEntity
      * @param int $id
      * @return void
      */
-    public function deleteTeam(int $id):void{
+    public function deleteTeam(int $id):void
+    {
         global $wpdb;
 
         $wpdb->delete(
@@ -281,17 +304,19 @@ class Member extends DataEntity
 
     /**
      * Retourne l'utilisateur WP associé à ce membre
-     * @return false|\WP_User
+     * @return false|WP_User
      */
-    public function getWPUser():false|\WP_User{
+    public function getWPUser():false|WP_User
+    {
         return get_user_by('id', $this->getWpId());
     }
-    static function getTeamMemberRelationTableName():string{
+    public static function getTeamMemberRelationTableName():string
+    {
         global $wpdb;
         return $wpdb->prefix . 'membre_equipe_ISTeP';
     }
 
-    static function getTableName(): string
+    public static function getTableName(): string
     {
         global $wpdb;
         return $wpdb->prefix . 'membre_ISTeP';
@@ -301,11 +326,12 @@ class Member extends DataEntity
      * @throws UpdateError
      * @throws InsertError
      */
-    public function save():void{
+    public function save():void
+    {
         global $wpdb;
         $table_name = self::getTableName();
         $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_membre = $this->id");
-        if (isset($rq) && $rq>0){
+        if (isset($rq) && $rq>0) {
             $update = $wpdb->update($table_name, array(
                 "fonction"=>$this->function,
                 "caseCourrier"=>$this->mailCase,
@@ -319,11 +345,11 @@ class Member extends DataEntity
                 "wp_user_id"=>$this->wp_id
             ));
 
-            if (gettype($update) == "boolean" && !$update){
+            if (gettype($update) == "boolean" && !$update) {
                 throw new UpdateError("Une erreur est survenue lors de l'enregistrement");
             }
-        }else{
-            $insert = $wpdb->insert($table_name,array(
+        } else {
+            $insert = $wpdb->insert($table_name, array(
                 "wp_user_id"=>$this->wp_id,
                 "fonction"=>$this->function,
                 "caseCourrier"=>$this->mailCase,
@@ -334,16 +360,17 @@ class Member extends DataEntity
                 "bureau"=>$this->office,
                 "campus_location"=>$this->location
             ));
-            if (gettype($insert) == "boolean" && !$insert){
+            if (gettype($insert) == "boolean" && !$insert) {
                 throw new InsertError("Une erreur est survenue lors de l'enregistrement");
             }
         }
     }
-    public function delete():bool{
+    public function delete():bool
+    {
         global $wpdb;
         $table_name = self::getTableName();
         $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_membre = $this->id");
-        if (isset($rq) && $rq>0){
+        if (isset($rq) && $rq>0) {
             $wpdb->delete(
                 $table_name,
                 array(
@@ -419,8 +446,9 @@ class Member extends DataEntity
         $this->teamRank = $teamRank;
     }
 
-    function getLastId(int $id):int{
-        if ($id == -1){
+    public function getLastId(int $id):int
+    {
+        if ($id == -1) {
             global $wpdb;
             $table_name = self::getTableName();
             $id = $wpdb->get_var("SELECT MAX(id_membre) FROM $table_name");
@@ -434,7 +462,8 @@ class Member extends DataEntity
      * @param int $user_id
      * @return string
      */
-    public function getAvatar():string{
+    public function getAvatar():string
+    {
         $avatar_id = get_user_meta($this->wp_id, 'wp_user_avatar', true);
         if ($avatar_id) {
             if (is_array(wp_get_attachment_image_src($avatar_id, 'thumbnail'))) {
@@ -448,7 +477,7 @@ class Member extends DataEntity
         return '<img src="' . $avatar_url . '" alt="Avatar">';
     }
 
-    function deletePersonalPage(): void
+    public function deletePersonalPage(): void
     {
         $wp_user = $this->getWPUser();
         $page = get_page_by_path('membres-istep/'.$wp_user->user_login);
@@ -465,9 +494,9 @@ class Member extends DataEntity
     }
     /**
      * Récupère toutes les infos présente sur la page de l'utilisateur et les renvoie sous la forme d'un tableau
-     * @return array
+     * @return array<object>
      */
-    function get_personal_page_categories():array
+    public function get_personal_page_categories():array
     {
         global $wpdb;
         $id = $this->wp_id;

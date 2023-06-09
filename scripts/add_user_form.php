@@ -7,6 +7,8 @@ use MUDF_ISTEP\Entity\Location;
 use MUDF_ISTEP\Entity\Member;
 use MUDF_ISTEP\Entity\PersonalPage;
 use MUDF_ISTEP\Entity\Team;
+use MUDF_ISTEP\Exception\InsertError;
+use MUDF_ISTEP\Exception\UpdateError;
 
 add_shortcode('add_istep_user_form', 'add_new_user_form');
 
@@ -300,7 +302,7 @@ function add_new_user(): void
 
                         wp_redirect($current_url."user-create-success=0", 302);
                     }
-                }catch (\MUDF_ISTEP\Exception\InsertError|\MUDF_ISTEP\Exception\UpdateError $e) {
+                }catch (InsertError|UpdateError $e) {
                     wp_redirect($current_url."user-create-error=9");
                     exit();
                 }

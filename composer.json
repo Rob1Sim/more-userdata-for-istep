@@ -11,5 +11,13 @@
     },
     "require": {
         "vlucas/phpdotenv": "^5.5"
+    },
+    "scripts": {
+        "test:cs": "php vendor/bin/php-cs-fixer fix --dry-run --diff",
+        "fix:cs": "php vendor/bin/php-cs-fixer fix"
+    },
+    "scripts-descriptions": {
+        "test:cs": "Vérifie si le codes est écrit selon le style de codage : PSR-12",
+        "fix:cs": "Corrige le code pour qu'il suivent le style de codage : PSR-12"
     }
 }

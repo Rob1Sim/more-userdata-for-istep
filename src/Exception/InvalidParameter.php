@@ -2,7 +2,9 @@
 
 namespace MUDF_ISTEP\Exception;
 
-class InvalidParameter extends \Exception
+use Exception;
+
+class InvalidParameter extends Exception
 {
 
 }

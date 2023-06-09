@@ -6,6 +6,10 @@
 
 use MUDF_ISTEP\Entity\Member;
 use MUDF_ISTEP\Entity\PersonalPage;
+use MUDF_ISTEP\Exception\EntityNotFound;
+use MUDF_ISTEP\Exception\InvalidParameter;
+use MUDF_ISTEP\Exception\MemberNotFound;
+use MUDF_ISTEP\Exception\UpdateError;
 
 wp_enqueue_style('more-userdata-for-istep', plugins_url('../public/styles/more-userdata-for-istep.css', __FILE__));
 wp_enqueue_script('more-userdata-for-istep-js', plugins_url('../public/scripts/more-userdata-for-istep.js', __FILE__), array(), false, true);
@@ -59,7 +63,7 @@ HTML;
 </div>
 HTML;
         return $html;
-    } catch (\MUDF_ISTEP\Exception\InvalidParameter|\MUDF_ISTEP\Exception\MemberNotFound|\MUDF_ISTEP\Exception\EntityNotFound $e) {
+    } catch (InvalidParameter|MemberNotFound|EntityNotFound $e) {
     return '<div id="message" class="notice notice-error"><p>Une erreur est survenue.</p></div>';
 }
 
@@ -150,7 +154,7 @@ function handle_personal_page_form(): void
         //Sauvegarde des données
         try {
             PersonalPage::save($data);
-        } catch (\MUDF_ISTEP\Exception\UpdateError $e) {
+        } catch (UpdateError $e) {
             wp_redirect($error_url."user-update-error=5", 302);
             exit();
         }

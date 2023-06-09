@@ -17,7 +17,7 @@ class Team extends DataEntity
      * @param int $id
      * @param string $name
      */
-    public function __construct(string $name,int $id = -1)
+    public function __construct(string $name, int $id = -1)
     {
         $this->id = $this->getLastId($id);
         $this->name = $name;
@@ -49,7 +49,7 @@ class Team extends DataEntity
         global $wpdb;
         $tableName =self::getTableName();
         $wp_obj = $wpdb->get_results("SELECT * FROM $tableName WHERE id_equipe = $id");
-        if (isset($wp_obj) && count($wp_obj)>0){
+        if (isset($wp_obj) && count($wp_obj)>0) {
             return self::createEntityFromWPDB($wp_obj[0]);
         }
         throw new TeamNotFound("L'id ne correspond à aucune équipe");
@@ -61,7 +61,7 @@ class Team extends DataEntity
     public static function getAll(): array
     {
         $instance_list = [];
-        foreach (parent::get_list_of_table(self::getTableName()) as $wp_objet){
+        foreach (parent::get_list_of_table(self::getTableName()) as $wp_objet) {
             $instance_list[] = self::createEntityFromWPDB($wp_objet);
         }
         return $instance_list;
@@ -71,10 +71,11 @@ class Team extends DataEntity
      * Renvoie le nom de chaque équipe
      * @return array<string>
      */
-    public static function getAllNames(): array{
+    public static function getAllNames(): array
+    {
         $teams = self::getAll();
         $teams_names = [];
-        foreach ($teams as $team){
+        foreach ($teams as $team) {
             $teams_names[] = $team->getName();
         }
         return $teams_names;
@@ -85,7 +86,7 @@ class Team extends DataEntity
      */
     public static function createEntityFromWPDB($entity): self
     {
-        return new Team($entity->nom_equipe,$entity->id_equipe);
+        return new Team($entity->nom_equipe, $entity->id_equipe);
     }
 
     /**
@@ -93,7 +94,8 @@ class Team extends DataEntity
      * @param int $id
      * @return bool
      */
-    public static function isTeamValid(int $id){
+    public static function isTeamValid(int $id)
+    {
         $teams = self::getAll();
         $array_of_id = [];
         foreach ($teams as $team) {
@@ -102,27 +104,29 @@ class Team extends DataEntity
 
         return in_array($id, $array_of_id);
     }
-    public function save():void{
+    public function save():void
+    {
         global $wpdb;
         $table_name = self::getTableName();
         $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_equipe = $this->id");
-        if (isset($rq) && $rq>0){
+        if (isset($rq) && $rq>0) {
             $wpdb->update($table_name, array(
                 "nom_equipe"=>$this->name,
             ), array(
                 "id_equipe"=>$this->id
             ));
-        }else {
+        } else {
             $wpdb->insert($table_name, array(
                 "nom_equipe" => $this->name,
             ));
         }
     }
-    public function delete():bool{
+    public function delete():bool
+    {
         global $wpdb;
         $table_name = self::getTableName();
         $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_equipe = $this->id");
-        if (isset($rq) && $rq>0){
+        if (isset($rq) && $rq>0) {
             $wpdb->delete(
                 $table_name,
                 array(
@@ -133,7 +137,7 @@ class Team extends DataEntity
         }
         return false;
     }
-    static function getTableName(): string
+    public static function getTableName(): string
     {
         global $wpdb;
         return $wpdb->prefix . 'equipe_ISTeP';
@@ -146,8 +150,9 @@ class Team extends DataEntity
         $this->name = $name;
     }
 
-    function getLastId(int $id):int{
-        if ($id == -1){
+    public function getLastId(int $id):int
+    {
+        if ($id == -1) {
             global $wpdb;
             $table_name = self::getTableName();
             $id = $wpdb->get_var("SELECT MAX(id_equipe) FROM $table_name");

@@ -2,7 +2,9 @@
 
 namespace MUDF_ISTEP\Exception;
 
-class InsertError extends \Exception
+use Exception;
+
+class InsertError extends Exception
 {
 
 }
