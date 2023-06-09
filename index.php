@@ -38,7 +38,7 @@ function more_ud_istep_install(): void
     $table_name_user_team = Team::getTableName();
     $table_members_team = Member::getTeamMemberRelationTableName();
     $table_name_user_location = Location::getTableName();
-    $table_personal_page = TABLE_PERSONAL_PAGE_NAME;
+    $table_personal_page = PersonalPage::getTableName();
     $charset_collate = $wpdb->get_charset_collate();
 
     $sql = "
@@ -117,20 +117,13 @@ function more_ud_istep_install(): void
     update_option('istep_user_roles', ["administrator"]);
     $role_obj = get_role("administrator");
     $role_obj->add_cap(ADMIN_CAPACITY);
-    $wpdb->insert(
-        $table_name_user_team,
-        array(
-            'id_equipe' => 1,
-            'nom_equipe' => "Pas d'équipe"
-        )
-    );
-    $wpdb->insert(
-        $table_name_user_location,
-        array(
-            'id_localisation' => 1,
-            'nom_localisation' => "Sorbonne Université - Campus Pierre et Marie Curie"
-        )
-    );
+
+    $team = new Team("Pas d'équipe");
+    $team->save();
+
+    $location = new Location("Sorbonne Université - Campus Pierre et Marie Curie");
+    $location->save();
+
 
     //Role par défaut
     update_option('default_role', "subscriber");

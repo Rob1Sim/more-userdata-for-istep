@@ -8,7 +8,7 @@ use MUDF_ISTEP\Interface\IWpEntity;
 /**
  * Représente l'entité equipe_ISTeP de la base de données
  */
-class Team implements IWpEntity
+class Team extends DataEntity
 {
     private int $id;
     private string $name;
@@ -61,7 +61,7 @@ class Team implements IWpEntity
     public static function getAll(): array
     {
         $instance_list = [];
-        foreach (get_list_of_table(self::getTableName()) as $wp_objet){
+        foreach (parent::get_list_of_table(self::getTableName()) as $wp_objet){
             $instance_list[] = self::createEntityFromWPDB($wp_objet);
         }
         return $instance_list;

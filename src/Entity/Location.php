@@ -5,7 +5,7 @@ namespace MUDF_ISTEP\Entity;
 use MUDF_ISTEP\Exception\LocationNotFound;
 use MUDF_ISTEP\Interface\IWpEntity;
 
-class Location implements IWpEntity
+class Location extends DataEntity
 {
     private int $id;
     private string $name;
@@ -56,7 +56,7 @@ class Location implements IWpEntity
     public static function getAll(): array
     {
         $instance_list = [];
-        foreach (get_list_of_table(self::getTableName()) as $wp_objet){
+        foreach (parent::get_list_of_table(self::getTableName()) as $wp_objet){
             $instance_list[] = self::createEntityFromWPDB($wp_objet);
         }
         return $instance_list;

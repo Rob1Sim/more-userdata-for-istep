@@ -11,7 +11,7 @@ use MUDF_ISTEP\Interface\IWpEntity;
 /**
  * Représente l'entité membre_ISTeP de la base de données
  */
-class Member implements IWpEntity
+class Member extends DataEntity
 {
     private int $id;
     private int $wp_id;
@@ -164,7 +164,7 @@ class Member implements IWpEntity
     {
 
         $instance_list = [];
-        foreach (get_list_of_table(self::getTableName()) as $wp_objet){
+        foreach (parent::get_list_of_table(self::getTableName()) as $wp_objet){
             $instance_list[] = self::createEntityFromWPDB($wp_objet);
         }
         return $instance_list;
