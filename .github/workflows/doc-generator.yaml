@@ -4,7 +4,7 @@ name: Deploy doc
 on:
   push:
     branches:
-      - master
+      - main
 
 
 permissions:
