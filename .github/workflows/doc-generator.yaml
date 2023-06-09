@@ -26,7 +26,7 @@ jobs:
       - name: Generate Documentation
         run: docker run --rm -v "$(pwd):/data" "phpdoc/phpdoc:3"
       - name: Copy to docs/
-        run: copy -r .phpdoc/build/ docs/
+        run: cp -r .phpdoc/build/ docs/
       - uses: actions/upload-pages-artifact@v1
         with:
           path: docs/
