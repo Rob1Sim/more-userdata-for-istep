@@ -3,6 +3,10 @@
  * Gère le formulaire de création d'utilisateur
  */
 
+use MUDF_ISTEP\Entity\Location;
+use MUDF_ISTEP\Entity\Member;
+use MUDF_ISTEP\Entity\Team;
+
 add_shortcode('add_istep_user_form', 'add_new_user_form');
 
 /**
@@ -29,18 +33,19 @@ function add_new_user_form():string
              </label>
             
             
-            <label for="login">Identifiant : 
-                <input type="text" name="login" id="login" required/> 
-            </label>
-            
-            
             <label for="email">Adresse email :
                 <input type="email" name="email" id="email" required/>
              </label>
              
+                          
              <label for="phone" id="phoneParent">Numéro de téléphone :
                 <input type="tel" name="phone" id="phoneNumber"/>
              </label>
+            
+            
+            <label for="login">Identifiant : 
+                <input type="text" name="login" id="login" required/> 
+            </label>
             
             <label for="password">Mot de passe : 
                 <input type="password" name="password" id="password" autocomplete required/>
@@ -73,11 +78,11 @@ function add_new_user_form():string
              <div class="role-box">   
 HTML;
         //Récupères les équipes existantes
-        $teams = get_list_of_table(TABLE_TEAM_NAME);
+        $teams = Team::getAll();
 
         foreach ($teams as $team) {
-            $team_name = $team->nom_equipe;
-            $team_id = $team->id_equipe;
+            $team_name = $team->getName();
+            $team_id = $team->getId();
             $html.= '<label><p></p><input type="checkbox" name="teams[]" value="'.$team_id.'"><p>'.$team_name.'</p></label><br/>';
         }
         $html.=<<<HTML
@@ -91,9 +96,9 @@ HTML;
             Campus :
             <select name="campus" id="campus">
 HTML;
-        $campus = get_list_of_table(TABLE_LOCATION_NAME);
+        $campus = Location::getAll();
         foreach ($campus as $one_campus) {
-            $html.= "<option value=\"".$one_campus->id_localisation."\">".$one_campus->nom_localisation."</option>";
+            $html.= "<option value=\"".$one_campus->getId()."\">".$one_campus->getName()."</option>";
         }
         $html .= <<<HTML
            </select>
@@ -119,16 +124,17 @@ HTML;
         }
         $roles = get_editable_roles();
 
-        // Récupère les rôles sélectionnés dans la base de données
-        $selected_roles = get_option('istep_user_roles', array());
-
         // Affiche une checkbox pour chaque rôle
         foreach ($roles as $key => $value) {
             $checked ="";
+            $disabled= "";
+            if ($key == "administrator"){
+                $disabled = "disabled";
+            }
             if ($key == get_option("default_role")) {
                 $checked ="checked";
             }
-            $html.= '<label><p></p><input type="checkbox" name="roles[]" value="'.$key.'"'.$checked.'><p>'.$value['name'].'</p></label><br/>';
+            $html.= '<label><p></p><input type="checkbox" name="roles[]" value="'.$key.'"'.$checked.' '.$disabled.'><p>'.$value['name'].'</p></label><br/>';
         }
         $html.= <<<HTML
         </div>
@@ -148,7 +154,7 @@ add_action('wp', 'add_new_user');
  * Fonction qui vérifie les données entré dans le formulaire et les enregistre dans la base de donnée
  * @return void
  */
-function add_new_user()
+function add_new_user(): void
 {
     $current_url = home_url(get_option('default_redirect_link')."/?");
     //Affiche une erreur si des informations entréer sont incorrecte
@@ -179,6 +185,9 @@ function add_new_user()
             case "8":
                 echo "<div class=\"user-create-error\">L'employeur n'éxiste pas</div>";
                 break;
+            case "9":
+                echo "<div class=\"user-create-error\">Une erreur est survenue lors de la création du compte.</div>";
+                break;
         }
 
     }
@@ -197,7 +206,7 @@ function add_new_user()
         $password = $_POST['password'];
         $office = sanitize_text_field($_POST['office']);
         $job = sanitize_text_field($_POST['job']);
-        $tourBureau = sanitize_text_field($_POST['tourBureau']);
+        $officeTower = sanitize_text_field($_POST['tourBureau']);
         $teamRank = sanitize_text_field($_POST['teamRank']);
         $campus = sanitize_text_field($_POST['campus']);
         $employer = sanitize_text_field($_POST['employer']);
@@ -214,20 +223,18 @@ function add_new_user()
         } else {
             $verified_roles = [get_option('default_role')];
         }
-
+        $verified_teams = [];
         if (isset($_POST['teams'])) {
             //Nettoyage des équipes
             $teams = $_POST['teams'];
-            $verified_teams = [];
             foreach ($teams as $team) {
                 $verified_teams[] = sanitize_text_field($team);
             }
-
         }
 
         // Validation des données
         if (isset($last_name) && isset($name) && isset($login) && isset($email)
-            && isset($password) && isset($office) && isset($job) && isset($tourBureau) && isset($team)
+            && isset($password) && isset($office) && isset($job) && isset($officeTower) && isset($team)
             && isset($teamRank) && isset($campus) && isset($employer)) {
 
             if (strlen($phone)!=10) {
@@ -237,7 +244,7 @@ function add_new_user()
             }
 
             //Vérification de l'éxistance du campus
-            is_location_existing_redirect_if_not($campus, $current_url."user-create-error=7");
+            Location::redirect_if_location_does_not_exist($campus, $current_url."user-create-error=7");
 
             // Créer un tableau avec les informations de l'utilisateur
             $user_data = array(
@@ -263,44 +270,19 @@ function add_new_user()
                     exit();
                 }
                 //Si l'utilisateur wp a bien été créer on continue
-                $user = get_user_by('login', $login); // récupère l'utilisateur par login
+                $user = get_user_by('login', $login);
                 $user_id = $user->ID;
 
-
-                $data = array(
-                    'wp_user_id' => $user_id,
-                    'fonction' => $job,
-                    'nTelephone' => $phone,
-                    'bureau' => $office,
-                    'rangEquipe' => $teamRank,
-                    'tourDuBureau' => $tourBureau,
-                    'campus_location' => $campus,
-                    'employeur' => $employer,
-                    'caseCourrier' => $mailCase,
-                );
-                $format = array(
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%d',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                );
-                //Ajout de l'utilisateur dans la bd membre_ISTeP
-                if ($wpdb->insert(TABLE_MEMBERS_NAME, $data, $format) === false) {
-                    wp_redirect($current_url);
-                    exit();
-                } else {
-                    $new_user = get_user_by('id', $user_id);
+                try {
+                    $new_member = new Member($user_id,$campus,$job,$phone,$office,$officeTower,$employer,$mailCase,$teamRank);
+                    $new_member->save();
+                    //Ajout des rôles
+                    $new_wp_user = get_user_by('id', $user_id);
                     foreach ($verified_roles as $new_role) {
-                        $new_user->add_role($new_role);
+                        $new_wp_user->add_role($new_role);
                     }
-                    $last_member = get_istep_user_by_id($user_id);
-
-                    add_data_to_team_members($verified_teams, $last_member->id_membre);
+                    //Ajout des équipes
+                    $new_member->addTeam($verified_teams);
 
                     //Création de la page perso
                     $wpdb->insert(TABLE_PERSONAL_PAGE_NAME, array(
@@ -320,6 +302,9 @@ function add_new_user()
 
                         wp_redirect($current_url."user-create-success=0", 302);
                     }
+                }catch (\MUDF_ISTEP\Exception\InsertError|\MUDF_ISTEP\Exception\UpdateError $e) {
+                    wp_redirect($current_url."user-create-error=9");
+                    exit();
                 }
 
             }
