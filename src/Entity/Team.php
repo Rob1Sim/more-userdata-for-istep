@@ -156,4 +156,8 @@ class Team implements IWpEntity
         return $id;
     }
 
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
 }
