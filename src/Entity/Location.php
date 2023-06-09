@@ -3,9 +3,8 @@
 namespace MUDF_ISTEP\Entity;
 
 use MUDF_ISTEP\Exception\LocationNotFound;
-use MUDF_ISTEP\Interface\IWpEntity;
 
-class Location implements \MUDF_ISTEP\Interface\IWpEntity
+class Location extends Entity
 {
     private int $id;
     private string $name;
@@ -14,9 +13,9 @@ class Location implements \MUDF_ISTEP\Interface\IWpEntity
      * @param int $id
      * @param string $name
      */
-    public function __construct(int $id, string $name)
+    public function __construct(string $name, int $id = -1)
     {
-        $this->id = $id;
+        $this->id = parent::getLastId($id,"id_localisation");
         $this->name = $name;
     }
 
@@ -67,7 +66,7 @@ class Location implements \MUDF_ISTEP\Interface\IWpEntity
      */
     public static function createEntityFromWPDB($entity): self
     {
-        return new Location($entity->id_localisation,$entity->nom_localisation);
+        return new Location($entity->nom_localisation,$entity->id_localisation,);
     }
 
     /**

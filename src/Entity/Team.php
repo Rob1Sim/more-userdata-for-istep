@@ -3,12 +3,11 @@
 namespace MUDF_ISTEP\Entity;
 
 use MUDF_ISTEP\Exception\TeamNotFound;
-use MUDF_ISTEP\Interface\IWpEntity;
 
 /**
  * Représente l'entité equipe_ISTeP de la base de données
  */
-class Team implements IWpEntity
+class Team extends Entity
 {
     private int $id;
     private string $name;
@@ -17,9 +16,9 @@ class Team implements IWpEntity
      * @param int $id
      * @param string $name
      */
-    public function __construct(int $id, string $name)
+    public function __construct(string $name,int $id = -1)
     {
-        $this->id = $id;
+        $this->id = parent::getLastId($id,"id_equipe");
         $this->name = $name;
     }
 
@@ -85,7 +84,7 @@ class Team implements IWpEntity
      */
     public static function createEntityFromWPDB($entity): self
     {
-        return new Team($entity->id_equipe,$entity->nom_equipe);
+        return new Team($entity->nom_equipe,$entity->id_equipe);
     }
 
     /**

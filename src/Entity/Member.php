@@ -1,15 +1,17 @@
 <?php
 namespace MUDF_ISTEP\Entity;
 use MUDF_ISTEP\Exception\EntityNotFound;
+use MUDF_ISTEP\Exception\InsertError;
 use MUDF_ISTEP\Exception\InvalidParameter;
 use MUDF_ISTEP\Exception\MemberNotFound;
 use MUDF_ISTEP\Exception\TeamNotFound;
+use MUDF_ISTEP\Exception\UpdateError;
 use MUDF_ISTEP\Interface\IWpEntity;
 
 /**
  * Représente l'entité membre_ISTeP de la base de données
  */
-class Member implements IWpEntity
+class Member extends Entity
 {
     private int $id;
     private int $wp_id;
@@ -33,12 +35,12 @@ class Member implements IWpEntity
      * @param string $employer
      * @param string $mailCase
      */
-    public function __construct(int    $id, int $wp_id, int $location,
+    public function __construct(int $wp_id, int $location,
                                 string $function = "", string $phone ="",
                                 string $office = "", string $officeTower ="",
-                                string $employer ="", string $mailCase ="", string $teamRank = "")
+                                string $employer ="", string $mailCase ="", string $teamRank = "", int $id = -1)
     {
-        $this->id = $id;
+        $this->id = parent::getLastId($id,"id_membre");
         $this->wp_id = $wp_id;
         $this->function = $function;
         $this->phone = $phone;
@@ -171,10 +173,10 @@ class Member implements IWpEntity
     public static function createEntityFromWPDB($entity): Member
     {
 
-        return new Member($entity->id_membre,$entity->wp_user_id,
+        return new Member($entity->wp_user_id,
             $entity->campus_location,($entity->fonction ?? ""),($entity->nTelephone ?? ""),
             ($entity->bureau ?? ""),($entity->tourDuBureau ?? ""),($entity->employeur ?? ""),
-            ($entity->caseCourrier ?? ""),($entity->rangEquipe ?? ""));
+            ($entity->caseCourrier ?? ""),($entity->rangEquipe ?? ""),($entity->id_membre ?? -1));
     }
 
     /**
@@ -294,12 +296,19 @@ class Member implements IWpEntity
         global $wpdb;
         return $wpdb->prefix . 'membre_ISTeP';
     }
+
+    /**
+     * @throws UpdateError
+     * @throws InsertError
+     */
     public function save():void{
         global $wpdb;
         $table_name = self::getTableName();
         $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_membre = $this->id");
+        var_dump($rq);
+        die();
         if (isset($rq) && $rq>0){
-            $wpdb->update($table_name, array(
+            $update = $wpdb->update($table_name, array(
                 "fonction"=>$this->function,
                 "caseCourrier"=>$this->mailCase,
                 "employeur"=>$this->employer,
@@ -311,8 +320,12 @@ class Member implements IWpEntity
             ), array(
                 "wp_user_id"=>$this->wp_id
             ));
+
+            if (gettype($update) == "boolean" && !$update){
+                throw new UpdateError("Une erreur est survenue lors de l'enregistrement");
+            }
         }else{
-            $wpdb->insert($table_name,array(
+            $insert = $wpdb->insert($table_name,array(
                 "wp_user_id"=>$this->wp_id,
                 "fonction"=>$this->function,
                 "caseCourrier"=>$this->mailCase,
@@ -323,6 +336,9 @@ class Member implements IWpEntity
                 "bureau"=>$this->office,
                 "campus_location"=>$this->location
             ));
+            if (gettype($insert) == "boolean" && !$insert){
+                throw new InsertError("Une erreur est survenue lors de l'enregistrement");
+            }
         }
     }
     public function delete():bool{
