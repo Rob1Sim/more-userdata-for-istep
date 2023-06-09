@@ -4,7 +4,9 @@ namespace MUDF_ISTEP\Entity;
 
 use MUDF_ISTEP\Exception\UpdateError;
 use MUDF_ISTEP\Interface\IWpEntity;
-
+/**
+ * Représente l'entité personal_page_ISTeP de la base de données
+ */
 class PersonalPage
 {
 

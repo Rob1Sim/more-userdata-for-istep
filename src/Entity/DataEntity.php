@@ -3,7 +3,9 @@
 namespace MUDF_ISTEP\Entity;
 
 use MUDF_ISTEP\Interface\IWpEntity;
-
+/**
+ * Class mère des class Location, Member et Team
+ */
 abstract class DataEntity implements IWpEntity
 {
     /**

@@ -4,7 +4,9 @@ namespace MUDF_ISTEP\Entity;
 
 use MUDF_ISTEP\Exception\LocationNotFound;
 use MUDF_ISTEP\Interface\IWpEntity;
-
+/**
+ * Représente l'entité localisation_ISTeP de la base de données
+ */
 class Location extends DataEntity
 {
     private int $id;
