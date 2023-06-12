@@ -127,6 +127,7 @@ class Team extends DataEntity
         $table_name = self::getTableName();
         $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_equipe = $this->id");
         if (isset($rq) && $rq>0 && $this->id != get_option("default_team")) {
+            Member::addDefaultTeamWhenNoTeamLeft($this->id);
             $wpdb->delete(
                 $table_name,
                 array(

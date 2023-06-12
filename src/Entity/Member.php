@@ -393,6 +393,19 @@ class Member extends DataEntity
     }
 
     /**
+     * Parcours tous les membres qui possède cette équipe, et leur ajoute l'équipe par défaut si ils n'en n'ont plus
+     * @param int $teamId
+     * @return void
+     */
+    public static function addDefaultTeamWhenNoTeamLeft(int $teamId):void
+    {
+        foreach (self::getAll() as $member) {
+            if (in_array($teamId, $member->getTeamsId()) && count($member->getTeamsId()) == 1) {
+                $member->addTeam([get_option("default_team")]);
+            }
+        }
+    }
+    /**
      * @param string $function
      */
     public function setFunction(string $function): void
