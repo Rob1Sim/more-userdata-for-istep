@@ -131,7 +131,7 @@ HTML;
         foreach ($roles as $key => $value) {
             $checked ="";
             $disabled= "";
-            if ($key == "administrator"){
+            if ($key == "administrator") {
                 $disabled = "disabled";
             }
             if ($key == get_option("default_role")) {
@@ -277,7 +277,7 @@ function add_new_user(): void
                 $user_id = $user->ID;
 
                 try {
-                    $new_member = new Member($user_id,$campus,$job,$phone,$office,$officeTower,$employer,$mailCase,$teamRank);
+                    $new_member = new Member($user_id, $campus, $job, $phone, $office, $officeTower, $employer, $mailCase, $teamRank);
                     $new_member->save();
                     //Ajout des rôles
                     $new_wp_user = get_user_by('id', $user_id);
@@ -291,7 +291,7 @@ function add_new_user(): void
 
 
                     //Ajout de l'image de profile
-                    PersonalPage::create_personal_page($name." ".$last_name, $login,$user_id);
+                    PersonalPage::create_personal_page($name." ".$last_name, $login, $user_id);
 
                     if($new_member->add_profile_picture_or_redirect(
                         'async-upload',
@@ -302,7 +302,7 @@ function add_new_user(): void
 
                         wp_redirect($current_url."user-create-success=0", 302);
                     }
-                }catch (InsertError|UpdateError $e) {
+                } catch (InsertError|UpdateError $e) {
                     wp_redirect($current_url."user-create-error=9");
                     exit();
                 }

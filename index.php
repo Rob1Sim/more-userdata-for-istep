@@ -31,7 +31,7 @@ require_once(plugin_dir_path(__FILE__) . 'scripts/add_user_form.php');
  * Créer la base de donnée lors de l'activation du plugin
  * @return void
  */
-function more_ud_istep_install(): void
+function on_activating(): void
 {
     global $wpdb;
     $table_name_user_data = Member::getTableName();
@@ -41,28 +41,23 @@ function more_ud_istep_install(): void
     $table_personal_page = PersonalPage::getTableName();
     $charset_collate = $wpdb->get_charset_collate();
 
-    $sql = "
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    $wpdb->query("
         CREATE TABLE $table_name_user_team(
-            id_equipe INT NOT NULL AUTO_INCREMENT,
+    id_equipe INT NOT NULL AUTO_INCREMENT,
             nom_equipe VARCHAR(255) NOT NULL,
             PRIMARY KEY(id_equipe)
-        )$charset_collate;
-        
-        CREATE TABLE $table_members_team(
-            id_equipe INT NOT NULL ,
-            id_membre INT NOT NULL,
-            PRIMARY KEY(id_equipe,id_membre),
-            FOREIGN KEY (id_equipe) REFERENCES {$wpdb->prefix}equipe_ISTeP(id_equipe) ON DELETE CASCADE,
-            FOREIGN KEY (id_membre) REFERENCES {$wpdb->prefix}membre_ISTeP(id_membre) ON DELETE CASCADE
-    
-        )$charset_collate;
-        
+        )$charset_collate;");
+
+    $wpdb->query("
         CREATE TABLE $table_name_user_location(
             id_localisation INT NOT NULL AUTO_INCREMENT,
             nom_localisation VARCHAR(255) NOT NULL,
             PRIMARY KEY(id_localisation)
-        )$charset_collate;
-        
+        )$charset_collate;");
+
+    $wpdb->query("
         CREATE TABLE $table_name_user_data (
             id_membre INT NOT NULL AUTO_INCREMENT,
             wp_user_id BIGINT UNSIGNED NOT NULL,
@@ -71,15 +66,29 @@ function more_ud_istep_install(): void
             bureau VARCHAR(4),
             rangEquipe VARCHAR(255),
             tourDuBureau VARCHAR(30),
-            campus_location VARCHAR(255),
+            campus_location INT,
             employeur VARCHAR(255),
             caseCourrier VARCHAR(10),
             PRIMARY KEY (id_membre),
             FOREIGN KEY (wp_user_id) REFERENCES {$wpdb->prefix}users(ID)
                 ON DELETE CASCADE,
             FOREIGN KEY(campus_location)  REFERENCES {$wpdb->prefix}localisation_ISTeP(id_localisation)
-                           ON DELETE CASCADE,
-    ) $charset_collate;
+                           ON DELETE CASCADE
+    ) $charset_collate;");
+
+
+
+    $wpdb->query("
+                CREATE TABLE $table_members_team(
+            id_equipe INT NOT NULL ,
+            id_membre INT NOT NULL,
+            PRIMARY KEY(id_equipe,id_membre),
+            FOREIGN KEY (id_equipe) REFERENCES {$wpdb->prefix}equipe_ISTeP(id_equipe) ON DELETE CASCADE,
+            FOREIGN KEY (id_membre) REFERENCES {$wpdb->prefix}membre_ISTeP(id_membre) ON DELETE CASCADE
+    
+        )$charset_collate;");
+
+    $wpdb->query("
         CREATE TABLE $table_personal_page(
             id_page INT NOT NULL AUTO_INCREMENT,
             wp_user_id BIGINT UNSIGNED NOT NULL,
@@ -93,12 +102,7 @@ function more_ud_istep_install(): void
             PRIMARY KEY(id_page),
             FOREIGN KEY (wp_user_id) REFERENCES {$wpdb->prefix}users(ID)
             ON DELETE CASCADE
-            )$charset_collate;
-
-";
-
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    dbDelta($sql);
+            )$charset_collate;");
 
     $page_data = array(
         'post_title' => "Membres de l'ISTeP",
@@ -134,7 +138,7 @@ function more_ud_istep_install(): void
 
     PersonalPage::create_modify_personal_page();
 }
-register_activation_hook(__FILE__, 'more_ud_istep_install'); //Appelé lors de l'activation du plugin
+register_activation_hook(__FILE__, 'on_activating'); //Appelé lors de l'activation du plugin
 
 
 /**
