@@ -129,6 +129,8 @@ function more_ud_istep_install(): void
     update_option('default_role', "subscriber");
     //Lien de redirection par défaut
     update_option('default_redirect_link', "sample-page");
+    //Equipe par défaut
+    update_option('default_team', $team->getId());
 
     PersonalPage::create_modify_personal_page();
 }
