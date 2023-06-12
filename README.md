@@ -18,6 +18,15 @@ Cloner ce repo dans le dossier des plugins de wordpress
 cd wp-content/plugins/
 git clone https://github.com/Rob1Sim/more-userdata-for-istep.git
 ```
+Installer les dépendances 
+```bash
+composer install --no-dev
+```
+Mettez à jour l'autoload
+```bash
+composer dump-autoload --optimize
+```
+
 Pour utiliser le formualaire sur une page il suffit d'ajouter le shortcode (code court) suivant : 
 ```bash
 [add_istep_user_form]
