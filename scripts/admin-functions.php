@@ -7,6 +7,8 @@
 
 // ---- Menu Administrateur ----
 
+use MUDF_ISTEP\Entity\Team as TeamAlias;
+
 wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../public/scripts/more-userdata-for-istep-admin.js', __FILE__), array(), false, true);
 wp_enqueue_style('more-userdata-for-istep-admin', plugins_url('../public/styles/more-userdata-for-istep-admin.css', __FILE__));
 
@@ -147,6 +149,16 @@ function more_userdata_istep_menu_content(): void
             echo '<div id="message" class="updated notice"><p>Le rôle par défaut a été mis à jour avec succès. </p></div>';
         }
     }
+    // Formulaire d'équipe par défaut
+    if(isset($_POST["submit-default-team"])) {
+        if (isset($_POST["default-team"])
+            && gettype($_POST["default-team"]) == "string") {
+
+            update_option('default_team', intval(sanitize_text_field($_POST["default-team"])));
+
+            echo '<div id="message" class="updated notice"><p>L\'équipe par défaut a été mis à jour avec succès. </p></div>';
+        }
+    }
     // Formulaire du lien par défaut
     if(isset($_POST["submit-redirect-link"])) {
         if (isset($_POST["redirect-link-default"])
@@ -205,6 +217,22 @@ function more_userdata_istep_menu_content(): void
     echo '</select>';
     ?>
             <?php submit_button('Enregistrer', 'primary', 'submit-default-role', true); ?>
+        </form>
+        <form method="post" action="">
+            <h2>Equipes par défaut</h2>
+            <p>Détermine l'équipe sélectionné par défaut si aucune autre équipe n'est spécifié lors de la création ou modification d'un membre.
+            Attention cette équipe ne peut pas être supprimer !</p>
+
+            <label for="default-team">Equipe par défaut : </label>
+            <select name="default-team" id="default-team">
+                <?php
+                foreach (TeamAlias::getAll() as $team) {
+                    echo "<option value=\"".$team->getId()."\">".$team->getName()."</option>";
+                }
+    ?>
+            </select>
+
+            <?php submit_button('Enregistrer', 'primary', 'submit-default-team', true); ?>
         </form>
         <form method="post" action="">
             <h2>Lien de redirection par défaut</h2>

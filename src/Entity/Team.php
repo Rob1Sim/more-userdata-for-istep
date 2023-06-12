@@ -126,7 +126,7 @@ class Team extends DataEntity
         global $wpdb;
         $table_name = self::getTableName();
         $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_equipe = $this->id");
-        if (isset($rq) && $rq>0) {
+        if (isset($rq) && $rq>0 && $this->id != get_option("default_team")) {
             $wpdb->delete(
                 $table_name,
                 array(
@@ -135,6 +135,7 @@ class Team extends DataEntity
             );
             return true;
         }
+
         return false;
     }
     public static function getTableName(): string

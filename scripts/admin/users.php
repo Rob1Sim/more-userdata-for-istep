@@ -90,9 +90,9 @@ function more_userdata_istep_users_list():void
             echo '<td>' . $member->getTeamRank() . '</td>';
             echo '<td>' . $member->getReadableOfficeTower() . '</td>';
             echo '<td>' . $member->getOffice() . '</td>';
-            try{
+            try {
                 echo '<td>' . $member->getLocation()->getName() . '</td>';
-            }catch (EntityNotFound $e) {
+            } catch (EntityNotFound $e) {
                 echo '<td>Pas de campus </td>';
             }
             echo '<td>' . $member->getEmployer() . '</td>';
@@ -193,7 +193,7 @@ function more_userdata_istep_users_edit_data():void
                 }
                 //Supprime la page personel pour la recreer
                 $new_member->deletePersonalPage();
-                PersonalPage::create_personal_page($display_name, $user_data->user_login,$new_member->getWpId());
+                PersonalPage::create_personal_page($display_name, $user_data->user_login, $new_member->getWpId());
             } catch (InsertError|UpdateError |InvalidParameter|MemberNotFound $e) {
                 echo '<div id="message" class="notice notice-error">'.$e->getMessage().'</div>';
             }
@@ -205,7 +205,7 @@ function more_userdata_istep_users_edit_data():void
             $already_exist_data = $member->getTeamsId();
             $teams_already_in = [];
             if (!isset($_POST['teams'])) {
-                $verified_teams[] = 1;
+                $verified_teams[] = get_option("default_team");
             } else {
                 $teams = $_POST['teams'];
 

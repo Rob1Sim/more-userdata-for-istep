@@ -93,7 +93,7 @@ function more_userdata_istep_edit_equipe_page(): void
     }
     // Récupère l'ID de l'équipe à éditer depuis l'URL
     $id_equipe = sanitize_text_field($_GET['id']);
-    if (isset($id_equipe)){
+    if (isset($id_equipe)) {
         try {
             $team = Team::findById($id_equipe);
             // Vérifie si le formulaire a été soumis
@@ -134,7 +134,7 @@ function more_userdata_istep_edit_equipe_page(): void
         } catch (EntityNotFound|TeamNotFound $e) {
             echo '<div id="message" class="notice notice-error"><p>Une erreur est survenue.</p></div>';
         }
-    }else{
+    } else {
         echo '<div id="message" class="notice notice-error"><p>Une erreur est survenue.</p></div>';
     }
 
@@ -155,21 +155,29 @@ function more_userdata_istep_delete_equipe_page(): void
         // Supprime l'équipe de la base de données
         try {
             $team_to_delete = Team::findById($id_equipe);
-            $team_to_delete->delete();
+            $delete = $team_to_delete->delete();
+            if (!$delete) {
+                echo '<div id="message" class="notice notice-error"><p>Impossible de supprimer l\'équipe par défaut.</p></div>';
+                echo '<a href="'.admin_url("admin.php?page=istep_manage_teams").'">Retour à la liste</a>';
+                exit();
+            }
             // Vérifie s'il reste des équipes dans la table
             if (count(Team::getAll()) == 0) {
                 // Crée l'équipe "Pas d'équipe"
                 $new_team = new Team("Pas d'équipe");
                 $new_team->save();
+                update_option('default_team', $new_team->getId());
             }
 
             echo '<div id="message" class="updated notice"><p>Équipe supprimée avec succès.</p></div>';
             echo '<a href="'.admin_url("admin.php?page=istep_manage_teams").'">Retour à la liste</a>';
         } catch (EntityNotFound|TeamNotFound $e) {
             echo '<div id="message" class="notice notice-error"><p>Une erreur est survenue lors de la suppression.</p></div>';
+            echo '<a href="'.admin_url("admin.php?page=istep_manage_teams").'">Retour à la liste</a>';
         }
     } else {
         echo '<div id="message" class="notice notice-error"><p>Vous n\'avez pas la permission de faire ça.</p></div>';
+        echo '<a href="'.admin_url("admin.php?page=istep_manage_teams").'">Retour à la liste</a>';
 
     }
 

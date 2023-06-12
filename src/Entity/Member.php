@@ -4,6 +4,7 @@ namespace MUDF_ISTEP\Entity;
 use MUDF_ISTEP\Exception\EntityNotFound;
 use MUDF_ISTEP\Exception\InsertError;
 use MUDF_ISTEP\Exception\InvalidParameter;
+use MUDF_ISTEP\Exception\LocationNotFound;
 use MUDF_ISTEP\Exception\MemberNotFound;
 use MUDF_ISTEP\Exception\TeamNotFound;
 use MUDF_ISTEP\Exception\UpdateError;
@@ -115,7 +116,11 @@ class Member extends DataEntity
      */
     public function getLocation(): Location|IWpEntity
     {
-        return Location::findById($this->location);
+        try {
+            return Location::findById($this->location);
+        } catch (LocationNotFound $e) {
+            return new Location("Pas de campus", -1);
+        }
     }
 
     /**
@@ -293,13 +298,18 @@ class Member extends DataEntity
     {
         global $wpdb;
 
-        $wpdb->delete(
+        $delete = $wpdb->delete(
             $this->getTeamMemberRelationTableName(),
             array(
-                "id_equipe" => $this->id,
-                "id_membre" => $id
+                "id_equipe" => $id,
+                "id_membre" => $this->id
             )
         );
+        if (!$delete) {
+            echo $id."\n";
+            echo $this->id;
+            die();
+        }
     }
 
     /**
