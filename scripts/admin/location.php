@@ -69,7 +69,7 @@ function more_userdata_istep_menu_location_page(): void
         echo '<td>
                         <form method="post" action="' . admin_url('admin.php?page=suppress_location&id=' . $location->getId()) . '">
                             <input type="hidden" name="location_id_delete" value="' . $location->getId() . '">
-                            <button type="submit" class="button">Supprimer</button>
+                            <button type="submit" class="button button-primary" style="background: #d0021b; border-color: #d0021b">Supprimer</button>
                         </form>
                       </td>';
         echo '</tr>';
@@ -104,6 +104,7 @@ function more_userdata_istep_edit_location_page(): void
                     $location_object->setName($location_name);
                     $location_object->save();
                     echo '<div id="message" class="updated notice"><p>Campus modifiée avec succès.</p></div>';
+                    echo '<a href="'.admin_url("admin.php?page=istep_manage_location").'">Retour à la liste</a>';
                 }
             } else {
                 echo '<div id="message" class="notice notice-error"><p>Vous n\'avez pas la permission de faire ça.</p></div>';
@@ -159,6 +160,7 @@ function more_userdata_istep_delete_location_page(): void
         }
 
         echo '<div id="message" class="updated notice"><p>Campus supprimée avec succès.</p></div>';
+        echo '<a href="'.admin_url("admin.php?page=istep_manage_location").'">Retour à la liste</a>';
     } else {
         echo '<div id="message" class="notice notice-error"><p>Vous n\'avez pas la permission de faire ça.</p></div>';
 

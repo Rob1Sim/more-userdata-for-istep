@@ -70,7 +70,7 @@ function more_userdata_istep_menu_team_page(): void
         echo '<td>
                         <form method="post" action="' . admin_url('admin.php?page=delete_teams&id=' . $team->getId()) . '">
                             <input type="hidden" name="equipe_id_delete" value="' . $team->getId() . '">
-                            <button type="submit" class="button">Supprimer</button>
+                            <button type="submit" class="button button-primary" style="background: #d0021b; border-color: #d0021b">Supprimer</button>
                         </form>
                       </td>';
         echo '</tr>';
@@ -105,6 +105,7 @@ function more_userdata_istep_edit_equipe_page(): void
                         $team->setName($nom_equipe);
                         $team->save();
                         echo '<div id="message" class="updated notice"><p>Équipe modifier avec succès.</p></div>';
+                        echo '<a href="'.admin_url("admin.php?page=istep_manage_teams").'">Retour à la liste</a>';
                     }
                 } else {
                     echo '<div id="message" class="notice notice-error"><p>Vous n\'avez pas la permission de faire ça.</p></div>';
@@ -163,6 +164,7 @@ function more_userdata_istep_delete_equipe_page(): void
             }
 
             echo '<div id="message" class="updated notice"><p>Équipe supprimée avec succès.</p></div>';
+            echo '<a href="'.admin_url("admin.php?page=istep_manage_teams").'">Retour à la liste</a>';
         } catch (EntityNotFound|TeamNotFound $e) {
             echo '<div id="message" class="notice notice-error"><p>Une erreur est survenue lors de la suppression.</p></div>';
         }

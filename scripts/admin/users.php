@@ -141,7 +141,6 @@ function more_userdata_istep_users_edit_data():void
         $office_tower = sanitize_text_field($_POST['tourBureau']);
         $office = sanitize_text_field($_POST['office']);
         $phone = sanitize_text_field($_POST['phone']);
-        $wp_id = sanitize_text_field($_POST['idUserWp']);
 
         if(isset($last_name) && isset($first_name) && isset($function) && isset($rank)
             && isset($employer) && isset($mailCase) && isset($campus) && isset($office_tower) && isset($office) && isset($phone)) {
