@@ -64,22 +64,22 @@ HTML;
 HTML;
         return $html;
     } catch (InvalidParameter|MemberNotFound|EntityNotFound $e) {
-    return '<div id="message" class="notice notice-error"><p>Une erreur est survenue.</p></div>';
-}
+        return '<div id="message" class="notice notice-error"><p>Une erreur est survenue.</p></div>';
+    }
 
 
 
 
 /**
- * Shortcode qui affiche l'éditeur de page personnel
- * @return string
- */
+     * Shortcode qui affiche l'éditeur de page personnel
+     * @return string
+     */
 function edit_personal_page_form():string
 {
 
     //Récupération des données de l'utilisateur
     $current_user_id = get_current_user_id();
-    $member = Member::findById($current_user_id,"wp");
+    $member = Member::findById($current_user_id, "wp");
     //Récupération des champs déjà existant
     $wp_page = $member->get_personal_page_categories();
 
@@ -103,7 +103,7 @@ function edit_personal_page_form():string
     <?php
 
     return ob_get_clean();
-    }
+}
 }
 
 add_shortcode('personal_page_form', 'edit_personal_page_form');
@@ -173,7 +173,7 @@ function display_section_personal_pages(): string
 {
     $current_page_slug = get_post_field('post_name', get_queried_object_id());
     $user = get_user_by('login', $current_page_slug);
-    $member = Member::findById($user->ID,"wp");
+    $member = Member::findById($user->ID, "wp");
     $sections = $member->get_personal_page_categories();
     $html = "<div>";
     foreach ($sections as $key => $section) {
@@ -217,3 +217,29 @@ function display_button_to_edit_personal_pages(): string
 add_shortcode('edit_personal_page_btn', 'display_button_to_edit_personal_pages');
 add_shortcode('edit_personal_page_btn', 'display_button_to_edit_personal_pages');
 
+/**
+ * Ajoute dans la barre administrateur un lien vers leur page personnel
+ * @return void
+ */
+function custom_admin_toolbar():void
+{
+    $current_user = wp_get_current_user();
+    if(get_page_by_path($current_user->user_login) !== null) {
+        global $wp_admin_bar;
+        $args = array(
+            'id'    => 'personal_page',
+            'title' => 'Page perso',
+            'href'  => '/'.$current_user->user_login."/",
+        );
+        $wp_admin_bar->add_menu($args);
+
+        $args = array(
+            'id'    => 'edit_personal_page',
+            'title' => 'Modifier la page perso',
+            'href'  => '/modifier-votre-page-personnel/',
+        );
+        $wp_admin_bar->add_menu($args);
+    }
+
+}
+add_action('admin_bar_menu', 'custom_admin_toolbar', 999);
