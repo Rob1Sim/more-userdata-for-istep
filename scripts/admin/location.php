@@ -152,7 +152,7 @@ function more_userdata_istep_delete_location_page(): void
         $location = Location::findById($id_location);
         $delete = $location->delete();
         if (!$delete) {
-            echo '<div id="message" class="notice notice-error"><p>Impossible de supprimer la localisation par défaut.</p></div>';
+            echo '<div id="message" class="notice notice-error"><p>Impossible de supprimer le campus par défaut.</p></div>';
             echo '<a href="'.admin_url("admin.php?page=istep_manage_location").'">Retour à la liste</a>';
             exit();
         }
