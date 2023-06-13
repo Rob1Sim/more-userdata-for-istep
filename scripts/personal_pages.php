@@ -221,25 +221,25 @@ add_shortcode('edit_personal_page_btn', 'display_button_to_edit_personal_pages')
  * Ajoute dans la barre administrateur un lien vers leur page personnel
  * @return void
  */
-function custom_admin_toolbar():void
+function edit_button_admin_bar(WP_Admin_Bar $admin_bar): void
 {
     $current_user = wp_get_current_user();
-    if(get_page_by_path($current_user->user_login) !== null) {
-        global $wp_admin_bar;
+    if (get_page_by_path($current_user->user_login) !== null) {
         $args = array(
-            'id'    => 'personal_page',
+            'id' => 'personal_page',
             'title' => 'Page perso',
-            'href'  => '/'.$current_user->user_login."/",
+            'href' => '/' . $current_user->user_login . "/",
         );
-        $wp_admin_bar->add_menu($args);
+        $admin_bar->add_menu($args);
 
         $args = array(
-            'id'    => 'edit_personal_page',
+            'id' => 'edit_personal_page',
             'title' => 'Modifier la page perso',
-            'href'  => '/modifier-votre-page-personnel/',
+            'href' => '/modifier-votre-page-personnel/',
         );
-        $wp_admin_bar->add_menu($args);
+        $admin_bar->add_menu($args);
     }
 
 }
-add_action('admin_bar_menu', 'custom_admin_toolbar', 999);
+
+add_action('admin_bar_menu', 'edit_button_admin_bar', 999);
