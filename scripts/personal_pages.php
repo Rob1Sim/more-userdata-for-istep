@@ -2,7 +2,8 @@
 /**
  * Gestion des pages personnels
  */
-
+wp_enqueue_style('more-userdata-for-istep', plugins_url('../public/styles/more-userdata-for-istep.css', __FILE__));
+wp_enqueue_script('more-userdata-for-istep-js', plugins_url('../public/scripts/more-userdata-for-istep.js', __FILE__), array(), false, true);
 
 use MUDF_ISTEP\Entity\Member;
 use MUDF_ISTEP\Entity\PersonalPage;
@@ -10,9 +11,6 @@ use MUDF_ISTEP\Exception\EntityNotFound;
 use MUDF_ISTEP\Exception\InvalidParameter;
 use MUDF_ISTEP\Exception\MemberNotFound;
 use MUDF_ISTEP\Exception\UpdateError;
-
-wp_enqueue_style('more-userdata-for-istep', plugins_url('../public/styles/more-userdata-for-istep.css', __FILE__));
-wp_enqueue_script('more-userdata-for-istep-js', plugins_url('../public/scripts/more-userdata-for-istep.js', __FILE__), array(), false, true);
 
 add_shortcode('istep_user_data', 'display_users_data');
 /**
@@ -47,9 +45,9 @@ function display_users_data(): string
                 <h5>Equipes</h5>
 HTML;
         foreach ($userTeams as $userTeam) {
-            $html.="<p>$userTeam</p>";
+            $html .= "<p>$userTeam</p>";
         }
-        $html.= <<<HTML
+        $html .= <<<HTML
             </div>
             <div>
                 <h5>Coordonées :</h5>
@@ -67,46 +65,52 @@ HTML;
         return '<div id="message" class="notice notice-error"><p>Une erreur est survenue.</p></div>';
     }
 
-
+}
 
 
 /**
-     * Shortcode qui affiche l'éditeur de page personnel
-     * @return string
-     */
+ * Shortcode qui affiche l'éditeur de page personnel
+ * @return string
+ * @throws InvalidParameter
+ * @throws MemberNotFound
+ */
 function edit_personal_page_form():string
 {
 
     //Récupération des données de l'utilisateur
-    $current_user_id = get_current_user_id();
-    $member = Member::findById($current_user_id, "wp");
-    //Récupération des champs déjà existant
-    $wp_page = $member->get_personal_page_categories();
+    $current_user_id = wp_get_current_user();
+    try {
+        $member = Member::findById($current_user_id->ID, "wp");
+        //Récupération des champs déjà existant
+        $wp_page = $member->get_personal_page_categories();
+        wp_enqueue_editor();
+        //Création du formulaire
+        ob_start();
+        ?>
+        <form method="POST" action="">
 
-    //Création du formulaire
-    ob_start();
-    ?>
-    <form method="POST" action="">
+            <div class="role-box">
+                <?php foreach ($wp_page as $key => $value) {
+                    //Cherche tous les champs de la bd pour les affiché
+                    if (strtolower($key) !== "id_page" && strtolower($key) !== "wp_user_id") {
+                        $title = ucfirst(strtolower(str_replace('_', ' ', $key)));
+                        echo "<h5>$title :</h5>";
+                        wp_editor(($value ?? ""), 'personal_page_' . $key . '_editor', array('textarea_name' => 'personal_page_' . $key));
+                    }
 
-        <div class="role-box">
-        <?php foreach ($wp_page as $key => $value) {
-            //Cherche tous les champs de la bd pour les affiché
-            if(strtolower($key) !== "id_page" && strtolower($key) !== "wp_user_id") {
-                $title = ucfirst(strtolower(str_replace('_', ' ', $key)));
-                echo "<h5>$title :</h5>";
-                wp_editor(($value ?? ""), 'personal_page_'.$key.'_editor', array('textarea_name' => 'personal_page_'.$key));
-            }
+                } ?>
+                <input type="submit" value="Mettre à jour" name="form_submit_personal_page" class="submit-btn">
+        </form>
+        <?php
 
-        }?>
-        <input type="submit" value="Mettre à jour" name="form_submit_personal_page" class="submit-btn">
-    </form>
-    <?php
+        return ob_get_clean();
 
-    return ob_get_clean();
+    } catch (TypeError|InvalidParameter|MemberNotFound $exception) {
+        return "<p style='padding: 1%;background-color: orangered'>Vous n'avez pas de page personnel</p>";
+    }
 }
-}
 
-add_shortcode('personal_page_form', 'edit_personal_page_form');
+
 
 /**
  * Gère la sauvegarde des données du formulaire de création de page dans la dans la base de donnée.
@@ -202,20 +206,23 @@ add_shortcode('personal_page_display', 'display_section_personal_pages');
  */
 function display_button_to_edit_personal_pages(): string
 {
+
     $current_page_slug = get_post_field('post_name', get_queried_object_id());
     $user = get_user_by('login', $current_page_slug);
     if (wp_get_current_user() == $user) {
         $page_url = get_permalink(get_page_by_path("modifier-votre-page-personnel"));
         if (!empty($page_url)) {
-            return'<a href="' . esc_url($page_url) . '" class="button">Modifier votre page</a>';
+            return '<a href="' . esc_url($page_url) . '" class="button">Modifier votre page</a>';
         } else {
             return "error";
         }
     }
     return "";
 }
+
 add_shortcode('edit_personal_page_btn', 'display_button_to_edit_personal_pages');
-add_shortcode('edit_personal_page_btn', 'display_button_to_edit_personal_pages');
+add_shortcode('personal_page_form', 'edit_personal_page_form');
+
 
 /**
  * Ajoute dans la barre administrateur un lien vers leur page personnel
