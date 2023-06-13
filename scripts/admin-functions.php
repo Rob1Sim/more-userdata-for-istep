@@ -7,6 +7,7 @@
 
 // ---- Menu Administrateur ----
 
+use MUDF_ISTEP\Entity\Location as LocationAlias;
 use MUDF_ISTEP\Entity\Team as TeamAlias;
 
 wp_enqueue_script('more-userdata-for-istep-admin-js', plugins_url('../public/scripts/more-userdata-for-istep-admin.js', __FILE__), array(), false, true);
@@ -159,6 +160,16 @@ function more_userdata_istep_menu_content(): void
             echo '<div id="message" class="updated notice"><p>L\'équipe par défaut a été mis à jour avec succès. </p></div>';
         }
     }
+    // Formulaire de campus par défaut
+    if(isset($_POST["submit-default-location"])) {
+        if (isset($_POST["default-location"])
+            && gettype($_POST["default-location"]) == "string") {
+
+            update_option('default_location', intval(sanitize_text_field($_POST["default-location"])));
+
+            echo '<div id="message" class="updated notice"><p>Le campus par défaut a été mis à jour avec succès. </p></div>';
+        }
+    }
     // Formulaire du lien par défaut
     if(isset($_POST["submit-redirect-link"])) {
         if (isset($_POST["redirect-link-default"])
@@ -233,6 +244,22 @@ function more_userdata_istep_menu_content(): void
             </select>
 
             <?php submit_button('Enregistrer', 'primary', 'submit-default-team', true); ?>
+        </form>
+        <form method="post" action="">
+            <h2>Campus par défaut</h2>
+            <p>Détermine le campus sélectionné par défaut si un autre campus est supprimé.
+                Attention ce campus ne peut pas être supprimer !</p>
+
+            <label for="default-location">Campus par défaut : </label>
+            <select name="default-location" id="default-location">
+                <?php
+                foreach (LocationAlias::getAll() as $location) {
+                    echo "<option value=\"".$location->getId()."\">".$location->getName()."</option>";
+                }
+    ?>
+            </select>
+
+            <?php submit_button('Enregistrer', 'primary', 'submit-default-location', true); ?>
         </form>
         <form method="post" action="">
             <h2>Lien de redirection par défaut</h2>
