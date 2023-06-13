@@ -150,9 +150,12 @@ function more_userdata_istep_delete_location_page(): void
 
         $id_location = sanitize_text_field($_POST['location_id_delete']);
         $location = Location::findById($id_location);
-        $location->delete();
-
-        // Vérifie s'il reste des équTABLE_MEMBERS_NAMEipes dans la table
+        $delete = $location->delete();
+        if (!$delete) {
+            echo '<div id="message" class="notice notice-error"><p>Impossible de supprimer la localisation par défaut.</p></div>';
+            echo '<a href="'.admin_url("admin.php?page=istep_manage_location").'">Retour à la liste</a>';
+            exit();
+        }
 
         if (count(Location::getAll()) == 0) {
             $new_location = new Location("Sorbonne Université - Campus Pierre et Marie Curie");
