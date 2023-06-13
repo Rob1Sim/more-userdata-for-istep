@@ -224,7 +224,8 @@ add_shortcode('edit_personal_page_btn', 'display_button_to_edit_personal_pages')
 function edit_button_admin_bar(WP_Admin_Bar $admin_bar): void
 {
     $current_user = wp_get_current_user();
-    if (get_page_by_path($current_user->user_login) !== null) {
+
+    if (get_page_by_path("/membres-istep/" . $current_user->user_login) !== null) {
         $args = array(
             'id' => 'personal_page',
             'title' => 'Page perso',
