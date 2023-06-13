@@ -234,6 +234,7 @@ function more_userdata_istep_users_edit_data():void
             echo '<a href="'.admin_url("admin.php?page=istep_users_list").'">Retour à la liste</a>';
         } catch (InvalidParameter|MemberNotFound $e) {
             echo '<div class="notice notice-error"><p>Une erreur est survenue</p></div>';
+            echo '<a href="'.admin_url("admin.php?page=istep_users_list").'">Retour à la liste</a>';
         }
     } else {
         edit_user_form();
@@ -259,12 +260,15 @@ function more_userdata_istep_users_delete_user():void
             if($wp_user !== false) {
                 wp_delete_user($wp_user->ID);
                 echo '<div id="message" class="updated notice"><p>L\'utilisateur à été supprimé avec succès.</p></div>';
+                echo '<a href="'.admin_url("admin.php?page=istep_users_list").'">Retour à la liste</a>';
             } else {
                 echo '<div class="notice notice-error"><p>Une erreur est survenue lors de la suppression</p></div>';
+                echo '<a href="'.admin_url("admin.php?page=istep_users_list").'">Retour à la liste</a>';
             }
             $member->deletePersonalPage();
         } catch (InvalidParameter|MemberNotFound $e) {
             echo '<div class="notice notice-error"><p>Une erreur est survenue</p></div>';
+            echo '<a href="'.admin_url("admin.php?page=istep_users_list").'">Retour à la liste</a>';
         }
     }
 }
