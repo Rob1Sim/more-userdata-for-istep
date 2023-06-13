@@ -122,7 +122,8 @@ class Location extends DataEntity
         global $wpdb;
         $table_name = self::getTableName();
         $rq = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id_localisation = $this->id");
-        if (isset($rq) && $rq>0) {
+        if (isset($rq) && $rq>0 && $this->id != get_option("default_location")) {
+            Member::addDefaultLocation($this->id);
             $wpdb->delete(
                 $table_name,
                 array(
@@ -165,5 +166,6 @@ class Location extends DataEntity
     {
         return $this->getName();
     }
+
 
 }

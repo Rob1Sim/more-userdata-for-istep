@@ -406,6 +406,20 @@ class Member extends DataEntity
         }
     }
     /**
+     * Défini la localisation par défaut si la localisation du membre est supprimé
+     * @param int $locationId
+     * @return void
+     */
+    public static function addDefaultLocation(int $locationId):void
+    {
+        foreach (self::getAll() as $member) {
+            if ($member->getLocation()->getId() == $locationId) {
+                $member->setLocation(get_option("default_location"));
+                $member->save();
+            }
+        }
+    }
+    /**
      * @param string $function
      */
     public function setFunction(string $function): void
